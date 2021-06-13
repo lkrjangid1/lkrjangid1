@@ -19,6 +19,8 @@
 <code><img height="31" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/dart/dart.png" width="31" /></code>
 <code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/android/android.png" width="35" /></code>
 <code><img height="26" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/javascript/javascript.png" width="26" /></code>
+<code><img height="26" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png" width="26" /></code>
+<code><img height="26" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/c/c.png" width="26" /></code>
 <code><img border="0" data-original-height="749" data-original-width="768" height="30" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Adobe_XD_CC_icon.svg/768px-Adobe_XD_CC_icon.svg.png" width="31" /></code>
 <code><img border="0" data-original-height="749" data-original-width="768" height="30" src="https://cdn4.iconfinder.com/data/icons/google-i-o-2016/512/google_firebase-2-512.png" width="31" /></code>
 <code><img border="0" data-original-height="749" data-original-width="768" height="30" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/WordPress_blue_logo.svg/1024px-WordPress_blue_logo.svg.png" width="31" /></code>
@@ -39,35 +41,16 @@
  <img align="center" alt="lokesh's github stats" src="https://raw.githubusercontent.com/lkrjangid1/lkrjangid1-github-stats/master/generated/languages.svg" /></a>
 
 <br/> 
-<h2>SKILLS</h2><br/> 
-
-  Flutter: Intermediate<br/> 
-  Dart: Intermediate<br/> 
-  Firebase: Intermediate<br/> 
-  Android: Intermediate<br/> 
-  Adobe XD: Intermediate<br/> 
-  Python: Intermediate<br/> 
-  HTML: Advanced<br/> 
-  CSS: Intermediate<br/> 
-  C: Intermediate<br/> 
-  C++: Intermediate<br/> 
   
-  
-<h2>My Projects</h2><br/> 
+ 
 
-  <a href="https://drive.google.com/file/d/1PSU4hplQJojZ4DDhSDDTN69ECxAhvPep/view?usp=sharing" style="color: #2196f3; font-family: Roboto, sans-serif; font-size: 15px; text-decoration-line: none;">MBM E-Learning Android app</a><br/> 
-  <a href="https://mbmec.weebly.com/" style="color: #2196f3; font-family: Roboto, sans-serif; font-size: 15px; text-decoration-line: none;">Mbmelearning web</a><br/> 
-  <a href="https://mbmlibraria.herokuapp.com/" style="color: #2196f3; font-family: Roboto, sans-serif; font-size: 15px; text-decoration-line: none;">Libraria</a><br/> 
+<h2>Projects</h2><br/> 
 
-<h2>Using Flutter</h2><br/> 
+[![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=Awesome-Flutter-Templates)](https://github.com/lkrjangid1/Awesome-Flutter-Templates)
+[![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=Awesome-Warez)](https://github.com/lkrjangid1/Awesome-Warez)
+[![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=blocWeather)](https://github.com/lkrjangid1/blocWeather)
+[![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=1377x-api)](https://github.com/lkrjangid1/1377x-api)
 
-  <a href="https://github.com/lkrjangid1/bitcoin_tricker" style="color: #2196f3; text-decoration-line: none;">Bitcoin tricker</a><br/> 
-  <a href="https://github.com/lkrjangid1/clima" style="color: #2196f3; text-decoration-line: none;">Clima</a><br/> 
-  <a href="http://github.com/lkrjangid1/flashchatapp" style="color: #2196f3; text-decoration-line: none;">Flash Chat App</a><br/> 
-  <a href="https://github.com/lkrjangid1/Todoye" style="color: #2196f3; text-decoration-line: none;"></a><a href="https://github.com/lkrjangid1/Todoye" style="color: #2196f3; text-decoration-line: none;">Todoye</a><br/> 
-  <a href="https://lkrjangidportfolio.vercel.app/#/" style="color: #2196f3; text-decoration-line: none;"></a><a href="https://lkrjangidportfolio.vercel.app/#/" style="color: #2196f3; text-decoration-line: none;">Portfolio</a><br/> 
-
-  
 
 
 
