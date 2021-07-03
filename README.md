@@ -50,7 +50,7 @@
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=Awesome-Warez)](https://github.com/lkrjangid1/Awesome-Warez)
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=blocWeather)](https://github.com/lkrjangid1/blocWeather)
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=1377x-api)](https://github.com/lkrjangid1/1377x-api)
-
+[![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=cutout_text_effect)](https://github.com/lkrjangid1/cutout_text_effect)
 
 
 
