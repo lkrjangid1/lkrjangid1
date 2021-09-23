@@ -46,7 +46,7 @@
 
 <h2>Projects</h2><br/> 
 
-[![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=Awesome-Flutter-Templates)](https://github.com/lkrjangid1/Awesome-Flutter-Templates)
+[![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=Awesome-Flutter-Templates-hacktoberfest-2021)](https://github.com/lkrjangid1/Awesome-Flutter-Templates-hacktoberfest-2021)
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=Awesome-Warez)](https://github.com/lkrjangid1/Awesome-Warez)
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=blocWeather)](https://github.com/lkrjangid1/blocWeather)
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=1377x-api)](https://github.com/lkrjangid1/1377x-api)
