@@ -1,7 +1,6 @@
 <p><b>&nbsp;<h1 style="font-size: large;">Hola, I'm Lokesh Jangid! 👋</h1>
-  </b></p><div class="nz oa ob dy x" style="background-color: white; box-sizing: inherit; color: rgba(0, 0, 0, 0.8); font-family: medium-content-sans-serif-font, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen, Ubuntu, Cantarell, &quot;Open Sans&quot;, &quot;Helvetica Neue&quot;, sans-serif; margin-bottom: 32px; max-height: 131px; max-width: 131px; overflow: hidden;"><img role="presentation" src="https://miro.medium.com/fit/c/197/197/1*BcsfXcXrI1AA89-9A9ffHA.jpeg" style="box-sizing: inherit; vertical-align: middle;" width="131" /></div><p><b><span style="font-size: large;"><br /></span></b>
-
-
+  </b></p>
+  
 <a href="https://linkedin.com/in/lkrjangid">
   <img align="left" alt="Lokesh's Linkdein" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" width="22px" />
 </a>
