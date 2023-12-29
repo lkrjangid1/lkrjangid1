@@ -10,15 +10,19 @@
 <a href="https://instagram.com/lkrjangid/">
   <img align="left" alt="Lokesh's Instagram" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/instagram.svg" width="22px" />
   
-</a><br /></p><p><br /></p><p>&nbsp;- 🔭 I’m currently Flutter Intern in <a href="http://timemarks.in/">Timemarks</a> and exploring Flutter and learn new things every day about it.&nbsp;</p><p>&nbsp;- 🎓 Pursuing Bachelor of Engineering from <a href="http://mbm.ac.in/">MBM ENGINEERING COLLEGE JODHPUR</a> in Electrical Engineering.</p><p>&nbsp;- 🎄&nbsp; My hobby is Gardening.</p><p>&nbsp;-&nbsp;<span style="font-size: 20px;">🛠</span><span style="font-size: x-small;">&nbsp;</span>&nbsp;Active member of <a href="https://nssmbm.weebly.com/">NSS MBM</a>.&nbsp;&nbsp;</p><p>&nbsp;- 💬 Ask me about Flutter or any tech-related stuff.&nbsp;</p><p>&nbsp;- 😄 Pronouns: He/His&nbsp;</p><p>&nbsp;- ⚡ Fun fact: I spend almost 12 hours listening to songs every day.</p><p><br /></p><p>&nbsp;
+</a><br /></p><p><br /></p><p>&nbsp;- 🔭 I’m currently Software Developer in <a href="http://studyem.io/">Studyem</a> and exploring Flutter, IOS, React, AI and learn new things every day about it.&nbsp;</p><p>&nbsp;- 🎓 Pursued Bachelor of Engineering from <a href="http://mbm.ac.in/">MBM ENGINEERING COLLEGE JODHPUR</a> in Electrical Engineering.</p><p>&nbsp;- 🎄&nbsp; My hobby is Gardening.</p><p>&nbsp;- 💬 Ask me about Flutter or any tech-related stuff.&nbsp;</p><p>&nbsp;- 😄 Pronouns: He/His&nbsp;</p><p>&nbsp;- ⚡ Fun fact: I spend almost 12 hours listening to songs every day.</p><p><br /></p><p>&nbsp;
 
 <h2>Languages and Tools:</h2><br/> 
 
 <code><img height="31" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/flutter/flutter.png" width="31" /></code>
 <code><img height="31" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/dart/dart.png" width="31" /></code>
-<code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/android/android.png" width="35" /></code>
-<code><img height="26" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/javascript/javascript.png" width="26" /></code>
 <code><img height="26" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png" width="26" /></code>
+<code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/android/android.png" width="35" /></code>
+<code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/kotlin/kotlin.png" width="35" /></code>
+<code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/ios/ios.png" width="35" /></code>
+<code><img height="35" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/swift/swift.png" width="35" /></code>
+<code><img height="26" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/javascript/javascript.png" width="26" /></code>
+<code><img height="26" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/react/react.png" width="26" /></code>
 <code><img height="26" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/c/c.png" width="26" /></code>
 <code><img border="0" data-original-height="749" data-original-width="768" height="30" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Adobe_XD_CC_icon.svg/768px-Adobe_XD_CC_icon.svg.png" width="31" /></code>
 <code><img border="0" data-original-height="749" data-original-width="768" height="30" src="https://cdn4.iconfinder.com/data/icons/google-i-o-2016/512/google_firebase-2-512.png" width="31" /></code>
