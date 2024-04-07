@@ -10,7 +10,7 @@
 <a href="https://instagram.com/lkrjangid/">
   <img align="left" alt="Lokesh's Instagram" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/instagram.svg" width="22px" />
   
-</a><br /></p><p><br /></p><p>&nbsp;- 🔭 I’m currently Software Developer in <a href="http://studyem.io/">Studyem</a> and exploring Flutter, IOS, React, AI and learn new things every day about it.&nbsp;</p><p>&nbsp;- 🎓 Pursued Bachelor of Engineering from <a href="http://mbm.ac.in/">MBM ENGINEERING COLLEGE JODHPUR</a> in Electrical Engineering.</p><p>&nbsp;- 🎄&nbsp; My hobby is Gardening.</p><p>&nbsp;- 💬 Ask me about Flutter or any tech-related stuff.&nbsp;</p><p>&nbsp;- 😄 Pronouns: He/His&nbsp;</p><p>&nbsp;- ⚡ Fun fact: I spend almost 12 hours listening to songs every day.</p><p><br /></p><p>&nbsp;
+</a><br /></p><p><br /></p><p>&nbsp;- 🔭 I’m currently Software Developer in <a href="http://univest.in/">Univest</a> and exploring Flutter, IOS, React, AI and learn new things every day about it.&nbsp;</p><p>&nbsp;- 🎓 Pursued Bachelor of Engineering from <a href="http://mbm.ac.in/">MBM ENGINEERING COLLEGE JODHPUR</a> in Electrical Engineering.</p><p>&nbsp;- 🎄&nbsp; My hobby is Gardening.</p><p>&nbsp;- 💬 Ask me about Flutter or any tech-related stuff.&nbsp;</p><p>&nbsp;- 😄 Pronouns: He/His&nbsp;</p><p>&nbsp;- ⚡ Fun fact: I spend almost 12 hours listening to songs every day.</p><p><br /></p><p>&nbsp;
 
 <h2>Languages and Tools:</h2><br/> 
 
