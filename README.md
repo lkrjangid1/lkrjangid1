@@ -55,6 +55,8 @@
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=1377x-api)](https://github.com/lkrjangid1/1377x-api)
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=cutout_text_effect)](https://github.com/lkrjangid1/cutout_text_effect)
 [![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=Duomorphsim)](https://github.com/lkrjangid1/Duomorphsim)
+[![Dev.to](https://github-readme-stats.vercel.app/api/pin/?username=lkrjangid1&repo=comic_reader)](https://github.com/lkrjangid1/comic_reader)
+
 
 [![An image of @lkrjangid's Holopin badges, which is a link to view their full Holopin profile](https://holopin.me/lkrjangid)](https://holopin.io/@lkrjangid)
 
