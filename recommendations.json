@@ -1,0 +1,38 @@
+[
+    {
+      title: "Adhikansh Singh",
+      profile: "https://www.linkedin.com/in/adhikansh-singh-42988bba/",
+      subtitle: "Ad Tech @ Univest",
+      recommendation: "I\u2019ve worked with Lokesh over the past few months, and it\u2019s been a genuinely positive experience. He has a strong understanding of Flutter and a clear sense of how the app fits together end-to-end, which helps him build features that are both practical and well thought out. What stands out about Lokesh is his thoughtful approach to problems and his willingness to go the extra mile to get things right. He\u2019s easy to work with, communicates well, and is someone the team can rely on. He brings a calm confidence to his work, and I\u2019ve really appreciated having him on the team."
+    },
+    {
+      title: "Jatin Balani",
+      profile: "https://www.linkedin.com/in/jatin-balani-127070211",
+      subtitle: "Senior Software Developer @ Univest",
+      recommendation: "I worked alongside Lokesh at Univest. He is the most responsible guy I have ever seen in my Tech Journey. There is no need to follow up when any important task is assigned to him."
+    },
+    {
+      title: "Vatsal Moradiya",
+      profile: "https://www.linkedin.com/in/vatsalmoradiya",
+      subtitle: "CTO @ TecoNico Pvt. Ltd.",
+      recommendation: "Lokesh has been working for TecoNico Pvt. Ltd. as a Flutter App Developer. He has been consistently proving himself worthy to the Smart Home Automation Project. He is also a quick learner and his concepts of Data Structure and how to use them are clear. His work was never disappointing or incomplete. The work he submitted every now and then was as per requirements so there was no need to ask for changes again and again. Overall, we are satisfied with his work at the company."
+    },
+    {
+      title: "Ranu Meena",
+      profile: "https://www.linkedin.com/in/ranu-meena-124b3997",
+      subtitle: "Co-Founder @ Studyem",
+      recommendation: "This guy is a gem of our team. He has all the skills and spirit that a front-end developer should have while building a great product. We are working together for the last two years and wish to continue this journey to build the world-class product Studyem."
+    },
+    {
+      title: "Harphool Meena",
+      profile: "https://www.linkedin.com/in/harphool-meena-07722258",
+      subtitle: "Product Manager @ Studyem",
+      recommendation: "He has been working for Timemarks for the last three months. He is an excellent Flutter developer. He has all the required attributes in his personality such as passion for Flutter, quick learner, dedication, hard work and honesty, and hence these things make him an excellent Flutter developer. I am sure wherever he goes, he will rock with his skills. Excited to work with him in upcoming projects."
+    },
+    {
+      title: "Payal Choudhary",
+      profile: "https://www.linkedin.com/in/payal-choudhary",
+      subtitle: "Software Developer @ Studyem",
+      recommendation: "Lokesh is hard-working and has a very engaging personality! He has the required work-ethic and is very enthusiastic about learning new technologies!"
+    }
+  ]
