@@ -4,10 +4,20 @@
       "title": "Univest \u2014 Trading & Investment Platform",
       "role": "Senior Software Engineer \u00b7 04/2024 \u2013 Present",
       "metrics": "9M+ users \u00b7 10M+ downloads on Play Store",
-      "tech": ["Flutter", "Kotlin", "SwiftUI"],
+      "tech": [
+        "Flutter",
+        "Kotlin",
+        "SwiftUI"
+      ],
       "links": [
-        { "label": "Play Store", "url": "https://play.google.com/store/apps/details?id=com.univest.capp" },
-        { "label": "App Store", "url": "https://apps.apple.com/in/app/univest-stocks-investment/id6443753518" }
+        {
+          "label": "Play Store",
+          "url": "https://play.google.com/store/apps/details?id=com.univest.capp"
+        },
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/in/app/univest-stocks-investment/id6443753518"
+        }
       ],
       "points": [
         "Architected brokerage order placement & order management \u2014 hardened for security, scale, and low latency.",
@@ -28,26 +38,39 @@
       "title": "Scalper \u2014 In-House Charting & Trading Terminal",
       "role": "Univest \u00b7 Built from scratch in under a month",
       "metrics": "+12% derivative trade share \u00b7 +8% more with Scalper 2.0 (~20% combined)",
-      "tech": ["Flutter", "Custom Rendering", "WebSockets"],
+      "tech": [
+        "Flutter",
+        "Custom Rendering",
+        "WebSockets"
+      ],
       "links": [],
       "points": [
         "TradingView-style chart engine built from scratch \u2014 custom indicators, drawing tools, pattern recognition, real-time rendering.",
         "Scalper 2.0 trade-from-chart: average position, stop-loss/target, live order & position lines with full order CRUD.",
-        "OI Visualizer: analyzes Open Interest across strike prices to surface market sentiment, support/resistance, and trend reversals for options traders.",
         "Rendering pipeline optimized for lag-free performance under continuous live tick streams."
       ],
       "screenshots": [
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/screenshot-2025-10-17-at-10-37-36-am_orig.png",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/screenshot-2025-10-17-at-10-37-08-am_orig.png"
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/whatsapp-image-2025-10-17-at-10-09-04-am.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/whatsapp-image-2025-10-17-at-10-09-03-am-1.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/whatsapp-image-2025-10-17-at-10-09-03-am_orig.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/whatsapp-image-2025-10-17-at-10-15-52-am_orig.jpeg"
       ]
     },
     {
       "title": "Self-Hosted Code Push \u2014 Shorebird, Reverse-Engineered",
       "role": "Univest \u00b7 Platform Engineering",
       "metrics": "Hotfixes: days \u2192 minutes \u00b7 Rs. 14L+ saved per year",
-      "tech": ["Flutter", "Android", "iOS", "OTA Updates"],
+      "tech": [
+        "Flutter",
+        "Android",
+        "iOS",
+        "OTA Updates"
+      ],
       "links": [
-        { "label": "Read the 4-part series on FlutDev", "url": "https://flutdev.blogspot.com/" }
+        {
+          "label": "Read the 4-part series on FlutDev",
+          "url": "https://flutdev.blogspot.com/"
+        }
       ],
       "points": [
         "Studied Shorebird's OTA update internals \u2014 bidiff patching, zstd compression, updater.rs \u2014 and built a self-hosted code-push platform for Android & iOS.",
@@ -59,7 +82,11 @@
       "title": "FinSight AI \u2014 Native Android & iOS",
       "role": "Univest \u00b7 Kotlin (Android) + SwiftUI (iOS)",
       "metrics": "",
-      "tech": ["Kotlin", "SwiftUI", "AI"],
+      "tech": [
+        "Kotlin",
+        "SwiftUI",
+        "AI"
+      ],
       "links": [],
       "points": [
         "AI-driven finance companion built natively on both platforms: stock fundamental/technical insights, an options strategy builder, and one-click trading.",
@@ -68,27 +95,69 @@
       "screenshots": []
     },
     {
+      "title": "OI Visualizer \u2014 Options Open-Interest Analytics",
+      "role": "Personal project \u00b7 Flutter",
+      "metrics": "",
+      "tech": [
+        "Flutter",
+        "Data Visualization",
+        "Options Trading"
+      ],
+      "links": [],
+      "points": [
+        "Helps traders analyze Open Interest (OI) across strike prices for options contracts, visualizing market participation and sentiment.",
+        "Tracks changes in OI against price movement to surface support, resistance, and potential trend reversals.",
+        "Enhanced P&L visualizer: interactive strategy payoff charts (e.g., bull call spread) with max profit/loss, breakeven indicators, and target/expiry lines.",
+        "Charts and table views of call/put OI change per strike, with expiry filtering, crosshair tracking, and interactive tooltips."
+      ],
+      "screenshots": [
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/screenshot-2025-10-17-at-10-37-36-am_orig.png",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/screenshot-2025-10-17-at-10-37-08-am_orig.png"
+      ]
+    },
+    {
       "title": "Libgen \u2014 Book Search & Reading Platform",
       "role": "Personal project \u00b7 Solo-built",
       "metrics": "600K+ downloads \u00b7 150K+ monthly active users",
-      "tech": ["Flutter", "Kotlin", "JavaScript", "Web Scraping"],
+      "tech": [
+        "Flutter",
+        "Kotlin",
+        "JavaScript",
+        "Web Scraping"
+      ],
       "links": [
-        { "label": "Play Store", "url": "https://play.google.com/store/apps/details?id=com.yaaratech.libgen" }
+        {
+          "label": "Play Store",
+          "url": "https://play.google.com/store/apps/details?id=com.yaaratech.libgen"
+        }
       ],
       "points": [
         "Entire app built in Flutter with multi-source scraping and aggregation pipelines written in Dart.",
         "Smooth, user-friendly experience to browse and search through any book.",
         "Monetized via LevelPlay ad bidding and RevenueCat in-app purchases."
       ],
-      "screenshots": []
+      "screenshots": [
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/409712340.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/659862394.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/310097013.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/586074094.jpeg"
+      ]
     },
     {
       "title": "Remote Jobs",
       "role": "Personal project",
       "metrics": "12,000+ users on Play Store",
-      "tech": ["Flutter", "Android", "Firebase", "Web Scraping"],
+      "tech": [
+        "Flutter",
+        "Android",
+        "Firebase",
+        "Web Scraping"
+      ],
       "links": [
-        { "label": "Play Store", "url": "https://play.google.com/store/apps/details?id=com.yaaratech.remote.jobs" }
+        {
+          "label": "Play Store",
+          "url": "https://play.google.com/store/apps/details?id=com.yaaratech.remote.jobs"
+        }
       ],
       "points": [
         "Helps people find remote jobs across the globe.",
@@ -103,22 +172,43 @@
       "title": "MBM E-Learning",
       "role": "Personal project",
       "metrics": "15K+ downloads on Play Store",
-      "tech": ["Flutter", "Android", "Firebase", "REST API"],
+      "tech": [
+        "Flutter",
+        "Android",
+        "Firebase",
+        "REST API"
+      ],
       "links": [
-        { "label": "Play Store", "url": "https://play.google.com/store/apps/details?id=com.mbm.elereaning.mbmecj" }
+        {
+          "label": "Play Store",
+          "url": "https://play.google.com/store/apps/details?id=com.mbm.elereaning.mbmecj"
+        }
       ],
       "points": [
         "Gives MBM University students semester- and branch-personalized access to comprehensive study materials."
       ],
-      "screenshots": []
+      "screenshots": [
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/509018779.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/186991999.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/173848741.jpeg",
+        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/799160829.jpeg"
+      ]
     },
     {
       "title": "Raksha \u2014 Emergency SOS Band",
       "role": "Team project \u00b7 IIIT Surat",
       "metrics": "\ud83c\udfc6 Winner \u2014 Incubation & Funding Round (SSIP), IIIT Surat",
-      "tech": ["Flutter", "IoT", "ESP32", "Firebase"],
+      "tech": [
+        "Flutter",
+        "IoT",
+        "ESP32",
+        "Firebase"
+      ],
       "links": [
-        { "label": "SSIP Program", "url": "https://bit.ly/3Dlh4JE" }
+        {
+          "label": "SSIP Program",
+          "url": "https://bit.ly/3Dlh4JE"
+        }
       ],
       "points": [
         "ESP32-based women's safety band paired with a Flutter app: a double-press gesture triggers SOS alerts with live location sent to assigned contacts.",
@@ -133,9 +223,17 @@
       "title": "Buckrate \u2014 AI Livestock Weight Estimation",
       "role": "Timemarks \u00b7 Flutter Web marketplace",
       "metrics": "75\u201380% estimation accuracy without weighing scales",
-      "tech": ["Flutter", "Web", "Python", "Computer Vision"],
+      "tech": [
+        "Flutter",
+        "Web",
+        "Python",
+        "Computer Vision"
+      ],
       "links": [
-        { "label": "Try the calculator", "url": "https://calculator.buckrate.com/?tab=0" }
+        {
+          "label": "Try the calculator",
+          "url": "https://calculator.buckrate.com/?tab=0"
+        }
       ],
       "points": [
         "Computer-vision weight estimator built on image segmentation with custom-trained models.",
@@ -149,7 +247,11 @@
       "title": "Weblm \u2014 Website AI Chatbot",
       "role": "Personal project",
       "metrics": "",
-      "tech": ["ChatGPT", "LangChain", "Python"],
+      "tech": [
+        "ChatGPT",
+        "LangChain",
+        "Python"
+      ],
       "links": [],
       "points": [
         "AI chatbot that interacts with and extracts information from any given website, making web-based data conversational and accessible."
@@ -160,9 +262,17 @@
       "title": "Greenhouse Monitoring & Control \u2014 IoT",
       "role": "Final-year college project",
       "metrics": "",
-      "tech": ["Flutter", "Firebase", "IoT", "Android"],
+      "tech": [
+        "Flutter",
+        "Firebase",
+        "IoT",
+        "Android"
+      ],
       "links": [
-        { "label": "Project report", "url": "https://docs.google.com/document/d/17N0snPxfcz9Z75Yx-na0LfVPv5ap2OOayehAhktldBg/edit?usp=sharing" }
+        {
+          "label": "Project report",
+          "url": "https://docs.google.com/document/d/17N0snPxfcz9Z75Yx-na0LfVPv5ap2OOayehAhktldBg/edit?usp=sharing"
+        }
       ],
       "points": [
         "IoT system monitoring real-time water content, humidity, temperature, and light availability.",
