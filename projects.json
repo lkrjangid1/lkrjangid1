@@ -268,7 +268,7 @@
     },
     {
       "title": "Greenhouse Monitoring & Control \u2014 IoT",
-      "role": "Final-year college project",
+      "role": "Final-year B.Tech project",
       "metrics": "",
       "tech": [
         "Flutter",
@@ -289,6 +289,35 @@
       "screenshots": [
         "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/green_house_iot_wire.png",
         "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/green_house_iot_mobile_app.png"
+      ]
+    },
+    {
+      "title": "AI-Based Research Paper Search, Summarization and Chat Application",
+      "role": "Final-year MCA project",
+      "metrics": "",
+      "tech": [
+        "Flutter",
+        "Google’s Gemini 1.5 Pro",
+        "FastAPI",
+        "Python"
+      ],
+      "links": [
+        {
+          "label": "Project report",
+          "url": "https://docs.google.com/document/d/1UDb1kOt7fiQ6a1BwyH8rD-mstawqOblFahn_9oZzRt4/edit?tab=t.0"
+        }
+      ],
+      "points": [
+        "AI-powered research paper assistant built as a three-tier system: a Flutter mobile app for search and chat, a FastAPI backend for PDF indexing and RAG orchestration, and external AI/search infrastructure such as arXiv, Google Gemini/Vertex AI-style services, and FAISS.",
+        "The app lets a user search arXiv, inspect paper details, generate expertise-aware summaries, select up to three papers, and ask citation-grounded questions over the indexed PDFs.",
+        "Code: https://github.com/lkrjangid1/research_assistant"
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ra_home.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ra_details.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ra_chat_options.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ra_history.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ra_settings.png"
       ]
     }
   ],
