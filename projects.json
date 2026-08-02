@@ -57,7 +57,7 @@
         "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/scalper_chart_indicators.jpeg",
         "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/scalper_chart_settings.jpeg",
         "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/scalper_order.jpeg",
-        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/scalper_option_chain.jpeg",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/scalper_option_chain.jpeg"
       ]
     },
     {
@@ -80,7 +80,11 @@
         "Studied Shorebird's OTA update internals \u2014 bidiff patching, zstd compression, updater.rs \u2014 and built a self-hosted code-push platform for Android & iOS.",
         "Hotfix delivery went from days of store review to minutes, eliminating the commercial licensing cost entirely."
       ],
-      "screenshots": []
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/shorebird_home.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/shorebird_release.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/shorebird_patch.png"
+      ]
     },
     {
       "title": "FinSight AI \u2014 Native Android & iOS",
@@ -115,8 +119,8 @@
         "Charts and table views of call/put OI change per strike, with expiry filtering, crosshair tracking, and interactive tooltips."
       ],
       "screenshots": [
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/screenshot-2025-10-17-at-10-37-36-am_orig.png",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/screenshot-2025-10-17-at-10-37-08-am_orig.png"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/oi_visualizer.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/oi_bar.png"
       ]
     },
     {
@@ -141,10 +145,10 @@
         "Monetized via LevelPlay ad bidding and RevenueCat in-app purchases."
       ],
       "screenshots": [
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/409712340.jpeg",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/659862394.jpeg",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/310097013.jpeg",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/586074094.jpeg"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_home.jpeg",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_search.jpeg",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_filter.jpeg",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_details.jpeg"
       ]
     },
     {
@@ -168,8 +172,8 @@
         "Automated pipeline retrieves remote-job posts from X (Twitter) and publishes them to in-app feeds, keeping users linked to fresh opportunities."
       ],
       "screenshots": [
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/571140226.jpeg",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/980465789.jpeg"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/remote_jobs_home.jpeg",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/lremote_jobs_menu.jpeg"
       ]
     },
     {
@@ -192,10 +196,10 @@
         "Gives MBM University students semester- and branch-personalized access to comprehensive study materials."
       ],
       "screenshots": [
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/509018779.jpeg",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/186991999.jpeg",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/173848741.jpeg",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/799160829.jpeg"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/mbm_home.jpeg",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/mbm_e.jpeg",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/mbm_ele_menu.jpeg",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/mbmb.jpeg"
       ]
     },
     {
@@ -219,8 +223,8 @@
         "Selected for the Student Startup & Innovation Policy (SSIP) at IIIT Surat and secured funding for prototype development."
       ],
       "screenshots": [
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/708789769.png",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/published/581160236.png"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/raksha_home.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/raksha_contact.png"
       ]
     },
     {
@@ -244,7 +248,7 @@
         "Cost-effective livestock weight estimation for a Flutter Web livestock marketplace \u2014 no traditional weighing scales needed."
       ],
       "screenshots": [
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/173556602.png"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/buckrate_web.png"
       ]
     },
     {
@@ -283,8 +287,8 @@
         "Mobile app displays live readings and enables both manual and automatic control of all connected devices."
       ],
       "screenshots": [
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/662808079.png",
-        "https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/1v3bw-maawby32qmenjtlsn-pxl-tzesawfgnpkdn_orig.png"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/green_house_iot_wire.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/green_house_iot_mobile_app.png"
       ]
     }
   ],
