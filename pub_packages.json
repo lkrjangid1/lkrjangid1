@@ -5,11 +5,11 @@
     "rar",
     "comic_reader",
     "cutout_text_effect",
-    "cloudflare_bypass",
     "drag_split_layout",
+    "cloudflare_bypass",
     "duomorphsim",
-    "smooth_chucker",
     "curl_request_parser",
+    "smooth_chucker",
     "flutter_account_manager",
     "global_context_menu"
   ]
