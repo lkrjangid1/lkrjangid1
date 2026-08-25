@@ -8,8 +8,8 @@
     "duomorphsim",
     "drag_split_layout",
     "cloudflare_bypass",
-    "curl_request_parser",
     "flutter_account_manager",
+    "curl_request_parser",
     "global_context_menu",
     "smooth_chucker"
   ]
