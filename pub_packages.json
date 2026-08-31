@@ -9,8 +9,8 @@
     "drag_split_layout",
     "cloudflare_bypass",
     "flutter_account_manager",
-    "curl_request_parser",
+    "smooth_chucker",
     "global_context_menu",
-    "smooth_chucker"
+    "curl_request_parser"
   ]
 }
