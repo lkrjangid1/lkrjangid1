@@ -4,13 +4,13 @@
     "rar",
     "pinned_shortcuts",
     "comic_reader",
-    "cutout_text_effect",
     "duomorphsim",
-    "cloudflare_bypass",
+    "cutout_text_effect",
     "drag_split_layout",
+    "cloudflare_bypass",
     "curl_request_parser",
-    "flutter_account_manager",
+    "global_context_menu",
     "smooth_chucker",
-    "global_context_menu"
+    "flutter_account_manager"
   ]
 }
