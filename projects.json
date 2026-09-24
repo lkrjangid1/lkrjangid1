@@ -319,6 +319,101 @@
         "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ra_history.png",
         "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ra_settings.png"
       ]
+    },
+    {
+      "title": "Incognito Vault — Save Incognito AI Chats",
+      "role": "Personal project · Chrome extension + macOS app",
+      "metrics": "Live on Chrome Web Store & Mac App Store",
+      "tech": [
+        "JavaScript",
+        "Chrome Extension (MV3)",
+        "IndexedDB"
+      ],
+      "links": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/lkrjangid1/incognito_vault"
+        },
+        {
+          "label": "Chrome Web Store",
+          "url": "https://chromewebstore.google.com/detail/incognito-vault/ncbpdacmhjnikheahffamjcfkenkjjnb"
+        },
+        {
+          "label": "Mac App Store",
+          "url": "https://apps.apple.com/in/app/incognito-vault/id6803170393?mt=12"
+        }
+      ],
+      "points": [
+        "Saves Claude and ChatGPT incognito/temporary chats to Markdown with YAML front-matter, so a conversation that matters doesn't vanish with the tab.",
+        "Captures Claude artifacts (HTML/React files) automatically and gives untitled chats meaningful names.",
+        "Private local history in IndexedDB — no cloud sync, no analytics — with one-click resume into a fresh incognito session.",
+        "Custom dependency-free HTML-to-Markdown parser running in a Manifest V3 service worker and content scripts."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/incognito_vault_1.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/incognito_vault_2.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/incognito_vault_3.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/incognito_vault_4.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/incognito_vault_5.png"
+      ]
+    },
+    {
+      "title": "SeedFuel — Health Food Brand Website",
+      "role": "Personal project · Brand & ordering site",
+      "metrics": "",
+      "tech": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "GitHub Pages"
+      ],
+      "links": [
+        {
+          "label": "Live site",
+          "url": "http://lkrjangid1.github.io/seedfuel"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/lkrjangid1/seedfuel"
+        }
+      ],
+      "points": [
+        "Marketing and ordering site for a naturally sweetened dry-fruit and seed laddu brand — no added sugar, made with dates and homemade ghee.",
+        "Pack picker (500 g to 3 kg) feeding a customisable order form, plus story, ingredients, FAQ, and contact sections.",
+        "Plain HTML, CSS, and vanilla JS with reveal animations and a config-driven setup — no framework or build step."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/seedfuel_home.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/seedfuel_laddu.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/seedfuel_order.png"
+      ]
+    },
+    {
+      "title": "PushPatch — OTA Updates for Flutter Apps",
+      "role": "Product · Flutter code-push platform",
+      "metrics": "Fixes to production in under 5 minutes",
+      "tech": [
+        "Flutter",
+        "Dart",
+        "OTA Updates",
+        "MongoDB"
+      ],
+      "links": [
+        {
+          "label": "Website",
+          "url": "https://pushpatch.in/"
+        }
+      ],
+      "points": [
+        "Ships Dart-only patches to released Flutter apps without waiting on app store review — binary-diff patches applied on next launch.",
+        "Staged rollouts from 1%, real-time adoption and device-health monitoring, and one-click rollback.",
+        "Available as a desktop app (macOS, Windows, Linux), CLI, and web dashboard; self-hostable on your own infrastructure."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/pushpatch_home.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/pushpatch_dashboard.png",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/pushpatch_workflow.png"
+      ]
     }
   ],
   "packages": [
