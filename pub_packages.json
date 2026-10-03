@@ -5,12 +5,12 @@
     "pinned_shortcuts",
     "comic_reader",
     "cutout_text_effect",
-    "duomorphsim",
     "drag_split_layout",
+    "duomorphsim",
     "cloudflare_bypass",
     "curl_request_parser",
-    "smooth_chucker",
     "flutter_account_manager",
+    "smooth_chucker",
     "global_context_menu"
   ]
 }
