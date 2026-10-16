@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import SectionHead from '../../components/SectionHead.astro';
 import { categoryLabels } from '../../data/site';
 import { getWork } from '../../data/work';
 import { sortedRepos, statusLabels } from '../../data/repos';
@@ -22,9 +23,9 @@ const total = projects.length + sortedRepos.length;
   <div class="wrap">
     <header class="page-head">
       <div class="page-glow" aria-hidden="true"></div>
-      <p class="label">Work</p>
-      <h1 class="h2" data-split>Things I've built<br /><span class="serif accent">and shipped.</span></h1>
-      <p class="lead" id="count" aria-live="polite">{total} projects</p>
+      <SectionHead as="h1" label="Work" title="Things I've built" accent="and shipped." split={false}>
+        <p class="lead" id="count" aria-live="polite">{total} projects</p>
+      </SectionHead>
     </header>
 
     <div class="controls" id="filters">
@@ -40,7 +41,7 @@ const total = projects.length + sortedRepos.length;
     </div>
 
     <section class="group" aria-labelledby="pro-h">
-      <h2 id="pro-h" class="label group-title">Professional and products</h2>
+      <SectionHead id="pro-h" size="sub" label={`${projects.length} projects`} title="Professional and products" />
       <div class="grid-cards">
         {projects.map((p) => (
           <ProjectCard
@@ -53,7 +54,7 @@ const total = projects.length + sortedRepos.length;
     </section>
 
     <section class="group" aria-labelledby="oss-h">
-      <h2 id="oss-h" class="label group-title">Open source and experiments</h2>
+      <SectionHead id="oss-h" size="sub" label={`${sortedRepos.length} repositories`} title="Open source and experiments" />
       <div class="grid-cards">
         {sortedRepos.map((r) => (
           <ProjectCard
@@ -110,7 +111,7 @@ const total = projects.length + sortedRepos.length;
 </script>
 
 <style>
-  .controls { position: sticky; top: 72px; z-index: 5; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 40px; padding: 10px; border-radius: 22px; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .controls { position: sticky; top: 72px; z-index: 5; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: var(--gap-head); padding: 10px; border-radius: var(--r-card); background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
   .search { flex: 1 1 260px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-radius: var(--r-pill); background: var(--surface); border: 1px solid var(--line-2); color: var(--text-3); }
   .search:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
   .search input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 12px 0; outline: none; font-size: 15px; }
@@ -118,7 +119,6 @@ const total = projects.length + sortedRepos.length;
   .fchip { font-size: 13px; padding: 8px 14px; border-radius: var(--r-pill); border: 1px solid var(--line-2); background: transparent; color: var(--text-2); transition: background var(--t-fast), color var(--t-fast); }
   .fchip:hover { background: var(--surface-2); color: var(--text); }
   .fchip[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-  .group + .group { margin-top: 72px; }
-  .group-title { margin-bottom: 20px; }
+  .group + .group { margin-top: clamp(72px, 9vw, 120px); }
   .empty { padding: 48px 0; text-align: center; }
 </style>

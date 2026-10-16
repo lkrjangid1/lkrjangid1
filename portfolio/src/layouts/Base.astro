@@ -62,8 +62,9 @@ const ogImage = new URL(`/og/${ogSlug}.png`, site.url).href;
     <meta name="twitter:image" content={ogImage} />
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
-  <body>
+  <body id="top">
     <div class="grain" aria-hidden="true"></div>
+    <div class="cursor" aria-hidden="true"><div class="cursor-ring"><span class="cursor-label"></span></div><div class="cursor-dot"></div></div>
     <a class="skip-link" href="#main">Skip to content</a>
     <Nav current={current} />
     <main id="main">

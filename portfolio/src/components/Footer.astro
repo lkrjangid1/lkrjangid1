@@ -1,26 +1,65 @@
 ---
 import { site } from '../data/site';
 const year = new Date().getFullYear();
+const search = `https://www.google.com/search?q=${encodeURIComponent(site.handle)}`;
 ---
-<footer class="footer wrap">
-  <span>© {year} {site.name}</span>
-  <span class="status"><span class="dot"></span> {site.availability}</span>
-  <nav class="links" aria-label="Elsewhere">
-    <a href={site.links.github} rel="me noopener">GitHub</a>
-    <a href={site.links.linkedin} rel="me noopener">LinkedIn</a>
-    <a href={site.links.x} rel="me noopener">X</a>
-    <a href={site.links.pubdev} rel="me noopener">pub.dev</a>
-    <a href={site.links.blog} rel="me noopener">FlutDev</a>
-    <a href={`mailto:${site.email}`}>Email</a>
-  </nav>
+<footer class="footer">
+  <div class="footer-glow" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="top">
+      <div class="credit">
+        <p>Designed and built by <a href="/about">{site.name}</a></p>
+        <a class="status" href="/contact" data-cursor="Hire"><span class="dot pulse"></span> {site.availability}</a>
+      </div>
+      <nav class="links" aria-label="Elsewhere">
+        <a href={site.links.github} rel="me noopener">GitHub</a>
+        <a href={site.links.linkedin} rel="me noopener">LinkedIn</a>
+        <a href={site.links.x} rel="me noopener">X</a>
+        <a href={site.links.pubdev} rel="me noopener">pub.dev</a>
+        <a href={site.links.blog} rel="me noopener">FlutDev</a>
+        <a href={`mailto:${site.email}`}>Email</a>
+      </nav>
+    </div>
+
+    <a class="wordmark" href={search} target="_blank" rel="noopener" data-wordmark data-cursor="Google me" aria-label={`Search Google for ${site.handle}`}>
+      <span aria-hidden="true">{site.handle}</span>
+    </a>
+
+    <div class="bottom">
+      <span>© {year} {site.name} · {site.location}</span>
+      <a href="#top" class="totop" data-cursor="Up">Back to top <span aria-hidden="true">↑</span></a>
+    </div>
+  </div>
 </footer>
 
 <style>
-  .footer {
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px 24px;
-    padding-top: 32px; padding-bottom: 40px; margin-top: 96px; border-top: 1px solid var(--line); font-size: 14px; color: var(--text-3);
-  }
-  .status { display: inline-flex; align-items: center; gap: 10px; }
-  .links { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .footer { position: relative; overflow: hidden; margin-top: clamp(96px, 12vw, 160px); border-top: 1px solid var(--line); }
+  .footer-glow { position: absolute; inset: 30% -10% -40%; background: radial-gradient(50% 50% at 50% 50%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%); pointer-events: none; z-index: -1; }
+  .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap; padding-top: 40px; }
+  .credit { display: grid; gap: 14px; justify-items: start; }
+  .credit p { color: var(--text-3); }
+  .credit p a { color: var(--text); }
+  .credit p a:hover { color: var(--accent); }
+  .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: var(--r-pill); background: var(--glass); border: 1px solid var(--line); font-size: 14px; color: var(--text-2); transition: border-color var(--t-fast); }
+  .status:hover { border-color: var(--mint); color: var(--text); }
+  .links { display: flex; flex-wrap: wrap; gap: 8px 28px; padding-top: 6px; color: var(--text-2); }
   .links a:hover { color: var(--text); }
+
+  /* Giant wordmark: grey-to-accent gradient, with a light that follows the pointer (set by site.ts). */
+  .wordmark {
+    --mx: 50%; --my: 40%;
+    /* Gradient text only paints inside the box, so pad it for the j and g descenders. */
+    display: block; margin: clamp(32px, 6vw, 72px) 0 0; padding-bottom: .2em; text-align: center;
+    font: 700 clamp(72px, 19vw, 300px)/.9 var(--font-display); letter-spacing: -.06em; white-space: nowrap;
+    background:
+      radial-gradient(35% 60% at var(--mx) var(--my), var(--accent), transparent 70%),
+      linear-gradient(180deg, color-mix(in srgb, var(--text-3) 70%, transparent) 0%, color-mix(in srgb, var(--text-3) 35%, transparent) 55%, color-mix(in srgb, var(--accent) 45%, transparent) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    transition: transform var(--t-med) var(--ease-out);
+    user-select: none;
+  }
+  .wordmark:hover { transform: translateY(-4px); }
+  .wordmark:focus-visible { outline-offset: 8px; }
+  .bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 24px 0 36px; border-top: 1px solid var(--line); font-size: 14px; color: var(--text-3); }
+  .totop:hover { color: var(--text); }
 </style>

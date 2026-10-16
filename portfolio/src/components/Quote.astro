@@ -1,0 +1,27 @@
+---
+import type { Recommendation } from '../data/recommendations';
+
+interface Props {
+  r: Recommendation;
+}
+const { r } = Astro.props;
+const initials = r.title.split(/\s+/).map((w) => w[0]).join('').slice(0, 2);
+---
+<figure class="ui-card quote" data-reveal>
+  <blockquote>{r.recommendation}</blockquote>
+  <figcaption>
+    <span class="avatar" aria-hidden="true">{initials}</span>
+    <span><a href={r.profile} rel="noopener" data-cursor="Profile">{r.title}</a><small>{r.subtitle}</small></span>
+  </figcaption>
+</figure>
+
+<style>
+  .quote { break-inside: avoid; margin: 0 0 var(--gap-grid); display: block; }
+  blockquote { margin: 0; color: var(--text-2); font-size: 16px; line-height: 1.7; }
+  blockquote::before { content: '“'; display: block; height: 28px; font: 400 64px/1 var(--font-serif); color: var(--accent); }
+  figcaption { display: flex; align-items: center; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+  figcaption a { font-weight: 500; }
+  figcaption a:hover { color: var(--accent); }
+  small { display: block; font-size: 13px; color: var(--text-3); }
+  .avatar { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font: 600 14px/1 var(--font-display); }
+</style>

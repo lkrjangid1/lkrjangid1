@@ -2,6 +2,25 @@
 
 /* Site-wide layout on top of the v2 tokens and components (tokens.css mirrors design/assets/tokens.css). */
 
+/* ---------- UI system: every card, heading and gap uses these. ---------- */
+:root {
+  /* Radius: cards, nested items inside cards, and full-width panels. */
+  --r-card: 24px;
+  --r-item: 14px;
+  --r-panel: 32px;
+  /* Padding: large content cards, standard cards, nested items. */
+  --pad-lg: clamp(24px, 2.8vw, 36px);
+  --pad-md: 24px;
+  --pad-sm: 14px 16px;
+  /* Type: titles (home sections and page h1), subtitles (sections within pages), card titles. */
+  --fs-title: clamp(44px, 6.2vw, 92px);
+  --fs-subtitle: clamp(30px, 3.6vw, 52px);
+  --fs-card: clamp(21px, 1.9vw, 26px);
+  /* Rhythm. */
+  --gap-grid: 16px;
+  --gap-head: 48px;
+}
+
 /* v1 token names still used by BenchmarkBars, CodeBlock and the contact form, mapped onto v2. */
 :root {
   --surface-0: var(--bg); --surface-1: var(--surface-2);
@@ -9,8 +28,33 @@
   --border: var(--line); --border-strong: var(--line-2);
   --text-accent: var(--accent); --bg-accent: var(--accent-soft);
   --success: var(--mint); --danger: var(--down);
-  --radius: var(--r-12); --radius-card: var(--r-16);
+  --radius: var(--r-item); --radius-card: var(--r-card);
 }
+
+/* Headings */
+.h2 { font-size: var(--fs-title); }
+.h3 { font-size: var(--fs-card); }
+.title-sub { font: 600 var(--fs-subtitle)/1 var(--font-display); letter-spacing: -.035em; }
+
+/* Cards. `--app` tints the corner glow; it defaults to the site accent. */
+.ui-card {
+  --app: var(--accent);
+  position: relative; isolation: isolate; overflow: hidden;
+  border-radius: var(--r-card); background: var(--surface); border: 1px solid var(--line);
+  padding: var(--pad-md);
+  transition: border-color var(--t-fast), transform var(--t-med) var(--ease-out), box-shadow var(--t-med);
+}
+.ui-card.lg { padding: var(--pad-lg); }
+.ui-card.flush { padding: 0; }
+.ui-card.glow::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--app) 14%, transparent), transparent 62%);
+}
+a.ui-card:hover, .ui-card.hoverable:hover { border-color: color-mix(in srgb, var(--app) 45%, var(--line-2)); }
+.ui-item { border-radius: var(--r-item); background: var(--surface-2); border: 1px solid var(--line); padding: var(--pad-sm); }
+a.ui-item { transition: border-color var(--t-fast), transform var(--t-fast) var(--ease-out); }
+a.ui-item:hover { border-color: color-mix(in srgb, var(--app, var(--accent)) 50%, var(--line-2)); }
+.ui-grid { display: grid; gap: var(--gap-grid); }
 
 body { display: flex; flex-direction: column; min-height: 100vh; }
 main { flex: 1; }
@@ -27,17 +71,13 @@ main { flex: 1; }
 .prose a:hover { border-color: var(--accent); }
 
 .section { padding-top: clamp(96px, 12vw, 160px); }
-.section-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap; }
-.section-head .label { margin-bottom: 18px; }
-.section-head .lead { max-width: 400px; }
 
-.page-head { padding-top: clamp(140px, 16vw, 200px); padding-bottom: 48px; position: relative; }
-.page-head .label { margin-bottom: 18px; }
-.page-head .lead { margin-top: 20px; max-width: 640px; }
+.page-head { padding-top: clamp(140px, 16vw, 200px); padding-bottom: var(--gap-head); position: relative; }
+.page-head .lead { margin-top: 24px; max-width: 640px; }
 .page-glow { position: absolute; inset: -40% -20% auto; height: 700px; background: var(--glow); pointer-events: none; z-index: -1; }
 
 .pills { display: flex; flex-wrap: wrap; gap: 8px; }
-.grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+.grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: var(--gap-grid); }
 
 .rows { list-style: none; margin: 0; padding: 0; }
 .rows > li > a, .rows > li > div {
@@ -45,6 +85,34 @@ main { flex: 1; }
   padding: 20px 4px; border-bottom: 1px solid var(--line); transition: color var(--t-fast), padding var(--t-med) var(--ease-out);
 }
 .rows > li > a:hover { color: var(--accent); padding-left: 12px; }
+
+/* ---------- Custom cursor (enabled by site.ts on fine pointers only) ----------
+   ring: follows with easing · dot: exact position
+   states on <html>: c-link (ring grows), c-label (filled disc with text), c-down (pressed), c-text (native I-beam), c-hide */
+.cursor { display: none; }
+.has-cursor, .has-cursor a, .has-cursor button, .has-cursor summary, .has-cursor label { cursor: none; }
+.has-cursor input, .has-cursor textarea, .has-cursor select, .has-cursor [contenteditable] { cursor: text; }
+.has-cursor .cursor { display: block; position: fixed; inset: 0 auto auto 0; z-index: 9999; pointer-events: none; }
+.cursor-ring, .cursor-dot { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; will-change: transform; }
+.cursor-ring {
+  width: 30px; height: 30px; margin: -15px 0 0 -15px; display: grid; place-items: center;
+  border: 1px solid rgba(255, 255, 255, .9); mix-blend-mode: difference;
+  transition: width .35s var(--ease-out), height .35s var(--ease-out), margin .35s var(--ease-out), background .25s, border-color .25s, opacity .25s, scale .2s var(--ease-out);
+}
+.cursor-dot { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: #fff; mix-blend-mode: difference; transition: opacity .2s, scale .2s; }
+.cursor-label { font: 600 12px/1 var(--font-body); letter-spacing: .02em; color: var(--accent-ink); white-space: nowrap; opacity: 0; scale: .6; transition: opacity .2s, scale .3s var(--ease-out); }
+.c-link .cursor-ring { width: 52px; height: 52px; margin: -26px 0 0 -26px; background: rgba(255, 255, 255, .06); }
+.c-link .cursor-dot { scale: 0; }
+.c-label .cursor-ring { width: 88px; height: 88px; margin: -44px 0 0 -44px; background: var(--accent); border-color: transparent; mix-blend-mode: normal; box-shadow: 0 10px 40px -10px var(--accent); }
+.c-label .cursor-label { opacity: 1; scale: 1; }
+.c-label .cursor-dot { scale: 0; }
+.c-down .cursor-ring { scale: .82; }
+.c-down .cursor-dot { scale: 1.6; }
+.c-text .cursor-ring, .c-text .cursor-dot, .c-hide .cursor-ring, .c-hide .cursor-dot { opacity: 0; }
+
+/* Cycling device frames: only the first screen loads up front. Lazy images that aren't displayed
+   aren't fetched, so the rest download once site.ts starts the cycle (after load, when visible). */
+[data-cycle]:not(.cycling) .screen img:not(.on) { display: none; }
 
 /* Split-text masks need room for descenders. */
 .word-mask { padding-bottom: .22em; margin-bottom: -.22em; }

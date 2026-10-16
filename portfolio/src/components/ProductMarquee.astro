@@ -1,0 +1,67 @@
+---
+import AppIcon from './AppIcon.astro';
+
+/** Two rows of product names drifting in opposite directions; names alternate display and serif styles. */
+interface Item {
+  slug: string;
+  name: string;
+  href: string;
+}
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+const half = Math.ceil(items.length / 2);
+const rows = [items.slice(0, half), items.slice(half)];
+const Sparkle = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c.6 6.2 5.8 11.4 12 12-6.2.6-11.4 5.8-12 12-.6-6.2-5.8-11.4-12-12C6.2 11.4 11.4 6.2 12 0Z"/></svg>';
+---
+<section class="pmarquee" aria-label="Products I've shipped">
+  {rows.map((row, r) => (
+    <div class:list={['prow', { reverse: r === 1 }]}>
+      {[0, 1].map((copy) => (
+        <ul class="ptrack" aria-hidden={copy === 1 ? 'true' : undefined}>
+          {row.map((it, i) => (
+            <li>
+              <a href={it.href} tabindex={copy === 1 ? -1 : undefined} data-cursor="Open">
+                <AppIcon slug={it.slug} name={it.name} size={64} />
+                <span class:list={['pname', (i + r) % 2 === 0 ? 'display-name' : 'serif-name']}>{it.name}</span>
+              </a>
+              <span class="spark" set:html={Sparkle} />
+            </li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  ))}
+</section>
+
+<style>
+  .pmarquee {
+    display: grid; gap: clamp(8px, 1.4vw, 18px); padding: clamp(28px, 4vw, 52px) 0; overflow: hidden;
+    border-block: 1px solid var(--line);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .prow { display: flex; width: max-content; }
+  .ptrack { display: flex; align-items: center; flex: none; list-style: none; margin: 0; padding: 0; animation: pm-left 60s linear infinite; }
+  .reverse .ptrack { animation-name: pm-right; animation-duration: 70s; }
+  .pmarquee:hover .ptrack { animation-play-state: paused; }
+  li { display: flex; align-items: center; }
+  a { display: flex; align-items: center; gap: clamp(14px, 1.6vw, 22px); padding: 0 clamp(18px, 2vw, 30px); border-radius: var(--r-item); }
+  .pname { font-size: clamp(40px, 5.6vw, 80px); line-height: 1.15; white-space: nowrap; transition: color var(--t-fast); }
+  .display-name { font-family: var(--font-display); font-weight: 600; letter-spacing: -.045em; color: var(--text); }
+  .serif-name { font-family: var(--font-serif); font-style: italic; letter-spacing: -.02em; color: var(--text-3); }
+  a:hover .pname { color: var(--accent); }
+  a :global(.app-icon) { --size: clamp(46px, 4.4vw, 64px) !important; transition: transform var(--t-med) var(--ease-out); }
+  a:hover :global(.app-icon) { transform: rotate(-6deg) scale(1.08); }
+  .spark { display: grid; place-items: center; width: clamp(18px, 1.8vw, 26px); color: var(--accent); flex: none; }
+  .spark :global(svg) { width: 100%; height: auto; fill: currentColor; }
+  @keyframes pm-left { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+  @keyframes pm-right { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+  @media (prefers-reduced-motion: reduce) {
+    .pmarquee { overflow-x: auto; }
+    .ptrack { animation: none; }
+    .ptrack[aria-hidden='true'] { display: none; }
+  }
+</style>

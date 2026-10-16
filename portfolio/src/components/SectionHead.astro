@@ -1,0 +1,42 @@
+---
+/**
+ * The one section header used everywhere: mono label, title (with an optional serif accent line),
+ * and an optional lead paragraph or action on the right.
+ * size="title" for home sections and page h1s; size="sub" for sections inside a page.
+ */
+interface Props {
+  label: string;
+  title: string;
+  accent?: string;
+  lead?: string;
+  id?: string;
+  as?: 'h1' | 'h2';
+  size?: 'title' | 'sub';
+  split?: boolean;
+}
+
+const { label, title, accent, lead, id, as: Tag = 'h2', size = 'title', split = true } = Astro.props;
+---
+<div class:list={['shead', size]}>
+  <div class="shead-main">
+    <p class="label">{label}</p>
+    <Tag id={id} class:list={[size === 'title' ? 'h2' : 'title-sub']} data-split={split ? '' : undefined}>
+      {title}{accent && <><br /><span class="serif accent">{accent}</span></>}
+    </Tag>
+  </div>
+  {(lead || Astro.slots.has('default')) && (
+    <div class="shead-aside" data-reveal>
+      {lead && <p class="lead">{lead}</p>}
+      <slot />
+    </div>
+  )}
+</div>
+
+<style>
+  /* Title column wraps; the aside always sits bottom-right (stacks below on narrow screens). */
+  .shead { display: grid; grid-template-columns: minmax(0, 1fr) fit-content(420px); align-items: end; gap: 24px 64px; margin-bottom: var(--gap-head); }
+  .shead.sub { margin-bottom: 32px; }
+  .shead .label { margin-bottom: 18px; }
+  .shead-aside { display: grid; gap: 16px; justify-items: start; }
+  @media (max-width: 900px) { .shead { grid-template-columns: 1fr; } }
+</style>

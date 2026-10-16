@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import { site, writing } from '../data/site';
 import { getArticleCount } from '../data/stats';
+import SectionHead from '../components/SectionHead.astro';
 
 const total = await getArticleCount();
 const series = writing.filter((p) => p.series).sort((a, b) => a.title.localeCompare(b.title));
@@ -12,12 +13,11 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', y
   <div class="wrap">
     <header class="page-head">
       <div class="page-glow" aria-hidden="true"></div>
-      <p class="label">Writing · FlutDev</p>
-      <h1 class="h2" data-split>{total} articles.<br /><span class="serif accent">One rabbit hole at a time.</span></h1>
-      <p class="lead">Selected posts on Flutter internals, native interop and performance. Every link opens the original on <a class="link" href={site.links.blog}>FlutDev</a>.</p>
+      <SectionHead as="h1" label="Writing · FlutDev" title={`${total} articles.`} accent="One rabbit hole at a time." split={false}
+        lead="Selected posts on Flutter internals, native interop and performance. Every link opens the original on FlutDev." />
     </header>
 
-    <section class="series" aria-labelledby="series-h" data-reveal>
+    <section class="ui-card lg glow series" style="--app:#ff7a45" aria-labelledby="series-h" data-reveal>
       <div>
         <p class="label">Series · May 2026 · 4 parts</p>
         <h2 id="series-h" class="h3">Shorebird internals</h2>
@@ -25,16 +25,16 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', y
       </div>
       <ol class="stack">
         {series.map((p, i) => (
-          <li><a href={p.url} rel="noopener"><span class="mono">{String(i + 1).padStart(2, '0')}</span><span>{p.title.replace(/^Part \d+:\s*/, '')}</span><span aria-hidden="true">↗</span></a></li>
+          <li><a class="ui-item" href={p.url} rel="noopener" data-cursor="Read"><span class="mono">{String(i + 1).padStart(2, '0')}</span><span>{p.title.replace(/^Part \d+:\s*/, '')}</span><span aria-hidden="true">↗</span></a></li>
         ))}
       </ol>
     </section>
 
     <section class="section" aria-labelledby="posts-h">
-      <h2 id="posts-h" class="label">More posts</h2>
-      <ul class="posts">
+      <SectionHead id="posts-h" size="sub" label={`${posts.length} selected`} title="More posts." />
+      <ul class="rows posts">
         {posts.map((p) => (
-          <li><a href={p.url} rel="noopener"><span>{p.title}</span><time class="label" datetime={p.date}>{fmt.format(new Date(p.date))}</time></a></li>
+          <li><a href={p.url} rel="noopener" data-cursor="Read"><span>{p.title}</span><time class="label" datetime={p.date}>{fmt.format(new Date(p.date))}</time></a></li>
         ))}
       </ul>
       <p class="more"><a class="btn" href={site.links.blog} rel="noopener">All {total} posts on FlutDev ↗</a></p>
@@ -43,18 +43,13 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', y
 </Base>
 
 <style>
-  .series {
-    display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; padding: 32px; border-radius: 28px; border: 1px solid var(--line-2);
-    background: radial-gradient(100% 80% at 100% 0%, color-mix(in srgb, #ff7a45 14%, transparent), transparent 60%), var(--surface);
-  }
-  .series .h3 { margin: 12px 0 10px; font-size: clamp(28px, 3vw, 40px); }
+  .series { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; }
+  .series .h3 { margin: 12px 0 10px; }
   .stack { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  .stack a { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); transition: transform var(--t-fast) var(--ease-out), border-color var(--t-fast); }
-  .stack a:hover { transform: translateX(6px); border-color: #ff7a45; }
-  .stack .mono { color: #ff7a45; }
-  .posts { list-style: none; margin: 16px 0 0; padding: 0; }
-  .posts a { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 22px 4px; border-bottom: 1px solid var(--line); font: 500 clamp(18px, 1.8vw, 23px)/1.35 var(--font-display); letter-spacing: -.01em; transition: color var(--t-fast), padding var(--t-med) var(--ease-out); }
-  .posts a:hover { color: var(--accent); padding-left: 12px; }
+  .stack a { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; }
+  .stack a:hover { transform: translateX(6px); }
+  .stack .mono { color: var(--app); }
+  .posts a { font: 500 clamp(18px, 1.8vw, 23px)/1.35 var(--font-display); letter-spacing: -.01em; }
   .posts time { white-space: nowrap; flex: none; }
   .more { margin-top: 40px; }
   @media (max-width: 900px) { .series { grid-template-columns: 1fr; } }

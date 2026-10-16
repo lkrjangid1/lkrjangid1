@@ -23,48 +23,44 @@ const { slug, href, title, subtitle, meta, metric, tags, category, status, shot,
 const search = [title, subtitle, meta, metric, status, ...tags].filter(Boolean).join(' ').toLowerCase();
 const portrait = shot && typeof shot !== 'string' && shot.height > shot.width * 1.2;
 ---
-<article class:list={['pcard', { featured, 'has-shot': shot }]} style={`--app:${brand(slug, title).accent}`} data-category={category} data-search={search} data-tilt>
+<article
+  class:list={['ui-card', 'flush', 'glow', 'hoverable', 'pcard', { featured }]}
+  style={`--app:${brand(slug, title).accent}`}
+  data-category={category} data-search={search} data-tilt data-cursor={external ? 'GitHub' : 'Open'}
+>
   <div class="pcard-body">
     <div class="pcard-head">
       <AppIcon slug={slug} name={title} size={44} />
-      {status && <span class="pill">{status}</span>}
+      {status ? <span class="pill">{status}</span> : <span class="go" aria-hidden="true">{external ? '↗' : '→'}</span>}
     </div>
     <a href={href} class="stretched" rel={external ? 'noopener' : undefined}><h3 class="h3">{title}</h3></a>
     {subtitle && <p class="muted sub">{subtitle}</p>}
-    {meta && <p class="label meta">{meta}</p>}
+    {meta && <p class="label">{meta}</p>}
     {metric && <p class="metric">{metric}</p>}
-    <div class="tags">{tags.slice(0, 4).map((t) => <span class="chip">{t}</span>)}</div>
+    <div class="pills tags">{tags.slice(0, 4).map((t) => <span class="chip">{t}</span>)}</div>
   </div>
   {shot && <div class:list={['thumb', { portrait }]}><Shot src={shot} alt="" width={portrait ? 360 : 640} /></div>}
-  <span class="go" aria-hidden="true">{external ? '↗' : '→'}</span>
 </article>
 
 <style>
-  .pcard {
-    position: relative; display: flex; flex-direction: column; overflow: hidden; min-height: 300px;
-    border-radius: 24px; background: var(--surface); border: 1px solid var(--line);
-    transition: border-color var(--t-fast), transform var(--t-med) var(--ease-out);
-  }
-  .pcard::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(90% 70% at 100% 0%, color-mix(in srgb, var(--app) 14%, transparent), transparent 60%); }
-  .pcard:hover { border-color: color-mix(in srgb, var(--app) 45%, var(--line)); }
+  .pcard { display: flex; flex-direction: column; min-height: 300px; }
   .pcard:has(.stretched:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
-  .featured { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
-  .pcard-body { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 24px 24px 20px; }
-  .pcard-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .featured { border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+  .pcard-body { display: flex; flex-direction: column; gap: 8px; padding: var(--pad-md); }
+  .pcard-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
   .stretched::after { content: ''; position: absolute; inset: 0; z-index: 2; }
   .stretched:focus-visible { outline: none; }
   .sub { font-size: 15px; line-height: 1.5; }
   .metric { font: 500 13.5px/1.45 var(--font-mono); color: color-mix(in srgb, var(--app) 75%, var(--text)); }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-  .thumb { position: relative; margin-top: auto; height: 170px; overflow: hidden; padding: 0 24px; }
+  .tags { margin-top: 6px; gap: 6px; }
+  .go { color: var(--text-3); font-size: 18px; transition: transform var(--t-fast), color var(--t-fast); }
+  .pcard:hover .go { color: var(--app); transform: translateX(3px); }
+  .thumb { margin-top: auto; height: 170px; overflow: hidden; padding: 0 var(--pad-md); }
   .thumb :global(img) {
-    width: 100%; height: auto; border-radius: 12px 12px 0 0; border: 1px solid var(--line-2); border-bottom: 0;
+    width: 100%; height: auto; border-radius: var(--r-item) var(--r-item) 0 0; border: 1px solid var(--line-2); border-bottom: 0;
     transition: transform var(--t-slow) var(--ease-out);
   }
   .thumb.portrait { display: flex; justify-content: center; align-items: flex-start; }
   .thumb.portrait :global(img) { width: 46%; border-radius: 18px 18px 0 0; }
   .pcard:hover .thumb :global(img) { transform: translateY(-8px); }
-  .go { position: absolute; right: 22px; top: 22px; z-index: 1; color: var(--text-3); font-size: 18px; transition: transform var(--t-fast), color var(--t-fast); }
-  .pcard:has(.pill) .go { display: none; }
-  .pcard:hover .go { color: var(--app); transform: translateX(3px); }
 </style>

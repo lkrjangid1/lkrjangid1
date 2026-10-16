@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Quote from '../components/Quote.astro';
 import portrait from '../assets/portrait.webp';
 import { achievements, education, experience, site, skills } from '../data/site';
 import { getRecommendations } from '../data/recommendations';
@@ -13,26 +15,25 @@ const recommendations = await getRecommendations();
     <header class="page-head about-head">
       <div class="page-glow" aria-hidden="true"></div>
       <div>
-        <p class="label">About</p>
-        <h1 class="h2" data-split>Hi, I'm Lokesh.<br /><span class="serif accent">I ship mobile apps.</span></h1>
+        <SectionHead as="h1" label="About" title="Hi, I'm Lokesh." accent="I ship mobile apps." split={false} />
         <div class="prose lead">{site.bio.map((p) => <p>{p}</p>)}</div>
         <div class="btns ctas">
-          <a class="btn btn-primary" href={site.resume} download>Download résumé <Icon name="download" size={14} /></a>
+          <a class="btn btn-primary" href={site.resume} download data-cursor="PDF">Download résumé <Icon name="download" size={14} /></a>
           <a class="btn" href="/contact">Get in touch</a>
           <a class="btn" href={site.links.linkedin} rel="noopener">LinkedIn ↗</a>
         </div>
       </div>
-      <div class="photo" data-reveal>
+      <figure class="photo">
         <Image src={portrait} alt={`Portrait of ${site.name}`} width={640} format="webp" quality={84} loading="eager" />
-        <p class="label">{site.location} · <time data-clock={site.timezone}>—</time> IST</p>
-      </div>
+        <figcaption class="label">{site.location} · <time data-clock={site.timezone}>—</time> IST</figcaption>
+      </figure>
     </header>
 
     <section class="section" aria-labelledby="xp-h">
-      <div class="section-head"><div><p class="label">Experience</p><h2 id="xp-h" class="h2" data-split>Where I've worked.</h2></div></div>
-      <ol class="jobs">
+      <SectionHead id="xp-h" size="sub" label="Experience" title="Where I've worked." />
+      <ol class="ui-grid jobs">
         {experience.map((e) => (
-          <li class="job" data-reveal>
+          <li class="ui-card lg job" data-reveal>
             <div class="job-meta">
               <span class="label">{e.period}</span>
               <span class="muted">{e.place}</span>
@@ -42,22 +43,22 @@ const recommendations = await getRecommendations();
               <h3 class="h3">{e.role}</h3>
               <p class="company">{e.company}</p>
               <p class="muted summary">{e.summary}</p>
-              <ul>{e.points.map((pt) => <li>{pt}</li>)}</ul>
+              <ul class="points">{e.points.map((pt) => <li>{pt}</li>)}</ul>
             </div>
           </li>
         ))}
       </ol>
     </section>
 
-    <section class="section split" aria-label="Education and achievements">
+    <section class="section ui-grid split" aria-label="Education and achievements">
       <div data-reveal>
-        <p class="label">Education</p>
+        <SectionHead size="sub" label="Education" title="Studied." split={false} />
         <ul class="rows">
           {education.map((e) => <li><div><span><b>{e.degree}</b><br /><span class="muted">{e.school} · {e.note}</span></span><span class="label">{e.period}</span></div></li>)}
         </ul>
       </div>
       <div data-reveal>
-        <p class="label">Achievements</p>
+        <SectionHead size="sub" label="Achievements" title="Recognised." split={false} />
         <ul class="rows">
           {achievements.map((a) => <li><div><span>{a}</span></div></li>)}
         </ul>
@@ -65,10 +66,10 @@ const recommendations = await getRecommendations();
     </section>
 
     <section class="section" aria-labelledby="sk-h">
-      <div class="section-head"><div><p class="label">Skills</p><h2 id="sk-h" class="h2" data-split>The toolbox.</h2></div></div>
-      <dl class="skills">
+      <SectionHead id="sk-h" size="sub" label="Skills" title="The toolbox." />
+      <dl class="ui-card lg skills" data-reveal>
         {skills.map((g) => (
-          <div class="skill-row" data-reveal>
+          <div class="skill-row">
             <dt class="label">{g.group}</dt>
             <dd class="pills">{g.items.map((s) => <span class="chip">{s}</span>)}</dd>
           </div>
@@ -78,15 +79,8 @@ const recommendations = await getRecommendations();
 
     {recommendations.length > 0 && (
       <section class="section" aria-labelledby="rec-h">
-        <div class="section-head"><div><p class="label">Recommendations · LinkedIn</p><h2 id="rec-h" class="h2" data-split>In their words.</h2></div></div>
-        <div class="quotes">
-          {recommendations.map((r) => (
-            <figure class="quote" data-reveal>
-              <blockquote>{r.recommendation}</blockquote>
-              <figcaption><a href={r.profile} rel="noopener">{r.title}</a><small>{r.subtitle}</small></figcaption>
-            </figure>
-          ))}
-        </div>
+        <SectionHead id="rec-h" size="sub" label="Recommendations · LinkedIn" title="In their words." />
+        <div class="quotes">{recommendations.map((r) => <Quote r={r} />)}</div>
       </section>
     )}
   </div>
@@ -94,46 +88,40 @@ const recommendations = await getRecommendations();
 
 <style>
   .about-head { display: grid; grid-template-columns: 1.3fr .9fr; gap: clamp(32px, 6vw, 96px); align-items: end; }
-  .about-head .h2 { margin-bottom: 8px; }
+  .about-head :global(.shead) { margin-bottom: 24px; }
   .ctas { margin-top: 32px; }
-  .photo { position: relative; justify-self: center; text-align: center; }
+  .photo { margin: 0; justify-self: center; text-align: center; }
   .photo :global(img) {
-    width: min(380px, 80vw); height: auto; border-radius: 0 0 28px 28px;
+    width: min(380px, 80vw); height: auto;
     background: radial-gradient(70% 60% at 50% 45%, var(--accent-soft), transparent 70%);
     -webkit-mask-image: linear-gradient(#000 78%, transparent); mask-image: linear-gradient(#000 78%, transparent);
   }
   .photo .label { margin-top: 6px; }
 
-  .jobs { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
-  .job { display: grid; grid-template-columns: 220px 1fr; gap: 32px; padding: 32px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); }
+  .jobs { list-style: none; margin: 0; padding: 0; }
+  .job { display: grid; grid-template-columns: 220px 1fr; gap: 32px; }
   .job-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-  .company { color: var(--accent); margin: 4px 0 10px; font-weight: 500; }
-  .summary { margin-bottom: 14px; }
-  .job ul { margin: 0; padding-left: 18px; color: var(--text-2); }
-  .job li + li { margin-top: 8px; }
-  .job li::marker { color: var(--accent); }
+  .company { color: var(--accent); margin: 6px 0 12px; font-weight: 500; }
+  .summary { margin-bottom: 16px; }
+  .points { margin: 0; padding-left: 18px; color: var(--text-2); }
+  .points li + li { margin-top: 8px; }
+  .points li::marker { color: var(--accent); }
 
-  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-  .split .label { margin-bottom: 8px; }
+  .split { grid-template-columns: 1fr 1fr; gap: 48px; }
   .split .rows > li > div { align-items: flex-start; }
 
-  .skills { margin: 0; }
+  .skills { margin: 0; padding-block: 8px; }
   .skill-row { display: grid; grid-template-columns: 200px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .skill-row:last-child { border-bottom: 0; }
   .skill-row dt { padding-top: 5px; }
   .skill-row dd { margin: 0; }
 
-  .quotes { columns: 2 340px; column-gap: 16px; }
-  .quote { break-inside: avoid; margin: 0 0 16px; padding: 24px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); }
-  .quote blockquote { margin: 0; color: var(--text-2); line-height: 1.65; }
-  .quote blockquote::before { content: '“'; display: block; font: 400 56px/0.6 var(--font-serif); color: var(--accent); margin-bottom: 12px; }
-  .quote figcaption { margin-top: 16px; }
-  .quote figcaption a { font-weight: 500; }
-  .quote small { display: block; font-size: 13px; color: var(--text-3); }
+  .quotes { columns: 2 340px; column-gap: var(--gap-grid); }
 
   @media (max-width: 900px) {
     .about-head, .split { grid-template-columns: 1fr; }
     .photo { order: -1; }
-    .job { grid-template-columns: 1fr; gap: 12px; padding: 24px; }
+    .job { grid-template-columns: 1fr; gap: 12px; }
     .job-meta { flex-direction: row; flex-wrap: wrap; align-items: center; }
     .skill-row { grid-template-columns: 1fr; gap: 8px; }
   }

@@ -1,8 +1,5 @@
-// Site-wide behaviour: theme switch, nav state, local clock, rotators, screenshot cycling, tilt and GSAP motion.
-// Everything degrades to a static, fully visible page without JS or with reduced motion.
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { SplitText } from 'gsap/SplitText';
+// Site-wide behaviour: theme switch, nav state, local clock, rotators, screenshot cycling, tilt and cursor.
+// Scroll motion lives in motion.ts and loads on idle. Everything degrades to a static, fully visible page.
 
 const root = document.documentElement;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -84,9 +81,13 @@ if (!reduced) {
     let visible = false;
     frame.addEventListener('mouseenter', () => (paused = true));
     frame.addEventListener('mouseleave', () => (paused = false));
-    new IntersectionObserver(([e]) => (visible = e.isIntersecting)).observe(frame);
+    // The other screens stay display:none (so their lazy images don't download) until the page has
+    // loaded and the frame is on screen; then they're unhidden and start cycling.
+    const ready = () => { if (visible && document.readyState === 'complete') frame.classList.add('cycling'); };
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; ready(); }).observe(frame);
+    addEventListener('load', ready);
     setInterval(() => {
-      if (paused || !visible) return;
+      if (paused || !visible || !frame.classList.contains('cycling')) return;
       imgs[i].classList.remove('on');
       i = (i + 1) % imgs.length;
       imgs[i].classList.add('on');
@@ -106,62 +107,70 @@ if (!reduced) {
     });
   }
 
-  /* ---------- GSAP ---------- */
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+  /* ---------- Custom cursor: fine pointers only ---------- */
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    const ring = document.querySelector<HTMLElement>('.cursor-ring');
+    const dot = document.querySelector<HTMLElement>('.cursor-dot');
+    const label = document.querySelector<HTMLElement>('.cursor-label');
+    if (ring && dot && label) {
+      root.classList.add('has-cursor');
+      let x = -100, y = -100, rx = -100, ry = -100;
+      const LINK = 'a, button, summary, label, [role="button"], .fchip';
+      const TEXT = 'input, textarea, select, [contenteditable="true"]';
+      const setState = (target: Element | null) => {
+        const labelled = target?.closest<HTMLElement>('[data-cursor]');
+        const text = target?.closest(TEXT);
+        const link = target?.closest(LINK);
+        root.classList.toggle('c-text', !!text);
+        root.classList.toggle('c-label', !!labelled && !text);
+        root.classList.toggle('c-link', !labelled && !!link && !text);
+        if (labelled) label.textContent = labelled.dataset.cursor ?? '';
+      };
+      addEventListener('pointermove', (e) => {
+        x = e.clientX; y = e.clientY;
+        dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        setState(e.target as Element);
+        root.classList.remove('c-hide');
+      }, { passive: true });
+      addEventListener('pointerdown', () => root.classList.add('c-down'));
+      addEventListener('pointerup', () => root.classList.remove('c-down'));
+      document.addEventListener('pointerleave', () => root.classList.add('c-hide'));
+      document.addEventListener('pointerenter', () => root.classList.remove('c-hide'));
+      const loop = () => {
+        rx += (x - rx) * 0.2; ry += (y - ry) * 0.2;
+        ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+        requestAnimationFrame(loop);
+      };
+      loop();
+
+      // Buttons lean toward the pointer.
+      document.querySelectorAll<HTMLElement>('.btn').forEach((b) => {
+        b.addEventListener('pointermove', (e) => {
+          const r = b.getBoundingClientRect();
+          b.style.translate = `${((e.clientX - r.left) / r.width - 0.5) * 8}px ${((e.clientY - r.top) / r.height - 0.5) * 6}px`;
+        });
+        b.addEventListener('pointerleave', () => (b.style.translate = ''));
+      });
+    }
+  }
+
+  /* ---------- Footer wordmark: light follows the pointer ---------- */
+  document.querySelectorAll<HTMLElement>('[data-wordmark]').forEach((w) => {
+    w.addEventListener('pointermove', (e) => {
+      const r = w.getBoundingClientRect();
+      w.style.setProperty('--mx', `${((e.clientX - r.left) / r.width) * 100}%`);
+      w.style.setProperty('--my', `${((e.clientY - r.top) / r.height) * 100}%`);
+    });
+  });
+
+  /* ---------- Scroll motion, loaded on idle ---------- */
+  // Reveal targets are hidden from now until motion runs; the failsafe shows them if it never does.
   root.classList.add('js-motion');
-  const ease = 'expo.out';
-
-  const name = document.querySelector('[data-split-chars]');
-  if (name) {
-    SplitText.create(name, {
-      type: 'words,chars', mask: 'chars', charsClass: 'char', autoSplit: true,
-      onSplit: (self) => gsap.from(self.chars, { yPercent: 110, duration: 0.8, ease, stagger: 0.022 }),
-    });
-  }
-  if (document.querySelector('.portrait')) gsap.from('.portrait', { y: 60, opacity: 0, duration: 1.4, ease, delay: 0.25 });
-
-  // Headings visible at load paint immediately (they are usually the LCP element); the rest rise in on scroll.
-  document.querySelectorAll('[data-split]').forEach((h) => {
-    if (h.getBoundingClientRect().top < innerHeight) return;
-    SplitText.create(h, {
-      type: 'words', mask: 'words', wordsClass: 'word', autoSplit: true,
-      onSplit: (self) => gsap.from(self.words, {
-        yPercent: 105, duration: 0.9, ease, stagger: 0.06,
-        scrollTrigger: { trigger: h, start: 'top 88%', once: true },
-      }),
-    });
-  });
-
-  gsap.set('[data-reveal]', { y: 28 });
-  ScrollTrigger.batch('[data-reveal]', {
-    start: 'top 92%', once: true,
-    onEnter: (els) => gsap.to(els, { opacity: 1, y: 0, duration: 0.9, ease, stagger: 0.08, overwrite: true }),
-  });
-
-  document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
-    const end = Number(el.dataset.count);
-    const suffix = el.dataset.suffix ?? '';
-    const o = { v: 0 };
-    gsap.to(o, {
-      v: end, duration: 1.6, ease: 'power3.out',
-      scrollTrigger: { trigger: el, start: 'top 94%', once: true },
-      onUpdate: () => (el.textContent = Math.round(o.v) + suffix),
-    });
-  });
-
-  document.querySelectorAll('.bench').forEach((b) => {
-    gsap.from(b.querySelectorAll('.bar i'), { scaleX: 0, duration: 1.2, ease, stagger: 0.15, scrollTrigger: { trigger: b, start: 'top 85%', once: true } });
-  });
-
-  document.querySelectorAll('.terminal pre').forEach((pre) => {
-    gsap.from(pre.querySelectorAll('.tl'), { opacity: 0, duration: 0.01, stagger: 0.32, scrollTrigger: { trigger: pre, start: 'top 80%', once: true } });
-  });
-
-  document.querySelectorAll('.product-visual').forEach((v) => {
-    gsap.fromTo(v, { y: 50 }, { y: -50, ease: 'none', scrollTrigger: { trigger: v, start: 'top bottom', end: 'bottom top', scrub: true } });
-  });
-
-  if (document.querySelector('.hero-glow')) {
-    gsap.to('.hero-glow', { opacity: 0.35, scale: 1.15, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-  }
+  const failsafe = setTimeout(() => root.classList.remove('js-motion'), 4000);
+  const loadMotion = () =>
+    import('./motion')
+      .then((m) => { m.startMotion(); clearTimeout(failsafe); })
+      .catch(() => root.classList.remove('js-motion'));
+  if ('requestIdleCallback' in window) requestIdleCallback(loadMotion, { timeout: 1200 });
+  else setTimeout(loadMotion, 200);
 }

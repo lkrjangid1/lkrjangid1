@@ -9,6 +9,7 @@ import type { Project } from '../../data/projects';
 import { categoryLabels, framedShots, site } from '../../data/site';
 import { shotSrc } from '../../data/shots';
 import { brand } from '../../data/icons';
+import SectionHead from '../../components/SectionHead.astro';
 
 export async function getStaticPaths() {
   const { projects, caseStudies } = await getWork();
@@ -84,7 +85,7 @@ const jsonLd = {
         {metrics.length > 0 && <ul class="metrics">{metrics.map((m) => <li>{m}</li>)}</ul>}
         {links.length > 0 && (
           <div class="btns links">
-            {links.map((l, i) => <a class:list={['btn', { 'btn-primary': i === 0 }]} href={l.url} rel="noopener">{l.label} ↗</a>)}
+            {links.map((l, i) => <a class:list={['btn', { 'btn-primary': i === 0 }]} href={l.url} rel="noopener" data-cursor="Visit">{l.label} ↗</a>)}
           </div>
         )}
       </div>
@@ -100,9 +101,9 @@ const jsonLd = {
     </header>
 
     {blocks.length > 0 && (
-      <section class="pac" aria-label="Problem, approach and result">
+      <section class="ui-grid pac" aria-label="Problem, approach and result">
         {blocks.map((b, i) => (
-          <div class="block" data-reveal>
+          <div class="ui-card glow block" data-reveal>
             <span class="mono step">0{i + 1}</span>
             <h2 class="h3">{b.title}</h2>
             <p class="muted">{b.body}</p>
@@ -112,10 +113,9 @@ const jsonLd = {
     )}
 
     {points.length > 0 && (
-      <section class="section narrow" aria-labelledby="built-h">
-        <p class="label">What I built</p>
-        <h2 id="built-h" class="h3 sec-title">Highlights</h2>
-        <ul class="points" data-reveal>{points.map((pt) => <li>{pt}</li>)}</ul>
+      <section class="section" aria-labelledby="built-h">
+        <SectionHead id="built-h" size="sub" label="What I built" title="Highlights" />
+        <ul class="ui-card lg points" data-reveal>{points.map((pt) => <li>{pt}</li>)}</ul>
       </section>
     )}
 
@@ -127,16 +127,15 @@ const jsonLd = {
 
     {shots.length > 1 && (
       <section class="section" aria-labelledby="shots-h">
-        <p class="label">Gallery</p>
-        <h2 id="shots-h" class="h3 sec-title">Screens</h2>
-        <div class:list={['gallery', { portrait }]} tabindex="0" role="region" aria-label={`${name} screenshots, scrollable`}>
+        <SectionHead id="shots-h" size="sub" label="Gallery" title="Screens" />
+        <div class:list={['gallery', { portrait }]} tabindex="0" role="region" aria-label={`${name} screenshots, scrollable`} data-cursor="Drag">
           {shots.map((s, i) => <Shot src={s} alt={`${name} screenshot ${i + 1}`} width={portrait ? 520 : 1200} />)}
         </div>
       </section>
     )}
 
     <nav class="next" aria-label="Next project">
-      <a href={`/work/${next.slug}`}>
+      <a href={`/work/${next.slug}`} data-cursor="Next">
         <span class="label">Next project</span>
         <span class="next-name"><AppIcon slug={next.slug} name={nextName} size={40} /> {nextName} <span aria-hidden="true">→</span></span>
       </a>
@@ -152,28 +151,26 @@ const jsonLd = {
   .crumb a:hover { color: var(--text); }
   .title-row { display: flex; align-items: center; gap: 18px; margin-bottom: 24px; }
   .app-name { font: 600 22px/1.2 var(--font-display); letter-spacing: -.02em; margin-top: 6px; }
-  .headline { font-size: clamp(40px, 5.4vw, 76px); max-width: 16ch; }
-  .lead { margin-top: 20px; }
+  .headline { max-width: 15ch; }
+  .lead { margin-top: 24px; }
   .meta { margin-top: 24px; }
   .metrics { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0 0; padding: 0; }
-  .metrics li { padding: 7px 12px; border-radius: 10px; font-size: 13.5px; color: var(--text); background: color-mix(in srgb, var(--app) 12%, var(--surface-2)); border: 1px solid color-mix(in srgb, var(--app) 28%, transparent); }
+  .metrics li { padding: 7px 12px; border-radius: var(--r-pill); font-size: 13.5px; color: var(--text); background: color-mix(in srgb, var(--app) 12%, var(--surface-2)); border: 1px solid color-mix(in srgb, var(--app) 28%, transparent); }
   .links { margin-top: 28px; }
   .hero-visual { display: grid; place-items: center; }
-  .hero-visual :global(.poster-hero) { width: min(320px, 80vw); height: auto; border-radius: 22px; box-shadow: var(--shadow); }
+  .hero-visual :global(.poster-hero) { width: min(320px, 80vw); height: auto; border-radius: var(--r-card); box-shadow: var(--shadow); }
 
-  .pac { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 40px; }
-  .block { padding: 26px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); }
+  .pac { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: var(--gap-head); }
   .step { color: var(--app); }
-  .block .h3 { margin: 10px 0 8px; font-size: 20px; }
+  .block .h3 { margin: 12px 0 8px; }
 
   .narrow { max-width: 820px; }
-  .sec-title { margin: 10px 0 20px; }
-  .points { margin: 0; padding-left: 20px; color: var(--text-2); font-size: 18px; }
+  .points { margin: 0; padding-left: calc(var(--pad-lg) + 20px); color: var(--text-2); font-size: 18px; max-width: 980px; }
   .points li + li { margin-top: 12px; }
   .points li::marker { color: var(--app); }
 
   .mdx { color: var(--text-2); }
-  .mdx :global(h2) { font: 600 clamp(26px, 3vw, 36px)/1.1 var(--font-display); letter-spacing: -.02em; color: var(--text); margin: 56px 0 16px; }
+  .mdx :global(h2) { font: 600 var(--fs-subtitle)/1 var(--font-display); letter-spacing: -.035em; color: var(--text); margin: clamp(64px, 8vw, 104px) 0 24px; }
   .mdx :global(h2:first-child) { margin-top: 0; }
   .mdx :global(p), .mdx :global(ul), .mdx :global(ol) { margin: 0 0 1em; }
   .mdx :global(li + li) { margin-top: 8px; }
@@ -181,13 +178,14 @@ const jsonLd = {
   .mdx :global(a) { color: var(--text); border-bottom: 1px solid var(--line-2); }
   .mdx :global(a:hover) { border-color: var(--accent); }
   .mdx :global(:not(pre) > code) { font-family: var(--font-mono); font-size: .88em; background: var(--surface-2); padding: 2px 6px; border-radius: 6px; }
+  .mdx :global(.bench), .mdx :global(.codeblock) { border-radius: var(--r-card); }
   .mdx :global(figure), .mdx :global(.codeblock) { margin: 20px 0; }
 
-  .gallery { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 10px; scroll-snap-type: x mandatory; }
-  .gallery :global(img) { flex: none; height: 360px; width: auto; scroll-snap-align: start; border-radius: 16px; border: 1px solid var(--line-2); background: var(--surface-2); }
-  .gallery.portrait :global(img) { height: 520px; border-radius: 26px; }
+  .gallery { display: flex; gap: var(--gap-grid); overflow-x: auto; padding-bottom: 10px; scroll-snap-type: x mandatory; }
+  .gallery :global(img) { flex: none; height: 360px; width: auto; scroll-snap-align: start; border-radius: var(--r-card); border: 1px solid var(--line-2); background: var(--surface-2); }
+  .gallery.portrait :global(img) { height: 520px; }
 
-  .next { margin-top: 96px; border-top: 1px solid var(--line); }
+  .next { margin-top: clamp(96px, 12vw, 160px); border-top: 1px solid var(--line); }
   .next a { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 28px 0 0; }
   .next-name { display: inline-flex; align-items: center; gap: 14px; font: 600 clamp(22px, 2.6vw, 32px)/1.2 var(--font-display); letter-spacing: -.02em; }
   .next a:hover .next-name { color: var(--accent); }

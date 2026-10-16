@@ -5,9 +5,12 @@ import AppIcon from '../components/AppIcon.astro';
 import Device from '../components/Device.astro';
 import Shot from '../components/Shot.astro';
 import Icon from '../components/Icon.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Quote from '../components/Quote.astro';
+import ProductMarquee from '../components/ProductMarquee.astro';
 import portrait from '../assets/portrait.webp';
 import '../styles/home.css';
-import { experience, proof, site, wins, writing } from '../data/site';
+import { experience, proof, shortNames, site, wins, writing } from '../data/site';
 import { getWork, getAllPackages } from '../data/work';
 import { buildLineup, buildReel } from '../data/home';
 import { brand } from '../data/icons';
@@ -30,16 +33,21 @@ const family = packages.filter((p) => isBindgenFamily(p.name));
 const topPackages = packages
   .filter((p) => !isBindgenFamily(p.name))
   .sort((a, b) => (b.points ?? 0) - (a.points ?? 0))
-  .slice(0, 7);
+  .slice(0, 6);
 const otherPackages = packages.length - family.length - topPackages.length;
 const repoStrip = sortedRepos.filter((r) => r.slug !== 'native-api-bindgen').slice(0, 5);
 
 const series = writing.filter((p) => p.series).sort((a, b) => a.title.localeCompare(b.title));
-const recent = writing.filter((p) => !p.series).slice(0, 4);
+const recent = writing.filter((p) => !p.series).slice(0, 5);
 const month = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric' });
 
 const dock = [...reelItems.map((r) => ({ slug: r.slug, name: r.name, href: `#p-${r.slug}` })), null,
   ...lineup.filter((t) => t.metric).slice(0, 4).map((t) => ({ slug: t.slug, name: t.name, href: t.href }))];
+
+const marqueeItems = [
+  ...reelItems.map((r) => ({ slug: r.slug, name: r.name, href: r.href })),
+  ...lineup.map((t) => ({ slug: t.slug, name: shortNames[t.slug] ?? t.name, href: t.href })),
+];
 
 const terminal = [
   '<span class="p">$</span> dart pub global activate native_api_bindgen',
@@ -73,7 +81,7 @@ const jsonLd = {
   <section class="hero" aria-labelledby="hero-name">
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="wrap hero-top">
-      <a class="status" href="/contact" data-reveal>
+      <a class="status" href="/contact" data-reveal data-cursor="Hire">
         <span class="dot pulse"></span>
         <span><strong>{site.status}</strong><small>{site.statusSub}</small></span>
         <span class="status-go" aria-hidden="true">→</span>
@@ -92,7 +100,7 @@ const jsonLd = {
         <strong>9M+ users</strong>, <span class="serif accent">and the tooling underneath them.</span>
       </p>
       <div class="hero-side" data-reveal>
-        <div class="currently" data-rotator aria-live="polite">
+        <div class="ui-card currently" data-rotator aria-live="polite">
           <div class="currently-head"><span class="label">Currently</span><span class="ticks" aria-hidden="true">{site.currently.map((_, i) => <i class={i === 0 ? 'on' : ''}></i>)}</span></div>
           <ul class="currently-list">
             {site.currently.map((c, i) => <li class={i === 0 ? 'on' : ''}>{c.label} <span class="muted">{c.at}</span></li>)}
@@ -106,7 +114,7 @@ const jsonLd = {
     </div>
 
     <div class="dock-wrap" data-reveal>
-      <p class="label dock-label">Now shipping · pick one</p>
+      <p class="label">Now shipping · pick one</p>
       <nav class="dock" aria-label="Products">
         {dock.map((d) => d ? (
           <a href={d.href} class="dock-item" data-tip={d.name} aria-label={d.name}><AppIcon slug={d.slug} name={d.name} size={54} /></a>
@@ -116,7 +124,7 @@ const jsonLd = {
 
     <div class="wrap proof" aria-label="Impact in numbers">
       {stats.map((s) => (
-        <a class="stat" href={s.href} rel="noopener" data-reveal>
+        <a class="stat" href={s.href} rel="noopener" data-reveal data-cursor="Source">
           <b data-count={s.value} data-suffix={s.suffix}>{s.value}{s.suffix}</b><span class="label">{s.label}</span>
         </a>
       ))}
@@ -132,13 +140,9 @@ const jsonLd = {
   </div>
 
   <!-- ============ REEL ============ -->
-  <section id="work" class="reel-intro wrap" aria-labelledby="work-h">
-    <div>
-      <p class="label">Featured · production and products</p>
-      <h2 id="work-h" class="h2" data-split>Now shipping.</h2>
-      <p class="serif reel-tag accent" data-reveal>From order books to OTA patches.</p>
-    </div>
-    <p class="lead reel-note" data-reveal>Fintech at scale by day, developer tooling the rest of the time. Scroll to step inside each one; everything else is in <a class="link" href="#lineup">the lineup</a>.</p>
+  <section id="work" class="wrap section" aria-labelledby="work-h">
+    <SectionHead id="work-h" label="Featured · production and products" title="Now shipping." accent="From order books to OTA patches."
+      lead="Fintech at scale by day, developer tooling the rest of the time. Scroll to step inside each one." />
   </section>
 
   <div class="reel">
@@ -159,18 +163,18 @@ const jsonLd = {
           <ul class="product-points">{r.points.map((pt) => <li>{pt}</li>)}</ul>
           {r.metrics.length > 0 && <ul class="metrics">{r.metrics.map((m) => <li>{m}</li>)}</ul>}
           {r.visual === 'terminal' && (
-            <div class="bench" role="img" aria-label="1 MB round trip: bindgen 1.80 ms, MethodChannel 9.02 ms">
+            <div class="ui-item bench" role="img" aria-label="1 MB round trip: bindgen 1.80 ms, MethodChannel 9.02 ms">
               <div class="bench-row"><span class="mono">bindgen</span><span class="bar"><i style="--w:20%" class="hi"></i></span><span class="mono">1.80 ms</span></div>
               <div class="bench-row"><span class="mono">MethodChannel</span><span class="bar"><i style="--w:100%"></i></span><span class="mono">9.02 ms</span></div>
               <p class="label">1 MB round trip · Oct 2026</p>
             </div>
           )}
-          <div class="store">
-            <a class="btn btn-sm btn-primary" href={r.href}>Case study →</a>
-            {r.links.slice(0, 3).map((l) => <a class="btn btn-sm" href={l.url} rel="noopener">{l.label} ↗</a>)}
+          <div class="actions">
+            <a class="btn btn-sm btn-primary" href={r.href} data-cursor="Read">Case study →</a>
+            {r.links.slice(0, 3).map((l) => <a class="btn btn-sm" href={l.url} rel="noopener" data-cursor="Visit">{l.label} ↗</a>)}
           </div>
         </div>
-        <div class="product-visual" data-reveal>
+        <div class="product-visual" data-reveal data-cursor={r.visual === 'terminal' ? undefined : 'Look'}>
           {r.visual === 'phones' && (
             <div class="two-phones">
               {r.shots.slice(0, 2).map((s, j) => <Device kind="phone" shots={[s]} alt={`${r.name} screen ${j + 1}`} class={j === 0 ? 'tilt-l' : 'tilt-r'} />)}
@@ -190,15 +194,17 @@ const jsonLd = {
     ))}
   </div>
 
+  <div class="marquee-gap"><ProductMarquee items={marqueeItems} /></div>
+
   <!-- ============ LINEUP ============ -->
   <section id="lineup" class="wrap section" aria-labelledby="lineup-h">
-    <div class="section-head">
-      <div><p class="label">The lineup</p><h2 id="lineup-h" class="h2" data-split>Everything else<br />I've shipped.</h2></div>
-      <p class="lead" data-reveal>Indie apps with real users, a hackathon win, AI experiments and client work.</p>
-    </div>
+    <SectionHead id="lineup-h" label="The lineup" title="Everything else" accent="I've shipped."
+      lead="Indie apps with real users, a hackathon win, AI experiments and client work.">
+      <a class="btn" href="/work">Browse all work →</a>
+    </SectionHead>
     <div class="bento">
       {lineup.map((t) => (
-        <a href={t.href} class:list={['tile', { 't-wide': t.layout !== 'text', 't-image': t.layout === 'image' }]} style={`--app:${brand(t.slug, t.name).accent}`} data-reveal data-tilt>
+        <a href={t.href} class:list={['ui-card', 'glow', 'tile', { 't-wide': t.layout !== 'text' }]} style={`--app:${brand(t.slug, t.name).accent}`} data-reveal data-tilt data-cursor="Open">
           <div class="tile-copy">
             <AppIcon slug={t.slug} name={t.name} size={44} />
             <h3 class="h3">{t.name}</h3>
@@ -206,131 +212,124 @@ const jsonLd = {
             {t.metric && <p class="tile-metric">{t.metric}</p>}
           </div>
           {t.layout === 'phones' && (
-            <div class="tile-shots">
+            <div class="tile-media phones">
               {t.shots.slice(0, 2).map((s, j) => <Device kind="phone" size="mini" shots={[s]} alt={`${t.name} screen ${j + 1}`} />)}
             </div>
           )}
           {t.layout === 'posters' && (
-            <div class="tile-shots posters">
+            <div class="tile-media posters">
               {t.shots.slice(0, 2).map((s, j) => <Shot src={s} alt={`${t.name} screen ${j + 1}`} width={300} class="poster" />)}
             </div>
           )}
-          {t.layout === 'image' && <Shot src={t.shots[0]} alt={`${t.name} screenshot`} width={720} class="tile-img" />}
+          {t.layout === 'image' && <div class="tile-media image"><Shot src={t.shots[0]} alt={`${t.name} screenshot`} width={720} /></div>}
         </a>
       ))}
     </div>
-    <p class="more" data-reveal><a class="btn" href="/work">Browse all work →</a></p>
   </section>
 
   <!-- ============ OPEN SOURCE ============ -->
   <section id="open-source" class="wrap section" aria-labelledby="os-h">
-    <div class="section-head">
-      <div><p class="label">Open source · pub.dev/publishers/lkrjangid.tech</p><h2 id="os-h" class="h2" data-split>{packages.length} packages.<br /><span class="serif accent">Used in other people's apps.</span></h2></div>
-      <a class="btn" href="/open-source" data-reveal>All open source →</a>
-    </div>
-    <div class="os-grid">
-      <a class="family card" href="/work/native-api-bindgen" data-reveal>
+    <SectionHead id="os-h" label="Open source · pub.dev/publishers/lkrjangid.tech" title={`${packages.length} packages.`} accent="Used in other people's apps.">
+      <a class="btn" href="/open-source">All open source →</a>
+    </SectionHead>
+    <div class="ui-grid os-grid">
+      <a class="ui-card lg glow family" href="/work/native-api-bindgen" data-reveal data-cursor="Read">
         <p class="label">The toolchain · {family.length} packages</p>
         <h3 class="h3 mono-title">native_api_*</h3>
         <p class="muted">CLI, IR, generators and runtimes behind native-api-bindgen.</p>
-        <div class="family-chips">{family.map((p) => <span class="chip">{p.name.replace('native_api_', '')}</span>)}</div>
+        <div class="pills">{family.map((p) => <span class="chip">{p.name.replace('native_api_', '')}</span>)}</div>
       </a>
-      <ul class="pkgs" data-reveal>
+      <ul class="ui-card flush pkgs" data-reveal>
         {topPackages.map((p) => (
-          <li><a href={p.url} rel="noopener"><span class="mono">{p.name}</span><span class="muted">{p.description}</span><span class="chip">{p.version || '↗'}</span></a></li>
+          <li><a href={p.url} rel="noopener" data-cursor="pub.dev"><span class="mono">{p.name}</span><span class="muted">{p.description}</span><span class="chip">{p.version || '↗'}</span></a></li>
         ))}
-        {otherPackages > 0 && <li><a href={site.links.pubdev} rel="noopener"><span class="mono">+ {otherPackages} more</span><span class="muted">on pub.dev</span><span class="chip">All ↗</span></a></li>}
+        {otherPackages > 0 && <li><a href="/open-source"><span class="mono">+ {otherPackages} more</span><span class="muted">See every package</span><span class="chip">All →</span></a></li>}
       </ul>
     </div>
-    <div class="repos" data-reveal>
-      <p class="label">Repos and experiments</p>
-      <div class="repo-row">
-        {repoStrip.map((r) => (
-          <a class="repo" href={r.repo} rel="noopener"><b>{r.name}</b><span>{r.tech.slice(0, 2).join(' · ')}</span><em class:list={['st', { show: r.status === 'showcase' || r.status === 'production', prog: r.status === 'in-progress' }]}>{statusLabels[r.status]}</em></a>
-        ))}
-        <a class="repo" href="/open-source"><b>+ {sortedRepos.length - repoStrip.length - 1} more</b><span>Every repo, with its status</span><em class="st">All →</em></a>
-      </div>
+    <div class="ui-grid repo-row" data-reveal>
+      {repoStrip.map((r) => (
+        <a class="ui-card repo" href={r.repo} rel="noopener" data-cursor="GitHub"><b>{r.name}</b><span>{r.tech.slice(0, 2).join(' · ')}</span><em class:list={['st', { show: r.status === 'showcase' || r.status === 'production', prog: r.status === 'in-progress' }]}>{statusLabels[r.status]}</em></a>
+      ))}
+      <a class="ui-card repo" href="/open-source"><b>+ {sortedRepos.length - repoStrip.length - 1} more</b><span>Every repo, with its status</span><em class="st">All →</em></a>
     </div>
   </section>
 
   <!-- ============ WRITING ============ -->
   <section id="writing" class="wrap section" aria-labelledby="writing-h">
-    <div class="section-head">
-      <div><p class="label">Writing · FlutDev</p><h2 id="writing-h" class="h2" data-split>{articleCount} articles.<br /><span class="serif accent">One rabbit hole at a time.</span></h2></div>
-      <a class="btn" href="/writing" data-reveal>All writing →</a>
-    </div>
-    <div class="writing">
-      <div class="series" data-reveal>
-        <p class="label">Series · May 2026</p>
+    <SectionHead id="writing-h" label="Writing · FlutDev" title={`${articleCount} articles.`} accent="One rabbit hole at a time.">
+      <a class="btn" href="/writing">All writing →</a>
+    </SectionHead>
+    <div class="ui-grid writing">
+      <div class="ui-card lg glow series" style="--app:#ff7a45" data-reveal>
+        <p class="label">Series · May 2026 · 4 parts</p>
         <h3 class="h3">Shorebird internals</h3>
         <p class="muted">How Flutter code push really works, from bidiff to a running .so.</p>
         <ol class="stack">
           {series.map((p, i) => (
-            <li><a href={p.url} rel="noopener"><span class="mono">{String(i + 1).padStart(2, '0')}</span>{p.title.replace(/^Part \d+:\s*/, '')}</a></li>
+            <li><a class="ui-item" href={p.url} rel="noopener" data-cursor="Read"><span class="mono">{String(i + 1).padStart(2, '0')}</span><span>{p.title.replace(/^Part \d+:\s*/, '')}</span></a></li>
           ))}
         </ol>
       </div>
-      <ul class="posts" data-reveal>
-        {recent.map((p) => <li><a href={p.url} rel="noopener"><span>{p.title}</span><time class="label" datetime={p.date}>{month.format(new Date(p.date))}</time></a></li>)}
+      <ul class="rows posts" data-reveal>
+        {recent.map((p) => <li><a href={p.url} rel="noopener" data-cursor="Read"><span>{p.title}</span><time class="label" datetime={p.date}>{month.format(new Date(p.date))}</time></a></li>)}
       </ul>
     </div>
   </section>
 
-  <!-- ============ TESTIMONIALS ============ -->
+  <!-- ============ RECOMMENDATIONS ============ -->
   {recommendations.length > 0 && (
     <section id="kind-words" class="wrap section" aria-labelledby="kw-h">
-      <div class="section-head">
-        <div><p class="label">Recommendations · LinkedIn</p><h2 id="kw-h" class="h2" data-split>People I've<br /><span class="serif accent">shipped with.</span></h2></div>
-      </div>
-      <div class="quotes">
-        {recommendations.map((r) => (
-          <figure class="quote" data-reveal>
-            <blockquote>{r.recommendation}</blockquote>
-            <figcaption>
-              <span class="avatar" aria-hidden="true">{r.title.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>
-              <span><a href={r.profile} rel="noopener">{r.title}</a><small>{r.subtitle}</small></span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
+      <SectionHead id="kw-h" label="Recommendations · LinkedIn" title="People I've" accent="shipped with." />
+      <div class="quotes">{recommendations.map((r) => <Quote r={r} />)}</div>
     </section>
   )}
 
   <!-- ============ EXPERIENCE ============ -->
-  <section id="about" class="wrap section about" aria-labelledby="about-h">
-    <div class="about-copy">
-      <p class="label">Experience</p>
-      <h2 id="about-h" class="h2" data-split>I like the layer<br /><span class="serif accent">under the app.</span></h2>
-      <p class="lead" data-reveal>{site.bio[1]}</p>
-      <div class="btns about-ctas" data-reveal>
+  <section id="about" class="wrap section" aria-labelledby="about-h">
+    <SectionHead id="about-h" label="Experience" title="I like the layer" accent="under the app." lead={site.bio[1]}>
+      <div class="btns">
         <a class="btn" href="/about">More about me →</a>
-        <a class="btn" href={site.resume} download>Résumé (PDF) <Icon name="download" size={14} /></a>
+        <a class="btn" href={site.resume} download data-cursor="PDF">Résumé <Icon name="download" size={14} /></a>
       </div>
-    </div>
-    <ol class="timeline" data-reveal>
+    </SectionHead>
+    <ol class="ui-grid xp" data-reveal>
       {experience.map((e) => (
-        <li><span class="when label">{e.period}</span><b>{e.role}, {e.company.replace(/ Pvt\. Ltd\.| Communication/g, '')}</b><span class="muted">{e.summary}</span></li>
+        <li class="ui-card hoverable">
+          <span class="label">{e.period}{e.current && <span class="now"><span class="dot pulse"></span>Now</span>}</span>
+          <h3 class="h3">{e.role}</h3>
+          <p class="company">{e.company.replace(/ Pvt\. Ltd\.| Communication/g, '')} · {e.place}</p>
+          <p class="muted">{e.summary}</p>
+        </li>
       ))}
-      <li><span class="when label">Open source</span><b>Platform tooling</b><span class="muted">native-api-bindgen, PushPatch, {packages.length} pub.dev packages</span></li>
-      <li><span class="when label">2019 – 2023</span><b>B.E. Electrical, MBM University</b><span class="muted">Raksha won SSIP funding at IIIT Surat; Hacktoberfest 2020 and 2021</span></li>
+      <li class="ui-card hoverable">
+        <span class="label">Open source</span>
+        <h3 class="h3">Platform tooling</h3>
+        <p class="company">native-api-bindgen · PushPatch</p>
+        <p class="muted">{packages.length} pub.dev packages and a self-hosted code-push platform.</p>
+      </li>
+      <li class="ui-card hoverable">
+        <span class="label">2019 – 2023</span>
+        <h3 class="h3">B.E. Electrical</h3>
+        <p class="company">MBM University · Jodhpur</p>
+        <p class="muted">Raksha won SSIP funding at IIIT Surat; Hacktoberfest 2020 and 2021.</p>
+      </li>
     </ol>
   </section>
 
   <!-- ============ CONTACT ============ -->
   <section id="contact" class="wrap section contact" aria-labelledby="contact-h">
     <div class="contact-glow" aria-hidden="true"></div>
-    <p class="label">Contact</p>
-    <h2 id="contact-h" class="h2" data-split>Have an app to build<br /><span class="serif accent">or fix?</span></h2>
-    <div class="contact-cards">
-      <a class="ccard" href="/contact" data-reveal data-tilt>
+    <SectionHead id="contact-h" label="Contact" title="Have an app to build" accent="or fix?" />
+    <div class="ui-grid contact-cards">
+      <a class="ui-card lg glow ccard" href="/contact" data-reveal data-tilt data-cursor="Write">
         <p class="label">Full-time</p><h3 class="h3">Hire me</h3>
         <p class="muted">Senior mobile or platform roles. Flutter, native Android and iOS, fintech scale.</p>
-        <span class="ccard-go">Send a message →</span>
+        <span class="go">Send a message →</span>
       </a>
-      <a class="ccard" href={`mailto:${site.email}?subject=Consulting`} data-reveal data-tilt>
+      <a class="ui-card lg glow ccard" href={`mailto:${site.email}?subject=Consulting`} data-reveal data-tilt data-cursor="Email">
         <p class="label">Consulting</p><h3 class="h3">Second pair of eyes</h3>
         <p class="muted">Code push setup, startup time, crash rate, native plugins and performance reviews.</p>
-        <span class="ccard-go">{site.email} →</span>
+        <span class="go">{site.email} →</span>
       </a>
     </div>
   </section>
