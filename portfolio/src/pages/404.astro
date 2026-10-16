@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+---
+<Base title="Not found" description="This page moved or never existed." noindex>
+  <div class="container nf">
+    <p class="mono muted">why-skipped '<span id="path">/this-page</span>'</p>
+    <h1>E404 · page not generated</h1>
+    <p class="muted">This page moved or never existed.</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="/work">Back to work <Icon name="arrow-right" /></a>
+      <a class="btn" href="/">Home</a>
+    </div>
+  </div>
+</Base>
+
+<script>
+  const el = document.getElementById('path');
+  if (el) el.textContent = location.pathname;
+</script>
+
+<style>
+  .nf { text-align: center; padding-top: 120px; padding-bottom: 40px; }
+  h1 { font-size: 28px; margin: 10px 0 8px; }
+  .btns { justify-content: center; margin-top: 24px; }
+</style>

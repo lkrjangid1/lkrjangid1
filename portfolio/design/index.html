@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio v2 · Design board</title>
+<script>try { const t = localStorage.getItem('lj-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="assets/tokens.css">
+<style>
+  body { padding-bottom: 96px; }
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 16px; padding: 14px var(--gutter); background: var(--glass); border-bottom: 1px solid var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .topbar strong { font: 600 16px/1 var(--font-display); }
+  .topbar .crumb { color: var(--text-3); font-size: 14px; }
+  .spacer { flex: 1; }
+  .theme { display: flex; padding: 3px; border-radius: var(--r-pill); background: var(--surface-2); border: 1px solid var(--line); }
+  .theme button { border: 0; background: transparent; color: var(--text-3); font-size: 13px; padding: 6px 12px; border-radius: var(--r-pill); }
+  .theme button[aria-pressed="true"] { background: var(--surface-3); color: var(--text); }
+
+  .head { padding: 72px 0 24px; }
+  .head h1 { font: 600 clamp(44px, 6vw, 84px)/.95 var(--font-display); letter-spacing: -.04em; margin: 14px 0 18px; }
+  .head .lead { max-width: 760px; }
+  .head .btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+  .goals { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 40px; }
+  .goal { padding: 18px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--line); }
+  .goal b { display: block; font: 600 17px/1.3 var(--font-display); margin: 8px 0 6px; }
+  .goal p { font-size: 14px; color: var(--text-2); }
+
+  .sec { padding-top: 88px; }
+  .sec-title { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 24px; }
+  .sec-title h2 { font: 600 clamp(30px, 3.4vw, 44px)/1 var(--font-display); letter-spacing: -.03em; }
+  .tag { font: 500 11px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; padding: 6px 9px; border-radius: 6px; background: var(--accent-soft); color: var(--accent); }
+  .tag.bad { background: color-mix(in srgb, var(--down) 14%, transparent); color: var(--down); }
+  .tag.good { background: color-mix(in srgb, var(--up) 14%, transparent); color: var(--up); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th, td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  th { font: 500 12px/1.4 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--text-3); }
+  td:first-child { font-weight: 500; width: 24%; }
+  td:nth-child(2) { color: var(--text-2); }
+  .panel { padding: 8px 8px 0; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--line); overflow-x: auto; }
+
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .box { padding: 22px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--line); }
+  .box h3 { font: 600 19px/1.3 var(--font-display); margin: 10px 0 10px; }
+  .box ul { margin: 0; padding-left: 18px; color: var(--text-2); font-size: 15px; }
+  .box li + li { margin-top: 6px; }
+  .src { font-size: 13px; color: var(--text-3); margin-top: 14px; }
+  .src a { text-decoration: underline; text-underline-offset: 3px; }
+
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .sw { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--surface); }
+  .sw i { display: block; height: 72px; border-bottom: 1px solid var(--line); }
+  .sw span { display: block; padding: 10px 12px; font: 12px/1.5 var(--font-mono); color: var(--text-2); }
+  .sw b { display: block; font: 500 13px/1.4 var(--font-body); color: var(--text); }
+  .apps { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+  .apps figure { margin: 0; display: grid; justify-items: center; gap: 6px; font-size: 12px; color: var(--text-3); }
+
+  .type-row { display: grid; grid-template-columns: 220px 1fr; gap: 20px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .type-row .meta { font: 12px/1.5 var(--font-mono); color: var(--text-3); }
+
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .cell { padding: 22px; border-radius: var(--r-16); background: var(--surface); border: 1px solid var(--line); display: grid; gap: 14px; align-content: start; }
+  .cell .label { margin-bottom: 2px; }
+  .row-flex { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .stat b { font: 600 48px/1 var(--font-display); letter-spacing: -.04em; display: block; }
+  .mini-phone { width: 120px; border-radius: 22px; padding: 6px; }
+  .mini-phone::before { width: 30px; height: 9px; top: 11px; }
+  .mini-phone .screen { border-radius: 17px; }
+
+  .map { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .map li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+  .map li::before { content: counter(s, decimal-leading-zero); font: 500 13px/1.6 var(--font-mono); color: var(--accent); }
+  .map b { font: 600 16px/1.4 var(--font-display); }
+  .map p { font-size: 14px; color: var(--text-2); margin-top: 2px; }
+
+  .q { display: grid; gap: 10px; }
+  .q li { list-style: none; display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); }
+  .q ul { margin: 0; padding: 0; }
+  .q p { color: var(--text-2); font-size: 15px; }
+
+  @media (max-width: 900px) {
+    .goals, .cols, .gallery { grid-template-columns: 1fr 1fr; }
+    .map { grid-template-columns: 1fr; }
+    .type-row { grid-template-columns: 1fr; gap: 6px; }
+  }
+  @media (max-width: 600px) {
+    .goals, .cols, .gallery { grid-template-columns: 1fr; }
+    .q li { grid-template-columns: 1fr; gap: 6px; }
+    .topbar .crumb { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<header class="topbar">
+  <span class="crumb">lkrjangid-portfolio / design /</span>
+  <strong>Portfolio v2 board</strong>
+  <span class="spacer"></span>
+  <div class="theme" role="group" aria-label="Theme">
+    <button type="button" data-theme-set="system">System</button>
+    <button type="button" data-theme-set="light">Light</button>
+    <button type="button" data-theme-set="dark">Dark</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="head">
+    <p class="label">Design board · v1 · Oct 2026</p>
+    <h1>From a document<br>to a <span class="serif" style="color:var(--accent)">product maker.</span></h1>
+    <p class="lead">The v1 site is fast and correct, but it reads like a résumé printed on beige. v2 keeps the data, static rendering and speed, and adds a face, kinetic type, real device mockups and a per-product colour system. Approve the look on the showcase page; the Astro port comes after.</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="home.html">Open the showcase page →</a>
+      <a class="btn" href="content-contract.md">Content contract</a>
+    </div>
+    <div class="goals">
+      <div class="goal"><span class="label">Fixes</span><b>Who, what, scale in 7 s</b><p>Name, role, Univest and 9M+ users are all visible without scrolling.</p></div>
+      <div class="goal"><span class="label">Shows</span><b>Products, not paragraphs</b><p>Real screenshots in phone, laptop and browser frames that cycle on their own.</p></div>
+      <div class="goal"><span class="label">Keeps</span><b>Speed and crawlability</b><p>Static HTML, lazy images, ~45 KB of GSAP, no preloader, no scroll-jacking.</p></div>
+      <div class="goal"><span class="label">Moves</span><b>Recruiter and client replies</b><p>Two clear asks: hire full-time, or book a second pair of eyes.</p></div>
+    </div>
+  </section>
+
+  <!-- Critique -->
+  <section class="sec" aria-labelledby="crit-h">
+    <div class="sec-title"><span class="tag bad">Critique</span><h2 id="crit-h">What's wrong with v1</h2><span class="muted">a senior product designer's read</span></div>
+    <div class="panel">
+      <table>
+        <thead><tr><th>Problem</th><th>Why it hurts</th><th>v2 fix</th></tr></thead>
+        <tbody>
+          <tr><td>No face, no voice</td><td>People hire people. Beige cards are forgettable.</td><td>Portrait hero, first-person copy, a rotating "Currently" line.</td></tr>
+          <tr><td>Abstract headline</td><td>"The layer under the app" is clever but doesn't say role or scale in the first seconds.</td><td>Name at 200px, "Senior Mobile Engineer at Univest, 9M+ users" directly below.</td></tr>
+          <tr><td>Eight equal metric tiles</td><td>No hierarchy, so nothing is remembered.</td><td>Five big count-ups, the rest moved to a marquee.</td></tr>
+          <tr><td>Visual products shown as text</td><td>Scalper, PushPatch and Incognito Vault screenshots are buried on sub-pages.</td><td>Device mockups on the home page that cycle through real screens.</td></tr>
+          <tr><td>One hue for everything</td><td>Every project looks identical.</td><td>Each product carries its own accent inside a neutral system.</td></tr>
+          <tr><td>No motion or depth</td><td>Feels static next to peers.</td><td>Split-text, reveals, glow, marquee, tilt. All off under reduced motion.</td></tr>
+          <tr><td>Flagships behind a click</td><td>Recruiters rarely click twice.</td><td>A "Now shipping" reel with five products right after the hero.</td></tr>
+          <tr><td>Light-first, low surface contrast</td><td>Looks washed out, especially in screenshots and at night.</td><td>Dark-first with an equally finished light theme.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section class="sec" aria-labelledby="res-h">
+    <div class="sec-title"><span class="tag">Research</span><h2 id="res-h">What we borrowed, and from where</h2></div>
+    <div class="cols">
+      <div class="box">
+        <span class="tag good">Copy</span><h3>From pawan.app</h3>
+        <ul>
+          <li>Giant name with the portrait breaking through it</li>
+          <li>"Open to…" pill and local time</li>
+          <li>App-icon dock: "Now shipping · pick one"</li>
+          <li>One section per product with a device mockup and serif tagline</li>
+          <li>Per-app accent colours and a sticky icon rail</li>
+          <li>Theme applied before first paint</li>
+        </ul>
+        <p class="src">Source: <a href="https://pawan.app/">pawan.app</a> (live render and bundle)</p>
+      </div>
+      <div class="box">
+        <span class="tag bad">Avoid</span><h3>From the same site</h3>
+        <ul>
+          <li>Violet (we use Flutter cyan, so it's ours)</li>
+          <li>17+ sections, games, radio, intro screen</li>
+          <li>Client-only rendering: crawlers see an empty page</li>
+          <li><code>user-scalable=no</code> blocks pinch-zoom</li>
+          <li>Employer impact buried under side projects</li>
+        </ul>
+      </div>
+      <div class="box">
+        <span class="tag">HR &amp; clients</span><h3>The first 10 seconds</h3>
+        <ul>
+          <li>Role, stack and contact above the fold</li>
+          <li>One featured project with live and code links</li>
+          <li>Impact numbers: users, speed, money saved</li>
+          <li>No preloader or long intro</li>
+          <li>Looping video over GIFs, lazy-loaded</li>
+        </ul>
+        <p class="src">Sources: <a href="https://www.fueler.io/blog/your-portfolio-has-7-seconds-what-recruiters-look-at-first">Fueler</a>, <a href="https://devplaybook.cc/blog/developer-portfolio-checklist-20-things-hiring-managers">devplaybook</a>, <a href="https://web.dev/articles/replace-gifs-with-videos">web.dev</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Principles -->
+  <section class="sec" aria-labelledby="pr-h">
+    <div class="sec-title"><span class="tag">Principles</span><h2 id="pr-h">Rules every section follows</h2></div>
+    <div class="cols">
+      <div class="box"><h3>Proof over adjectives</h3><p class="muted">Every claim is a number with a link: Play Store, pub.dev, a FlutDev post or a case study.</p></div>
+      <div class="box"><h3>Ten-second sections</h3><p class="muted">Each block answers one question in a headline, a tagline and three chips. Details live one click deeper.</p></div>
+      <div class="box"><h3>Motion explains, never blocks</h3><p class="muted">Nothing waits on animation to be readable. Reduced motion gets the same page, still.</p></div>
+    </div>
+  </section>
+
+  <!-- Design system -->
+  <section class="sec" aria-labelledby="ds-h">
+    <div class="sec-title"><span class="tag">System</span><h2 id="ds-h">Colour</h2><span class="muted">switch the theme above to compare</span></div>
+    <div class="swatches">
+      <div class="sw"><i style="background:var(--bg)"></i><span><b>bg</b>#07080B · #FAFAF8</span></div>
+      <div class="sw"><i style="background:var(--surface)"></i><span><b>surface</b>#0E1015 · #FFFFFF</span></div>
+      <div class="sw"><i style="background:var(--surface-2)"></i><span><b>surface-2</b>#151821 · #F1F2F4</span></div>
+      <div class="sw"><i style="background:var(--text)"></i><span><b>text</b>#F4F5F7 · #0B0C0F</span></div>
+      <div class="sw"><i style="background:var(--text-2)"></i><span><b>text-2</b>#A3A8B4 · #4A4F5C</span></div>
+      <div class="sw"><i style="background:var(--accent)"></i><span><b>accent</b>#3DB9FF · #0A6CD9</span></div>
+      <div class="sw"><i style="background:var(--mint)"></i><span><b>mint (live)</b>#7CF2D0 · #0F8A66</span></div>
+      <div class="sw"><i style="background:linear-gradient(90deg,var(--up) 50%,var(--down) 50%)"></i><span><b>up / down</b>chart candles</span></div>
+    </div>
+    <p class="label" style="margin-top:28px">Per-product accents</p>
+    <div class="apps">
+      <figure><span class="app-icon" style="--app:var(--app-univest)">U</span>Univest</figure>
+      <figure><span class="app-icon" style="--app:var(--app-scalper)">S</span>Scalper</figure>
+      <figure><span class="app-icon" style="--app:var(--app-pushpatch)">P</span>PushPatch</figure>
+      <figure><span class="app-icon" style="--app:var(--app-bindgen)">nb</span>bindgen</figure>
+      <figure><span class="app-icon" style="--app:var(--app-vault)">iV</span>Vault</figure>
+      <figure><span class="app-icon" style="--app:var(--app-libgen)">L</span>Libgen</figure>
+      <figure><span class="app-icon" style="--app:var(--app-remote)">R</span>Remote Jobs</figure>
+      <figure><span class="app-icon" style="--app:var(--app-mbm)">M</span>MBM</figure>
+      <figure><span class="app-icon" style="--app:var(--app-oi)">OI</span>OI Visualizer</figure>
+      <figure><span class="app-icon" style="--app:var(--app-raksha)">Ra</span>Raksha</figure>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="ty-h">
+    <div class="sec-title"><span class="tag">System</span><h2 id="ty-h">Type</h2></div>
+    <div class="type-row"><span class="meta">Display · Space Grotesk 600<br>clamp(64, 13.5vw, 210)</span><span class="display" style="font-size:clamp(56px,8vw,112px)">Lokesh</span></div>
+    <div class="type-row"><span class="meta">Section · Space Grotesk 600<br>clamp(40, 6vw, 88)</span><span class="h2">Now shipping.</span></div>
+    <div class="type-row"><span class="meta">Tagline · Fraunces italic<br>22–32</span><span class="serif" style="font-size:30px;color:var(--accent)">Trading and investing for 9M+ people.</span></div>
+    <div class="type-row"><span class="meta">Lead · Inter 400<br>18–22 / 1.55</span><span class="lead">Senior Mobile Engineer at <strong>Univest</strong>. I build Flutter, Android and iOS apps for <strong>9M+ users</strong>.</span></div>
+    <div class="type-row"><span class="meta">Body · Inter 400<br>17 / 1.65</span><span class="muted">Binary-encrypted WebSocket market data with reconnects across app-state changes.</span></div>
+    <div class="type-row"><span class="meta">Label · JetBrains Mono 500<br>12 · +0.18em · caps</span><span class="label">Now shipping · pick one</span></div>
+  </section>
+
+  <section class="sec" aria-labelledby="cp-h">
+    <div class="sec-title"><span class="tag">System</span><h2 id="cp-h">Components</h2></div>
+    <div class="gallery">
+      <div class="cell"><span class="label">Buttons</span><div class="row-flex"><a class="btn btn-primary" href="#cp-h">Hire me</a><a class="btn" href="#cp-h">Résumé ↓</a><a class="btn btn-sm" href="#cp-h">Docs ↗</a></div></div>
+      <div class="cell"><span class="label">Pills and chips</span><div class="row-flex"><span class="pill"><span class="dot pulse"></span>Open to senior roles</span><span class="pill">Android · iOS</span><span class="chip">1.0.0</span><span class="chip">Flutter</span></div></div>
+      <div class="cell"><span class="label">Stat</span><div class="stat"><b>9M+</b><span class="label">Users served</span></div></div>
+      <div class="cell"><span class="label">Phone frame</span><div class="phone mini-phone"><div class="screen"><img class="on" alt="Scalper" src="https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/scalper_2_chart.jpeg" loading="lazy"></div></div></div>
+      <div class="cell"><span class="label">Terminal</span><div class="terminal"><div class="bar"><i></i><i></i><i></i></div><pre style="min-height:0"><span class="p">$</span> native-api-bindgen generate flutter
+<span class="ok">✓ 51,429 of 52,938 methods</span></pre></div></div>
+      <div class="cell"><span class="label">Card</span><div class="card" style="padding:18px"><span class="app-icon" style="--app:var(--app-libgen);--size:40px">L</span><p class="h3" style="margin-top:10px">Libgen</p><p class="muted" style="font-size:14px">600K+ downloads</p></div></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="mo-h">
+    <div class="sec-title"><span class="tag">System</span><h2 id="mo-h">Motion</h2><span class="muted">GSAP 3.15 · ScrollTrigger · SplitText (~45 KB gzip)</span></div>
+    <div class="panel"><table>
+      <thead><tr><th>Element</th><th>Behaviour</th><th>Timing · reduced motion</th></tr></thead>
+      <tbody>
+        <tr><td>Hero name</td><td>Letters rise out of a mask, staggered.</td><td>1.1 s expo.out, 35 ms stagger · static</td></tr>
+        <tr><td>Section titles</td><td>Words rise as they enter the viewport, once.</td><td>0.9 s, 60 ms stagger · static</td></tr>
+        <tr><td>Blocks</td><td>Fade and lift 28px, batched per row.</td><td>0.9 s, 80 ms stagger · visible</td></tr>
+        <tr><td>Stats</td><td>Count up from 0 on first view.</td><td>1.6 s power3.out · final value</td></tr>
+        <tr><td>Device screens</td><td>Cross-fade every 2.6 s; pause on hover and off-screen.</td><td>700 ms fade · first screen only</td></tr>
+        <tr><td>Device mockups</td><td>Drift ±50px against the scroll.</td><td>scrub · none</td></tr>
+        <tr><td>Marquee</td><td>Continuous scroll, pauses on hover.</td><td>48 s loop · stopped</td></tr>
+        <tr><td>Tiles and contact cards</td><td>Pointer tilt up to 5°.</td><td>Pointer devices only · none</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="sec" aria-labelledby="map-h">
+    <div class="sec-title"><span class="tag">Showcase</span><h2 id="map-h">Section map of home.html</h2></div>
+    <ol class="map">
+      <li><div><b>Nav</b><p>Glass pill, theme switch, Résumé and Hire me.</p></div></li>
+      <li><div><b>Hero</b><p>Status pill, local time, giant name with portrait, intro, Currently card, two CTAs.</p></div></li>
+      <li><div><b>App dock</b><p>Nine products; tap to jump.</p></div></li>
+      <li><div><b>Proof strip and marquee</b><p>Five count-ups; eight secondary wins scrolling.</p></div></li>
+      <li><div><b>Now shipping reel</b><p>Univest, Scalper, PushPatch, native-api-bindgen, Incognito Vault, with a sticky icon rail.</p></div></li>
+      <li><div><b>The lineup</b><p>Bento of ten more products, sized by importance.</p></div></li>
+      <li><div><b>Open source</b><p>native_api_* family, seven packages, six repos with status.</p></div></li>
+      <li><div><b>Writing</b><p>Shorebird series stack and four recent posts.</p></div></li>
+      <li><div><b>About</b><p>First-person bio, skills, timeline.</p></div></li>
+      <li><div><b>Contact</b><p>Hire me or consulting, plus all profiles.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="sec" aria-labelledby="oq-h">
+    <div class="sec-title"><span class="tag bad">Open</span><h2 id="oq-h">Questions and gaps</h2><span class="muted">needed from Lokesh before the Astro port</span></div>
+    <ul class="q">
+      <li><span class="label">Portrait</span><p>Transparent cut-out at <code>design/assets/portrait.webp</code>, about 900×1200. The page shows a silhouette until then.</p></li>
+      <li><span class="label">Screenshots</span><p>Libgen, MBM, Raksha and Remote Jobs screenshots in projects.json are only ~117×260 px and look soft in frames. Re-export at 1080 px wide.</p></li>
+      <li><span class="label">App icons</span><p>Real icons (512 px PNG) for each product would replace the monogram squircles.</p></li>
+      <li><span class="label">Video</span><p>Optional 6–10 s screen recordings (Scalper chart, PushPatch rollout) as muted loops instead of cycling stills.</p></li>
+      <li><span class="label">Testimonials</span><p>Two or three real quotes from managers, clients or package users. Omitted until provided; nothing is invented.</p></li>
+      <li><span class="label">Talks</span><p>Any talks, GDG events or mentoring to add as a community strip?</p></li>
+      <li><span class="label">Timeline</span><p>Confirm the Timemarks title and dates, and when platform tooling started.</p></li>
+      <li><span class="label">Dead links</span><p>From projects.json: the Remote Jobs Play Store listing returns 404, and calculator.buckrate.com doesn't respond. Both tiles are unlinked until fixed.</p></li>
+      <li><span class="label">Contact</span><p>Public email for the CTA, and the résumé PDF to host at /resume.pdf (the Weebly copy is linked for now).</p></li>
+    </ul>
+  </section>
+</main>
+
+<script>
+  (() => {
+    const root = document.documentElement, KEY = 'lj-theme';
+    const btns = document.querySelectorAll('[data-theme-set]');
+    const apply = (m) => {
+      if (m === 'light' || m === 'dark') root.dataset.theme = m; else delete root.dataset.theme;
+      btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeSet === m)));
+      try { m === 'system' ? localStorage.removeItem(KEY) : localStorage.setItem(KEY, m); } catch (e) {}
+    };
+    let s = 'system'; try { s = localStorage.getItem(KEY) || 'system'; } catch (e) {}
+    apply(s);
+    btns.forEach((b) => b.addEventListener('click', () => apply(b.dataset.themeSet)));
+  })();
+</script>
+</body>
+</html>

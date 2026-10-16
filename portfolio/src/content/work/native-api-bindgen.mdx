@@ -1,0 +1,74 @@
+---
+title: native-api-bindgen
+headline: Use native APIs directly
+summary: Typed Dart and TypeScript bindings generated from the Android and Apple SDKs already on your machine. No MethodChannel, no hand-written plugin per API.
+role: Sole author
+year: '2026'
+stack: [Dart, JNI, libclang, Objective-C runtime, JSI, TypeScript]
+order: 1
+problem: Every platform API a Flutter or React Native app needs has to go through a hand-written MethodChannel or bridge, plus native glue on each platform.
+approach: Parse the installed SDKs into a platform-neutral IR, then run per-target generators that emit typed bindings and a reason code for anything they skip.
+result: About 1 µs per native call instead of about 270 µs. Bindings for the whole android.jar ship in the same APK size as 24 types.
+repo: https://github.com/lkrjangid1/native-api-bindgen
+links:
+  - { label: Docs, url: 'https://lkrjangid1.github.io/native-api-bindgen-docs/' }
+  - { label: GitHub, url: 'https://github.com/lkrjangid1/native-api-bindgen' }
+  - { label: pub.dev, url: 'https://pub.dev/packages/native_api_bindgen' }
+---
+import BenchmarkBars from '../../components/BenchmarkBars.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+
+## Benchmarks
+
+Measured in October 2026 on an Apple-silicon Mac, Android emulator and iOS simulator. The project claims nothing it has no test for.
+
+<BenchmarkBars
+  title="1 MB byte transfer, Dart round trip"
+  unit="ms"
+  rows={[
+    { label: 'bindgen', value: 1.8, highlight: true },
+    { label: 'MethodChannel', value: 9.02 },
+  ]}
+  source="native-api-bindgen README"
+/>
+
+<BenchmarkBars
+  title="1 MB transfer, React Native"
+  unit="ms"
+  rows={[
+    { label: 'Uint8Array', value: 1.61, highlight: true },
+    { label: 'number[]', value: 99.6 },
+  ]}
+  source="native-api-bindgen README"
+/>
+
+## Coverage
+
+- **Android, Flutter target:** 51,429 of 52,938 `android.jar` methods generated (97.1%).
+- **iOS, Flutter target:** 11,092 of 11,937 Foundation and UIKit methods generated (92.9%).
+- **App size:** the Flutter Android release APK is the same size whether it binds 24 types or the whole SDK, because unused code is tree-shaken. React Native doesn't tree-shake, so you generate only what you use.
+
+## How it works
+
+1. **SDK discovery.** `native_api_android` reads `android.jar`; `native_api_ios` extracts Objective-C headers with libclang.
+2. **Canonical IR.** `native_api_ir` holds a platform-neutral JSON model of every class, method and type.
+3. **Generators.** `native_api_flutter_android` emits Dart over `package:jni`; `native_api_flutter_ios` over `package:objective_c`; the React Native targets emit TypeScript over a JSI/C++ runtime.
+4. **Reason codes.** Anything not generated is reported with the reason, so coverage is auditable instead of silent.
+
+## Try it
+
+<CodeBlock
+  code={`dart pub global activate native_api_bindgen
+native-api-bindgen doctor
+native-api-bindgen init
+native-api-bindgen generate flutter`}
+  output="51,429 of 52,938 methods generated"
+/>
+
+## Known limits
+
+- Flutter on iOS can't implement protocols or pass some escaping blocks yet.
+- Kotlin `Flow` is an opaque object on React Native.
+- Kotlin default arguments aren't applied through JNI.
+
+Status: beta (`0.1.0-beta.1`), tested end to end on emulators and simulators, not yet on physical devices.

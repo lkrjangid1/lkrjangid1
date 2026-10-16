@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { getAllPackages } from '../data/work';
+import { isBindgenFamily } from '../data/packages';
+import { sortedRepos, statusLabels } from '../data/repos';
+import { site } from '../data/site';
+
+const packages = await getAllPackages();
+const family = packages.filter((p) => isBindgenFamily(p.name));
+const standalone = packages.filter((p) => !isBindgenFamily(p.name));
+const bindgenCli = packages.find((p) => p.name === 'native_api_bindgen');
+---
+<Base
+  title="Open source"
+  current="/open-source"
+  ogSlug="open-source"
+  description={`${packages.length} pub.dev packages and open-source repos by Lokesh Jangid, including the native-api-bindgen toolchain.`}
+>
+  <div class="container narrow">
+    <header class="page-head">
+      <h1>Open source</h1>
+      <p class="muted">{packages.length} packages on pub.dev under <a href={site.links.pubdev}>lkrjangid.tech</a>, plus the repos behind them.</p>
+    </header>
+
+    <section aria-labelledby="pkg-h">
+      <h2 id="pkg-h" class="sr-only">Packages</h2>
+
+      {family.length > 0 && (
+        <details class="family">
+          <summary class="row">
+            <span class="name">
+              <span class="mono">native_api_*</span>
+              <span class="small">The native-api-bindgen toolchain: CLI, IR, generators and runtimes · {family.length} packages</span>
+            </span>
+            <span class="label meta">{bindgenCli?.version ?? ''} <span class="toggle">Show</span></span>
+          </summary>
+          <div class="inner">
+            {family.map((p) => (
+              <a class="row pkg" href={p.url} rel="noopener">
+                <span class="name"><span class="mono">{p.name}</span><span class="small">{p.description}</span></span>
+                <span class="label meta">{p.version}</span>
+              </a>
+            ))}
+          </div>
+        </details>
+      )}
+
+      {standalone.map((p) => (
+        <a class="row pkg" href={p.url} rel="noopener">
+          <span class="name">
+            <span class="mono">{p.name}</span>
+            <span class="small">{p.description}</span>
+            {p.platforms.length > 0 && <span class="label">{p.platforms.join(' · ')}</span>}
+          </span>
+          <span class="label meta">
+            {p.version}
+            {p.points != null && <><br />{p.points}/{p.maxPoints} pts</>}
+          </span>
+        </a>
+      ))}
+    </section>
+
+    <section class="section" aria-labelledby="repo-h">
+      <h2 id="repo-h">Repositories</h2>
+      {sortedRepos.map((r) => (
+        <a class="row pkg" href={r.caseStudy ? `/work/${r.slug}` : r.repo} rel={r.caseStudy ? undefined : 'noopener'}>
+          <span class="name">
+            <span class="mono">{r.name}</span>
+            <span class="small">{r.desc}</span>
+          </span>
+          <span class="label meta">{statusLabels[r.status]}<br />{r.year}</span>
+        </a>
+      ))}
+    </section>
+
+    <section class="section" aria-labelledby="contrib-h">
+      <h2 id="contrib-h">Contributions</h2>
+      <p class="small">
+        Hacktoberfest 2020 and 2021 contributor · badges on <a href={site.links.holopin}>Holopin</a> ·
+        everything else on <a href={site.links.github}>GitHub <Icon name="arrow-up-right" size={14} class="inline" /></a>
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .narrow { max-width: 920px; }
+  .pkg { text-decoration: none; color: inherit; }
+  .pkg:hover .mono { color: var(--accent); }
+  .name { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .name .mono { color: var(--text-primary); font-size: 14px; }
+  .meta { text-align: right; white-space: nowrap; flex: none; }
+  .family summary { cursor: pointer; list-style: none; }
+  .family summary::-webkit-details-marker { display: none; }
+  .toggle { margin-left: 8px; color: var(--text-accent); }
+  .family[open] .toggle { font-size: 0; }
+  .family[open] .toggle::after { content: 'Hide'; font-size: 12px; }
+  .inner { padding-left: 20px; border-left: 2px solid var(--border); margin-bottom: 8px; }
+  .inner .row:last-child { border-bottom: 1px solid var(--border); }
+  :global(.inline) { display: inline; vertical-align: -2px; }
+</style>

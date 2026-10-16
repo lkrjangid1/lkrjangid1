@@ -1,0 +1,181 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { getWork, type CaseStudy } from '../../data/work';
+import type { Project } from '../../data/projects';
+import { categoryLabels, site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const { projects, caseStudies } = await getWork();
+  const bySlug = new Map(caseStudies.map((c) => [c.id, c]));
+  const items = projects.map((p) => ({ slug: p.slug, project: p as Project | undefined, study: bySlug.get(p.slug) }));
+  for (const c of caseStudies) {
+    if (!projects.some((p) => p.slug === c.id)) items.push({ slug: c.id, project: undefined, study: c });
+  }
+  // Case studies first (in their configured order), then the remaining projects.
+  items.sort((a, b) => (a.study?.data.order ?? 99) - (b.study?.data.order ?? 99));
+  return items.map((item, i) => ({
+    params: { slug: item.slug },
+    props: { ...item, next: items[(i + 1) % items.length] },
+  }));
+}
+
+interface Item {
+  slug: string;
+  project?: Project;
+  study?: CaseStudy;
+}
+type Props = Item & { next: Item };
+
+const { slug, project, study, next } = Astro.props;
+const Content = study ? (await render(study)).Content : undefined;
+
+const name = study?.data.title ?? project!.name;
+const headline = study?.data.headline ?? project?.subtitle ?? '';
+const summary = study?.data.summary ?? project?.points[0] ?? '';
+const role = study?.data.role ?? project?.role;
+const stack = study?.data.stack ?? project?.tech ?? [];
+const links = [...(study?.data.links ?? []), ...(project?.links ?? [])].filter(
+  (l, i, all) => all.findIndex((x) => x.url === l.url) === i,
+);
+const nextName = next.study?.data.title ?? next.project?.name ?? next.slug;
+const blocks = study
+  ? [
+      { title: 'Problem', body: study.data.problem },
+      { title: 'Approach', body: study.data.approach },
+      { title: 'Result', body: study.data.result },
+    ]
+  : [];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': study?.data.repo ? 'SoftwareSourceCode' : 'CreativeWork',
+  name,
+  headline,
+  description: summary,
+  author: { '@type': 'Person', name: site.name, url: site.url },
+  url: new URL(`/work/${slug}`, site.url).href,
+  ...(study?.data.repo ? { codeRepository: study.data.repo, programmingLanguage: stack } : { keywords: stack.join(', ') }),
+};
+---
+<Base title={name} current="/work" ogSlug={`work-${slug}`} description={`${name}: ${headline}. ${summary}`.slice(0, 300)} jsonLd={jsonLd}>
+  <article class="container">
+    <nav class="crumb label" aria-label="Breadcrumb"><a href="/work">Work</a> <span aria-hidden="true">/</span> <span aria-current="page">{name}</span></nav>
+
+    <header class="title-block">
+      <p class="eyebrow">{name}{project && ` · ${categoryLabels[project.category] ?? project.category}`}</p>
+      <h1>{headline || name}</h1>
+      {summary && <p class="lede">{summary}</p>}
+      <div class="pills">
+        {role && <span class="pill">{role}</span>}
+        {study?.data.year && <span class="pill">{study.data.year}</span>}
+        {stack.map((s) => <span class="pill">{s}</span>)}
+      </div>
+      {project?.metrics && <p class="metric">{project.metrics}</p>}
+      {links.length > 0 && (
+        <div class="btns links">
+          {links.map((l, i) => (
+            <a class:list={['btn', { 'btn-primary': i === 0 }]} href={l.url} rel="noopener">{l.label} <Icon name="arrow-up-right" /></a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    {blocks.length > 0 && (
+      <section class="pac" aria-label="Problem, approach and result">
+        {blocks.map((b) => (
+          <div class="block">
+            <h2>{b.title}</h2>
+            <p class="small">{b.body}</p>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {project && project.points.length > (study ? 0 : 1) && (
+      <section class="section">
+        <h2>What I built</h2>
+        <ul class="points">
+          {project.points.slice(study ? 0 : 1).map((pt) => <li>{pt}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {Content && (
+      <section class="section mdx">
+        <Content />
+      </section>
+    )}
+
+    {project && project.screenshots.length > 0 && (
+      <section class="section" aria-labelledby="shots-h">
+        <h2 id="shots-h">Screenshots</h2>
+        <div class="shots" tabindex="0" role="region" aria-label={`${name} screenshots, scrollable`}>
+          {project.screenshots.map((src, i) => (
+            <Image
+              src={src}
+              inferSize
+              height={480}
+              format="webp"
+              quality={80}
+              loading={i < 2 ? 'eager' : 'lazy'}
+              alt={`${name} screenshot ${i + 1}`}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <nav class="next" aria-label="Next project">
+      <a href={`/work/${next.slug}`}>
+        <span class="label">Next</span>
+        <span class="next-name">{nextName} <Icon name="arrow-right" /></span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .crumb { padding-top: var(--space-8); }
+  .crumb a { color: var(--text-muted); }
+  .title-block { padding: var(--space-6) 0 0; }
+  .title-block h1 { font-size: 40px; letter-spacing: -0.02em; margin: 8px 0 12px; max-width: 900px; }
+  .lede { color: var(--text-secondary); max-width: 68ch; margin-bottom: 16px; }
+  .metric { margin-top: 14px; color: var(--success); font-size: 15px; }
+  .links { margin-top: 20px; }
+  .pac { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); margin-top: var(--space-12); }
+  .block { background: var(--surface-1); border-radius: var(--radius); padding: 18px 20px; }
+  .block h2 { font-size: 16px; margin-bottom: 6px; }
+  .section > h2 { margin-bottom: var(--space-4); }
+  .points { margin: 0; padding-left: 20px; max-width: 72ch; color: var(--text-secondary); }
+  .points li + li { margin-top: 8px; }
+  .points li::marker { color: var(--text-muted); }
+
+  .mdx { max-width: 760px; color: var(--text-secondary); }
+  .mdx :global(h2) { color: var(--text-primary); margin: var(--space-8) 0 var(--space-3); }
+  .mdx :global(h2:first-child) { margin-top: 0; }
+  .mdx :global(p), .mdx :global(ul), .mdx :global(ol) { margin: 0 0 1em; }
+  .mdx :global(li + li) { margin-top: 6px; }
+  .mdx :global(strong) { color: var(--text-primary); font-weight: 500; }
+  .mdx :global(:not(pre) > code) { background: var(--surface-1); padding: 1px 5px; border-radius: 4px; }
+  .mdx :global(figure), .mdx :global(.codeblock) { margin: var(--space-4) 0; }
+
+  .shots { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+  .shots :global(img) {
+    height: 480px; width: auto; flex: none; scroll-snap-align: start;
+    border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--surface-1);
+  }
+
+  .next { margin-top: var(--space-12); border-top: 1px solid var(--border); }
+  .next a { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; text-decoration: none; color: var(--text-primary); }
+  .next-name { display: inline-flex; align-items: center; gap: 8px; font-weight: 500; }
+  .next a:hover .next-name { color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .title-block h1 { font-size: 28px; }
+    .pac { grid-template-columns: 1fr; }
+    .shots :global(img) { height: 380px; }
+  }
+</style>

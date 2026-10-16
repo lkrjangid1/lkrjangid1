@@ -1,0 +1,54 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  title: string;
+  subtitle?: string;
+  meta?: string;
+  metric?: string;
+  tags: string[];
+  category: string;
+  status?: string;
+  variant?: 'default' | 'featured';
+  external?: boolean;
+}
+
+const { href, title, subtitle, meta, metric, tags, category, status, variant = 'default', external = false } = Astro.props;
+const search = [title, subtitle, meta, metric, ...tags].filter(Boolean).join(' ').toLowerCase();
+---
+<article class:list={['project', variant]} data-category={category} data-search={search}>
+  <a href={href} class="stretched" rel={external ? 'noopener' : undefined}>
+    <h3>{title}</h3>
+  </a>
+  {subtitle && <p class="small">{subtitle}</p>}
+  {meta && <p class="label meta">{meta}</p>}
+  {metric && <p class="metric">{metric}</p>}
+  <div class="pills">
+    {status && <span class="pill pill-accent">{status}</span>}
+    {tags.slice(0, 4).map((t) => <span class="pill">{t}</span>)}
+  </div>
+  <span class="go" aria-hidden="true"><Icon name={external ? 'arrow-up-right' : 'arrow-right'} /></span>
+</article>
+
+<style>
+  .project {
+    position: relative; display: flex; flex-direction: column; gap: 6px;
+    border: 1px solid var(--border); border-radius: var(--radius-card);
+    background: var(--surface-2); padding: 18px 44px 18px 20px; min-height: 168px;
+    transition: border-color .15s ease;
+  }
+  .project:hover { border-color: var(--border-strong); }
+  .project:has(.stretched:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .featured { border: 2px solid var(--accent); padding: 17px 43px 17px 19px; }
+  .featured:hover { border-color: var(--accent); }
+  h3 { font-size: 16px; font-weight: 500; color: var(--text-primary); }
+  .stretched { text-decoration: none; color: inherit; }
+  .stretched:focus-visible { outline: none; }
+  .stretched::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  .meta { margin-top: -2px; }
+  .metric { font-size: 14px; color: var(--success); line-height: 1.5; }
+  .pills { margin-top: auto; padding-top: 8px; }
+  .go { position: absolute; right: 16px; top: 20px; color: var(--text-muted); transition: transform .15s ease, color .15s ease; }
+  .project:hover .go { color: var(--accent); transform: translateX(2px); }
+</style>

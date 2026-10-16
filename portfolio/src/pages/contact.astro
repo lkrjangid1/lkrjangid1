@@ -1,0 +1,147 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../data/site';
+---
+<Base title="Contact" current="/contact" ogSlug="contact" description="Get in touch with Lokesh Jangid about senior mobile, Flutter platform or native tooling work.">
+  <div class="container narrow">
+    <header class="page-head">
+      <h1>Get in touch</h1>
+      <p class="muted">{site.availability}</p>
+    </header>
+
+    <form id="contact" class="form" action="/api/contact" method="post" novalidate>
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" autocomplete="name" required maxlength="100" aria-describedby="name-err" />
+        <p class="err" id="name-err"></p>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required maxlength="200" placeholder="you@company.com" aria-describedby="email-err" />
+        <p class="err" id="email-err"></p>
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="6" required minlength="10" maxlength="5000" placeholder="We need a Flutter plugin for…" aria-describedby="message-err"></textarea>
+        <p class="err" id="message-err"></p>
+      </div>
+      <div class="hp" aria-hidden="true">
+        <label for="company">Company website</label>
+        <input id="company" name="company" tabindex="-1" autocomplete="off" />
+      </div>
+      <input type="hidden" name="t" id="t" />
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary" id="send">Send message</button>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+
+    <section class="section elsewhere" aria-labelledby="else-h">
+      <h2 id="else-h">Elsewhere</h2>
+      <div class="btns">
+        <a class="btn" href={site.links.linkedin} rel="noopener"><Icon name="linkedin" /> LinkedIn</a>
+        <a class="btn" href={site.links.github} rel="noopener"><Icon name="github" /> GitHub</a>
+        <a class="btn" href={site.links.x} rel="noopener"><Icon name="brand-x" /> X</a>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  const form = document.getElementById('contact') as HTMLFormElement;
+  const status = document.getElementById('status')!;
+  const send = document.getElementById('send') as HTMLButtonElement;
+  (document.getElementById('t') as HTMLInputElement).value = String(Date.now());
+
+  const fields = {
+    name: { el: form.elements.namedItem('name') as HTMLInputElement, check: (v: string) => (v ? '' : 'Enter your name.') },
+    email: {
+      el: form.elements.namedItem('email') as HTMLInputElement,
+      check: (v: string) => (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? '' : 'Enter a valid email address.'),
+    },
+    message: {
+      el: form.elements.namedItem('message') as HTMLTextAreaElement,
+      check: (v: string) => (v.length >= 10 ? '' : 'Write at least a sentence (10+ characters).'),
+    },
+  };
+
+  function setError(key: keyof typeof fields, msg: string) {
+    const f = fields[key];
+    document.getElementById(`${key}-err`)!.textContent = msg;
+    f.el.setAttribute('aria-invalid', String(Boolean(msg)));
+  }
+
+  function setStatus(msg: string, kind: '' | 'ok' | 'error') {
+    status.textContent = msg;
+    status.dataset.kind = kind;
+  }
+
+  for (const key of Object.keys(fields) as (keyof typeof fields)[]) {
+    fields[key].el.addEventListener('blur', () => setError(key, fields[key].check(fields[key].el.value.trim())));
+    fields[key].el.addEventListener('input', () => {
+      if (fields[key].el.getAttribute('aria-invalid') === 'true') setError(key, fields[key].check(fields[key].el.value.trim()));
+      if (status.dataset.kind === 'error') setStatus('', '');
+    });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    let firstBad: HTMLElement | undefined;
+    for (const key of Object.keys(fields) as (keyof typeof fields)[]) {
+      const msg = fields[key].check(fields[key].el.value.trim());
+      setError(key, msg);
+      if (msg && !firstBad) firstBad = fields[key].el;
+    }
+    if (firstBad) return firstBad.focus();
+
+    if (!navigator.onLine) return setStatus("You're offline. Check your connection and try again.", 'error');
+
+    send.disabled = true;
+    setStatus('Sending…', '');
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      form.reset();
+      setStatus("Thanks — message sent. I'll reply within 2 days.", 'ok');
+    } catch (err) {
+      const offline = !navigator.onLine || err instanceof TypeError;
+      setStatus(
+        offline
+          ? "Couldn't reach the server. Check your connection and try again."
+          : `Couldn't send: ${(err as Error).message}. Try again or reach me on LinkedIn.`,
+        'error',
+      );
+    } finally {
+      send.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .narrow { max-width: 640px; }
+  .form { display: grid; gap: 6px; }
+  .field { display: grid; gap: 6px; }
+  label { font-size: 14px; color: var(--text-secondary); }
+  input, textarea {
+    width: 100%; background: var(--surface-2); border: 1px solid var(--border-strong);
+    border-radius: var(--radius); padding: 10px 12px; font-size: 16px; line-height: 1.5;
+  }
+  textarea { resize: vertical; min-height: 140px; }
+  input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  [aria-invalid='true'] { border-color: var(--danger); }
+  .err { min-height: 20px; font-size: 13px; color: var(--danger); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
+  .status { font-size: 14px; color: var(--text-secondary); }
+  .status[data-kind='ok'] { color: var(--success); }
+  .status[data-kind='error'] { color: var(--danger); }
+  button:disabled { opacity: .6; cursor: progress; }
+  .elsewhere h2 { margin-bottom: var(--space-3); }
+</style>

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.firebase/
+functions/lib/
+functions/node_modules/
+.env
+.secret.local
+*.log
+.DS_Store
+.lighthouseci/
+
+# Source originals; optimized copies live in src/assets
+raw_assets/

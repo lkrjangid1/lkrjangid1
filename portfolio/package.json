@@ -1,0 +1,30 @@
+{
+  "name": "lkrjangid-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check && vitest run",
+    "test": "vitest run",
+    "serve": "firebase emulators:start --only hosting,functions",
+    "deploy": "npm run build && firebase deploy --only hosting,functions"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "4.3.14",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource/inter": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "astro": "5.18.2",
+    "astro-og-canvas": "^0.7.2",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "typescript": "5.9.3",
+    "vitest": "3.2.7"
+  }
+}

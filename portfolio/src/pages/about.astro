@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { education, site, skills, timeline } from '../data/site';
+---
+<Base title="About" current="/about" ogSlug="about" description={`${site.bio[0]} ${site.bio[1]}`}>
+  <div class="container narrow">
+    <header class="page-head bio">
+      <div class="avatar" aria-hidden="true">{site.initials}</div>
+      <div>
+        <h1>About</h1>
+        <p class="eyebrow">{site.eyebrow}</p>
+      </div>
+    </header>
+
+    <div class="prose">
+      {site.bio.map((p) => <p>{p}</p>)}
+    </div>
+
+    <div class="btns cta">
+      <a class="btn btn-primary" href={site.resume} download>Download PDF résumé <Icon name="download" /></a>
+      <a class="btn" href="/contact">Get in touch</a>
+    </div>
+
+    <section class="section" aria-labelledby="tl-h">
+      <h2 id="tl-h">Timeline</h2>
+      <ol class="timeline">
+        {timeline.map((t) => (
+          <li class="row">
+            <span class="what"><span>{t.label}</span><span class="small">{t.detail}</span></span>
+            <span class="label when">{t.period}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="section" aria-labelledby="edu-h">
+      <h2 id="edu-h">Education</h2>
+      <ul class="timeline">
+        {education.map((e) => (
+          <li class="row"><span class="what"><span>{e.label}</span><span class="small">{e.detail}</span></span></li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="section" aria-labelledby="sk-h">
+      <h2 id="sk-h">Skills</h2>
+      <dl class="skills">
+        {skills.map((g) => (
+          <div class="skill-row">
+            <dt class="label">{g.group}</dt>
+            <dd class="pills">{g.items.map((s) => <span class="pill">{s}</span>)}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .narrow { max-width: 920px; }
+  .bio { display: flex; align-items: center; gap: 18px; }
+  .avatar {
+    width: 64px; height: 64px; flex: none; border-radius: 50%; display: grid; place-items: center;
+    background: var(--bg-accent); color: var(--text-accent); font-weight: 500; font-size: 20px;
+  }
+  .cta { margin-top: var(--space-6); }
+  .section h2 { margin-bottom: var(--space-3); }
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .what { display: flex; flex-direction: column; }
+  .when { white-space: nowrap; flex: none; }
+  .skills { margin: 0; }
+  .skill-row { display: grid; grid-template-columns: 180px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .skill-row:last-child { border-bottom: none; }
+  .skill-row dt { padding-top: 4px; }
+  .skill-row dd { margin: 0; }
+  @media (max-width: 600px) { .skill-row { grid-template-columns: 1fr; gap: 6px; } }
+</style>

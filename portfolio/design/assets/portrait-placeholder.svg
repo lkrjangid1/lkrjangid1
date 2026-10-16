@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" width="900" height="1200">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3db9ff" stop-opacity=".55"/>
+      <stop offset=".55" stop-color="#3db9ff" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#3db9ff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="r" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Head -->
+  <ellipse cx="450" cy="330" rx="150" ry="180" fill="url(#g)"/>
+  <!-- Neck -->
+  <path d="M390 480 h120 v90 h-120z" fill="url(#g)"/>
+  <!-- Shoulders -->
+  <path d="M120 1200 C130 820 250 640 450 600 C650 640 770 820 780 1200 Z" fill="url(#g)"/>
+  <ellipse cx="450" cy="330" rx="150" ry="180" fill="none" stroke="url(#r)" stroke-width="2"/>
+  <text x="450" y="320" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="22" fill="#ffffff" fill-opacity=".55" letter-spacing="3">YOUR</text>
+  <text x="450" y="352" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="22" fill="#ffffff" fill-opacity=".55" letter-spacing="3">PORTRAIT</text>
+</svg>

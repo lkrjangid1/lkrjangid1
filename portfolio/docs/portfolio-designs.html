@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lokesh Jangid — portfolio design canvas</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono&display=swap">
+<style>
+:root{--surface-0:#f6f5f1;--surface-1:#faf9f5;--surface-2:#fff;--text-primary:#141413;--text-secondary:#5f5e5a;--text-muted:#888780;--border:rgba(20,20,19,.12);--border-strong:rgba(20,20,19,.22);--accent:#185FA5;--bg-accent:#E6F1FB;--text-accent:#0C447C;--success:#3B6D11;--radius:8px;--font-sans:'Inter',system-ui,sans-serif;--font-mono:'JetBrains Mono',ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root{--surface-0:#141413;--surface-1:#1c1c1b;--surface-2:#232322;--text-primary:#f1efe8;--text-secondary:#b4b2a9;--border:rgba(241,239,232,.12);--border-strong:rgba(241,239,232,.22);--accent:#85B7EB;--bg-accent:#0C447C;--text-accent:#B5D4F4;--success:#97C459}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--text-primary);font-family:var(--font-sans);line-height:1.6}
+button,input,textarea{font:inherit;color:inherit}
+button{background:transparent;border:1px solid var(--border-strong);border-radius:var(--radius);padding:8px 14px;cursor:pointer}
+button:hover{background:var(--surface-1)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input,textarea{background:var(--surface-2);border:1px solid var(--border-strong);border-radius:var(--radius);padding:8px 12px}
+.cv{max-width:1240px;margin:0 auto;padding:24px}
+.pages{position:sticky;top:0;z-index:2;background:var(--surface-0);padding:12px 0;display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--border)}
+.fl{font-size:12px;font-family:var(--font-mono);color:var(--text-muted);margin:40px 0 8px}
+.fr{background:var(--surface-2);border:1px solid var(--border-strong);border-radius:10px;overflow:hidden}
+.bar{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-muted);font-family:var(--font-mono)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--border-strong)}
+.pg{padding:32px 48px}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;font-size:15px;color:var(--text-secondary);padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:40px}
+.nav b{color:var(--text-primary);font-weight:500}
+.ly{font-size:11px;font-family:var(--font-mono);color:var(--text-accent);display:block;margin:0 0 6px}
+.cd{border:1px solid var(--border);border-radius:12px;padding:16px 18px;background:var(--surface-2)}
+.cd.ft{border:2px solid var(--accent)}
+.m{background:var(--surface-1);border-radius:var(--radius);padding:16px}
+.k{font-size:13px;color:var(--text-muted);margin:0}
+.t{font-size:16px;font-weight:500;margin:0 0 4px}
+.v{font-size:28px;font-weight:500;margin:0}
+.pl{font-size:12px;padding:3px 9px;border-radius:6px;background:var(--surface-1);color:var(--text-secondary);display:inline-block;margin:6px 6px 0 0}
+.ch{font-size:13px;padding:5px 12px}
+.ch.on{background:var(--bg-accent);color:var(--text-accent);border-color:var(--accent)}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);font-size:15px}
+.mono{font-family:var(--font-mono);font-size:13px}
+.sec{margin-bottom:40px}
+.claim{font-size:48px;font-weight:500;line-height:1.15;margin:8px 0 12px;max-width:900px}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.bars div.r{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.bars span.l{width:140px}
+.bars .b{height:14px;border-radius:3px}
+.mob{max-width:390px}
+.mob .pg{padding:20px}
+.mob .claim{font-size:28px}
+.err{color:#A32D2D;font-size:13px;min-height:18px}
+@media (max-width:768px){.pg{padding:24px 20px}.claim{font-size:32px}}
+</style>
+</head>
+<body>
+<div class="cv">
+<nav class="pages" id="pages">
+<button class="ch on" data-t="f1">01 Home</button><button class="ch" data-t="f2">02 Work</button><button class="ch" data-t="f3">03 Case study</button><button class="ch" data-t="f4">04 Open source</button><button class="ch" data-t="f5">05 Writing</button><button class="ch" data-t="f6">06 About</button><button class="ch" data-t="f7">07 Contact</button><button class="ch" data-t="f8">08 404</button><button class="ch" data-t="f9">09 Mobile</button>
+</nav>
+
+<p class="fl" id="f1">Frame 01 — Home / desktop 1440</p>
+<div class="fr"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>lkrjangid.dev/</div><div class="pg">
+<span class="ly">nav</span><div class="nav"><b>Lokesh Jangid</b><span>Work · Open source · Writing · About</span><button>Get in touch</button></div>
+<div class="sec"><span class="ly">hero</span><p class="k">Mobile platform engineer · Flutter, Android, iOS</p>
+<p class="claim">I build the layer under the app: native bindings, delivery pipelines, and the Flutter apps on top.</p>
+<p style="color:var(--text-secondary);font-size:17px;max-width:680px">Currently shipping native-api-bindgen, typed Dart and TypeScript bindings generated from the SDKs already on your machine.</p>
+<div class="btns"><button>See work <i class="ti ti-arrow-right"></i></button><button>Résumé <i class="ti ti-download"></i></button></div></div>
+<div class="sec"><span class="ly">proof-metrics</span><div class="g4">
+<div class="m"><p class="k">App downloads</p><p class="v">350K+</p><p class="k">Play Console, Oct 2026</p></div>
+<div class="m"><p class="k">Native call latency</p><p class="v">~1 µs</p><p class="k">vs ~270 µs MethodChannel</p></div>
+<div class="m"><p class="k">Infra cost saved</p><p class="v">₹14L/yr</p><p class="k">Self-hosted code push</p></div>
+<div class="m"><p class="k">pub.dev packages</p><p class="v">12</p><p class="k">lkrjangid.tech</p></div></div></div>
+<div class="sec"><span class="ly">featured</span><div class="cd ft"><p class="t">native-api-bindgen</p><p class="k">Typed Dart and TypeScript bindings generated from installed SDKs. 97.1% of android.jar generated.</p></div></div>
+<div class="sec"><span class="ly">selected-work · top 4 from projects.json</span><div class="g" id="homeGrid"></div></div>
+<span class="ly">footer</span><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:13px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:16px"><span>© 2026 Lokesh Jangid</span><span>GitHub · LinkedIn · X · Email</span></div>
+</div></div>
+
+<p class="fl" id="f2">Frame 02 — Work / projects index (data: projects.json)</p>
+<div class="fr"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>lkrjangid.dev/work</div><div class="pg">
+<span class="ly">page-header</span><h1 style="font-size:32px;font-weight:500;margin:0">Work</h1><p class="k" id="srcNote" style="margin-bottom:24px">Loading projects.json…</p>
+<span class="ly">search + filters</span><div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:24px"><input id="q" placeholder="Search projects" style="flex:1;min-width:220px" aria-label="Search projects"><div id="chips" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+<span class="ly">project-grid</span><div class="g" id="grid"></div>
+<details style="margin-top:24px"><summary class="k" style="cursor:pointer">Archive · early learning builds</summary><p class="k" id="archive" style="margin-top:8px">wh-clone, mysql-flutter, flask-basic-rest-api</p></details>
+</div></div>
+
+<p class="fl" id="f3">Frame 03 — Case study / native-api-bindgen</p>
+<div class="fr"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>lkrjangid.dev/work/native-api-bindgen</div><div class="pg">
+<span class="ly">breadcrumb</span><p class="k" style="margin-bottom:16px">Work / native-api-bindgen</p>
+<div class="sec"><span class="ly">title-block</span><h1 style="font-size:40px;font-weight:500;margin:0 0 8px">Use native APIs directly</h1><span class="pl">Role · sole author</span><span class="pl">2026</span><span class="pl">Dart · JNI · libclang · JSI</span></div>
+<div class="sec"><span class="ly">problem / approach / result</span><div class="g">
+<div class="m"><p class="t">Problem</p><p class="k">Every platform API needed a hand-written MethodChannel plus native glue.</p></div>
+<div class="m"><p class="t">Approach</p><p class="k">SDK parser → canonical IR → per-target generators with reason codes.</p></div>
+<div class="m"><p class="t">Result</p><p class="k">~1 µs calls vs ~270 µs. Same APK size with bindings for the full SDK.</p></div></div></div>
+<div class="sec bars"><span class="ly">benchmark-chart · 1 MB round trip, ms</span>
+<div class="r"><span class="l mono">bindgen</span><div class="b" style="width:12%;background:var(--accent)"></div><span class="mono">1.80 ms</span></div>
+<div class="r"><span class="l mono">MethodChannel</span><div class="b" style="width:60%;background:var(--border-strong)"></div><span class="mono">9.02 ms</span></div></div>
+<div class="sec"><span class="ly">code-sample</span><div class="m mono">$ native-api-bindgen generate flutter<br><span style="color:var(--success)">51,429 of 52,938 methods generated</span></div></div>
+<span class="ly">next-project</span><div class="row" style="border:none"><span>Next: Organic chemistry map</span><i class="ti ti-arrow-right"></i></div>
+</div></div>
+
+<p class="fl" id="f4">Frame 04 — Open source</p>
+<div class="fr"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>lkrjangid.dev/open-source</div><div class="pg">
+<span class="ly">package-list · pub.dev publisher lkrjangid.tech</span>
+<div class="row"><span class="mono">native_api_bindgen</span><span class="k">CLI · 0.1.0-beta.1</span></div>
+<div class="row"><span class="mono">native_api_runtime</span><span class="k">runtime</span></div>
+<div class="row"><span class="mono">native_api_ui</span><span class="k">native views</span></div>
+<div class="row"><span class="mono">flutter_account_manager</span><span class="k">plugin</span></div>
+<span class="ly" style="margin-top:20px">contributions</span><p class="k">Hacktoberfest 2020, 2021 · Holopin badges</p>
+</div></div>
+
+<p class="fl" id="f5">Frame 05 — Writing</p>
+<div class="fr"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>lkrjangid.dev/writing</div><div class="pg">
+<span class="ly">post-list · migrated from FlutDev</span>
+<div class="row"><span>Why MethodChannel is slow</span><span class="k">8 min</span></div>
+<div class="row"><span>Self-hosting code push for Flutter</span><span class="k">10 min</span></div>
+<div class="row" style="border:none"><span>Rendering molecules with SMILES Drawer</span><span class="k">6 min</span></div>
+</div></div>
+
+<p class="fl" id="f6">Frame 06 — About and résumé</p>
+<div class="fr"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>lkrjangid.dev/about</div><div class="pg">
+<div class="sec"><span class="ly">bio</span><div style="display:flex;gap:16px;align-items:center"><div style="width:56px;height:56px;border-radius:50%;background:var(--bg-accent);color:var(--text-accent);display:flex;align-items:center;justify-content:center;font-weight:500">LJ</div><p style="color:var(--text-secondary);margin:0;max-width:620px">Flutter and native engineer. From WhatsApp clones in 2020 to SDK code generators in 2026.</p></div></div>
+<div class="sec"><span class="ly">timeline</span>
+<div class="row"><span>Platform tooling</span><span class="k">2025–now</span></div>
+<div class="row"><span>Trading and fintech apps</span><span class="k">production</span></div>
+<div class="row"><span>Flutter integrations, Web3</span><span class="k">2021–23</span></div>
+<div class="row"><span>Learning builds</span><span class="k">2020</span></div></div>
+<span class="ly">skills · grouped, no ratings</span><div><span class="pl">Flutter</span><span class="pl">Dart</span><span class="pl">Kotlin</span><span class="pl">Swift / ObjC</span><span class="pl">Python</span><span class="pl">Firebase</span><span class="pl">NestJS</span></div>
+<div style="margin-top:20px"><button>Download PDF résumé <i class="ti ti-download"></i></button></div>
+</div></div>
+
+<p class="fl" id="f7">Frame 07 — Contact</p>
+<div class="fr"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>lkrjangid.dev/contact</div><div class="pg">
+<span class="ly">form</span>
+<form id="cf" novalidate style="display:grid;gap:10px;max-width:440px">
+<input id="cn" placeholder="Your name" aria-label="Name"><input id="ce" type="email" placeholder="you@company.com" aria-label="Email"><textarea id="cm" rows="4" placeholder="We need a Flutter plugin for…" aria-label="Message"></textarea>
+<p class="err" id="cerr" role="alert"></p><button style="justify-self:start">Send message</button></form>
+<span class="ly" style="margin-top:20px">availability</span><p class="k">Open to platform and senior Flutter roles · replies within 2 days</p>
+</div></div>
+
+<p class="fl" id="f8">Frame 08 — 404</p>
+<div class="fr"><div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>lkrjangid.dev/guitarcourse</div><div class="pg" style="text-align:center;padding:64px 24px">
+<p class="mono" style="color:var(--text-muted)">why-skipped '/guitarcourse'</p><p style="font-size:28px;font-weight:500;margin:8px 0">E404 · page not generated</p><p class="k" style="margin-bottom:16px">This page moved or never existed.</p><button>Back to work</button>
+</div></div>
+
+<p class="fl" id="f9">Frame 09 — Home / mobile 390</p>
+<div class="fr mob"><div class="bar">390 × 844</div><div class="pg">
+<div style="display:flex;justify-content:space-between;margin-bottom:24px"><b style="font-weight:500">Lokesh Jangid</b><i class="ti ti-menu-2" aria-label="Menu"></i></div>
+<p class="claim">I build the layer under the app.</p>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px"><div class="m"><p class="k">Downloads</p><p style="font-weight:500;margin:0">350K+</p></div><div class="m"><p class="k">Packages</p><p style="font-weight:500;margin:0">12</p></div><div class="m"><p class="k">Native call</p><p style="font-weight:500;margin:0">~1 µs</p></div><div class="m"><p class="k">Saved/yr</p><p style="font-weight:500;margin:0">₹14L</p></div></div>
+<div class="cd ft"><p class="t">native-api-bindgen</p><p class="k">Featured case study</p></div>
+</div></div>
+</div>
+
+<script>
+const SRC='https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/main/projects.json';
+const FALLBACK=[
+{title:'Scalper chart engine',description:'Trading chart engine, +20% derivative trades',category:'production',tags:['Flutter','Trading'],featured:true},
+{title:'Self-hosted code push',description:'OTA updates, Rs. 14L+/yr saved',category:'production',tags:['Flutter','DevOps'],featured:true},
+{title:'Libgen',description:'600K+ downloads',category:'production',tags:['Flutter']},
+{title:'FinSight AI',description:'AI finance app',category:'production',tags:['AI']},
+{title:'native-api-bindgen',description:'Typed bindings from installed SDKs',category:'tooling',tags:['Dart','JNI','TypeScript'],url:'https://github.com/lkrjangid1/native-api-bindgen'},
+{title:'Organic chemistry map',description:'Zoomable reaction map for JEE',category:'web',tags:['React','React Flow'],url:'https://github.com/lkrjangid1/Organic-Chemistry-Map'},
+{title:'FCM admin',description:'Push campaign panel, in progress',category:'backend',tags:['NestJS','BullMQ'],url:'https://github.com/lkrjangid1/fcm_admin'},
+{title:'Election DApp',description:'Voting on Web3',category:'mobile',tags:['Flutter','Web3'],url:'https://github.com/lkrjangid1/Election-Flutter-Web3'},
+{title:'Agora in Flutter',description:'Video calling',category:'mobile',tags:['Flutter','Agora'],url:'https://github.com/lkrjangid1/Agora-in-Flutter'},
+{title:'Whiteboard',description:'Drawing canvas',category:'mobile',tags:['Flutter'],url:'https://github.com/lkrjangid1/whiteboard-flutter'},
+{title:'Personal safety UI',description:'Compose and Material 3 study',category:'mobile',tags:['Kotlin','Compose'],url:'https://github.com/lkrjangid1/Google-Personal-Safety'},
+{title:'Blob file downloader',description:'Web download utility',category:'web',tags:['JavaScript'],url:'https://github.com/lkrjangid1/Blob-file-downloader'}
+];
+let all=[],cat='all',q='';
+const arr=v=>Array.isArray(v)?v.map(String):typeof v==='string'?v.split(',').map(s=>s.trim()).filter(Boolean):[];
+const norm=p=>({title:String(p.title||p.name||p.projectName||'Untitled'),desc:String(p.description||p.desc||p.summary||''),tags:arr(p.tags||p.tech||p.stack||p.technologies),cat:String(p.category||p.type||'other').toLowerCase(),url:String(p.live||p.url||p.link||p.github||p.repo||''),featured:!!p.featured});
+function card(p){const d=document.createElement('div');d.className='cd';const t=document.createElement('p');t.className='t';t.textContent=p.title;const s=document.createElement('p');s.className='k';s.textContent=p.desc;d.append(t,s);p.tags.slice(0,3).forEach(x=>{const e=document.createElement('span');e.className='pl';e.textContent=x;d.append(e)});if(p.url){d.style.cursor='pointer';d.tabIndex=0;d.onclick=()=>window.open(p.url,'_blank','noopener')}return d}
+function draw(){const g=document.getElementById('grid');g.replaceChildren();const L=all.filter(p=>p.cat!=='archive'&&(cat==='all'||p.cat===cat)&&(p.title+' '+p.desc+' '+p.tags.join(' ')).toLowerCase().includes(q));L.forEach(p=>g.append(card(p)));if(!L.length){const e=document.createElement('p');e.className='k';e.textContent='No projects match. Try another filter.';g.append(e)}}
+function init(list,live){all=list.map(norm).sort((a,b)=>b.featured-a.featured);document.getElementById('srcNote').textContent=live?all.length+' projects · live from projects.json':'Sample data · projects.json could not be loaded';const ar=all.filter(p=>p.cat==='archive');if(ar.length)document.getElementById('archive').textContent=ar.map(p=>p.title).join(', ');const c=document.getElementById('chips');c.replaceChildren();['all',...new Set(all.filter(p=>p.cat!=='archive').map(p=>p.cat))].forEach(k=>{const b=document.createElement('button');b.className='ch'+(k==='all'?' on':'');b.setAttribute('aria-pressed',k==='all');b.textContent=k[0].toUpperCase()+k.slice(1);b.onclick=()=>{cat=k;c.querySelectorAll('.ch').forEach(x=>{x.classList.remove('on');x.setAttribute('aria-pressed','false')});b.classList.add('on');b.setAttribute('aria-pressed','true');draw()};c.append(b)});const h=document.getElementById('homeGrid');h.replaceChildren();all.filter(p=>p.cat!=='archive').slice(0,4).forEach(p=>h.append(card(p)));draw()}
+document.getElementById('q').addEventListener('input',e=>{q=e.target.value.toLowerCase();draw()});
+fetch(SRC).then(r=>{if(!r.ok)throw 0;return r.json()}).then(d=>{const l=Array.isArray(d)?d:(d.projects||d.data||d.items||[]);if(!l.length)throw 0;init(l,true)}).catch(()=>init(FALLBACK,false));
+document.querySelectorAll('#pages .ch').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#pages .ch').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.getElementById(b.dataset.t).scrollIntoView({behavior:'smooth'})}));
+document.getElementById('cf').addEventListener('submit',e=>{e.preventDefault();const err=document.getElementById('cerr');const n=document.getElementById('cn').value.trim(),m=document.getElementById('ce').value.trim(),t=document.getElementById('cm').value.trim();if(!n||!t){err.textContent='Enter your name and a message.';return}if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m)){err.textContent='Enter a valid email address.';return}err.style.color='var(--success)';err.textContent='Message sent.'});
+['cn','ce','cm'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{const err=document.getElementById('cerr');err.textContent='';err.style.color=''}));
+</script>
+</body>
+</html>
