@@ -1,8 +1,13 @@
 ---
+import '@fontsource/space-grotesk/latin-600.css';
+import '@fontsource/fraunces/latin-400-italic.css';
 import '@fontsource/inter/latin-400.css';
 import '@fontsource/inter/latin-500.css';
 import '@fontsource/jetbrains-mono/latin-400.css';
 import '../styles/global.css';
+// Preloaded: the display face (hero name, headings) and body text paint first.
+import displayFont from '@fontsource/space-grotesk/files/space-grotesk-latin-600-normal.woff2?url';
+import bodyFont from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
@@ -18,7 +23,9 @@ interface Props {
 
 const { title, description = site.description, current = '', ogSlug = 'home', jsonLd, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
-const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', site.url).href;
+// build.format 'file' makes pathname end in .html; Firebase serves clean URLs, so canonicalize to those.
+const cleanPath = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '').replace(/\/$/, '') || '/';
+const canonical = new URL(cleanPath, site.url).href;
 const ogImage = new URL(`/og/${ogSlug}.png`, site.url).href;
 ---
 <!doctype html>
@@ -26,15 +33,19 @@ const ogImage = new URL(`/og/${ogSlug}.png`, site.url).href;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline src="/theme-init.js"></script>
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
-    <meta name="theme-color" content="#f6f5f1" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#07080b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#fafaf8" media="(prefers-color-scheme: light)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.name} — writing`} href="/rss.xml" />
+    <slot name="head" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
@@ -52,11 +63,15 @@ const ogImage = new URL(`/og/${ogSlug}.png`, site.url).href;
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
+    <div class="grain" aria-hidden="true"></div>
     <a class="skip-link" href="#main">Skip to content</a>
     <Nav current={current} />
     <main id="main">
       <slot />
     </main>
     <Footer />
+    <script>
+      import '../scripts/site.ts';
+    </script>
   </body>
 </html>

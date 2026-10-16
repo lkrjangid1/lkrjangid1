@@ -1,78 +1,140 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { education, site, skills, timeline } from '../data/site';
+import portrait from '../assets/portrait.webp';
+import { achievements, education, experience, site, skills } from '../data/site';
+import { getRecommendations } from '../data/recommendations';
+
+const recommendations = await getRecommendations();
 ---
-<Base title="About" current="/about" ogSlug="about" description={`${site.bio[0]} ${site.bio[1]}`}>
-  <div class="container narrow">
-    <header class="page-head bio">
-      <div class="avatar" aria-hidden="true">{site.initials}</div>
+<Base title="About" current="/about" ogSlug="about" description={site.bio.join(' ')}>
+  <div class="wrap">
+    <header class="page-head about-head">
+      <div class="page-glow" aria-hidden="true"></div>
       <div>
-        <h1>About</h1>
-        <p class="eyebrow">{site.eyebrow}</p>
+        <p class="label">About</p>
+        <h1 class="h2" data-split>Hi, I'm Lokesh.<br /><span class="serif accent">I ship mobile apps.</span></h1>
+        <div class="prose lead">{site.bio.map((p) => <p>{p}</p>)}</div>
+        <div class="btns ctas">
+          <a class="btn btn-primary" href={site.resume} download>Download résumé <Icon name="download" size={14} /></a>
+          <a class="btn" href="/contact">Get in touch</a>
+          <a class="btn" href={site.links.linkedin} rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+      <div class="photo" data-reveal>
+        <Image src={portrait} alt={`Portrait of ${site.name}`} width={640} format="webp" quality={84} loading="eager" />
+        <p class="label">{site.location} · <time data-clock={site.timezone}>—</time> IST</p>
       </div>
     </header>
 
-    <div class="prose">
-      {site.bio.map((p) => <p>{p}</p>)}
-    </div>
-
-    <div class="btns cta">
-      <a class="btn btn-primary" href={site.resume} download>Download PDF résumé <Icon name="download" /></a>
-      <a class="btn" href="/contact">Get in touch</a>
-    </div>
-
-    <section class="section" aria-labelledby="tl-h">
-      <h2 id="tl-h">Timeline</h2>
-      <ol class="timeline">
-        {timeline.map((t) => (
-          <li class="row">
-            <span class="what"><span>{t.label}</span><span class="small">{t.detail}</span></span>
-            <span class="label when">{t.period}</span>
+    <section class="section" aria-labelledby="xp-h">
+      <div class="section-head"><div><p class="label">Experience</p><h2 id="xp-h" class="h2" data-split>Where I've worked.</h2></div></div>
+      <ol class="jobs">
+        {experience.map((e) => (
+          <li class="job" data-reveal>
+            <div class="job-meta">
+              <span class="label">{e.period}</span>
+              <span class="muted">{e.place}</span>
+              {e.current && <span class="pill"><span class="dot pulse"></span>Current</span>}
+            </div>
+            <div>
+              <h3 class="h3">{e.role}</h3>
+              <p class="company">{e.company}</p>
+              <p class="muted summary">{e.summary}</p>
+              <ul>{e.points.map((pt) => <li>{pt}</li>)}</ul>
+            </div>
           </li>
         ))}
       </ol>
     </section>
 
-    <section class="section" aria-labelledby="edu-h">
-      <h2 id="edu-h">Education</h2>
-      <ul class="timeline">
-        {education.map((e) => (
-          <li class="row"><span class="what"><span>{e.label}</span><span class="small">{e.detail}</span></span></li>
-        ))}
-      </ul>
+    <section class="section split" aria-label="Education and achievements">
+      <div data-reveal>
+        <p class="label">Education</p>
+        <ul class="rows">
+          {education.map((e) => <li><div><span><b>{e.degree}</b><br /><span class="muted">{e.school} · {e.note}</span></span><span class="label">{e.period}</span></div></li>)}
+        </ul>
+      </div>
+      <div data-reveal>
+        <p class="label">Achievements</p>
+        <ul class="rows">
+          {achievements.map((a) => <li><div><span>{a}</span></div></li>)}
+        </ul>
+      </div>
     </section>
 
     <section class="section" aria-labelledby="sk-h">
-      <h2 id="sk-h">Skills</h2>
+      <div class="section-head"><div><p class="label">Skills</p><h2 id="sk-h" class="h2" data-split>The toolbox.</h2></div></div>
       <dl class="skills">
         {skills.map((g) => (
-          <div class="skill-row">
+          <div class="skill-row" data-reveal>
             <dt class="label">{g.group}</dt>
-            <dd class="pills">{g.items.map((s) => <span class="pill">{s}</span>)}</dd>
+            <dd class="pills">{g.items.map((s) => <span class="chip">{s}</span>)}</dd>
           </div>
         ))}
       </dl>
     </section>
+
+    {recommendations.length > 0 && (
+      <section class="section" aria-labelledby="rec-h">
+        <div class="section-head"><div><p class="label">Recommendations · LinkedIn</p><h2 id="rec-h" class="h2" data-split>In their words.</h2></div></div>
+        <div class="quotes">
+          {recommendations.map((r) => (
+            <figure class="quote" data-reveal>
+              <blockquote>{r.recommendation}</blockquote>
+              <figcaption><a href={r.profile} rel="noopener">{r.title}</a><small>{r.subtitle}</small></figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
   </div>
 </Base>
 
 <style>
-  .narrow { max-width: 920px; }
-  .bio { display: flex; align-items: center; gap: 18px; }
-  .avatar {
-    width: 64px; height: 64px; flex: none; border-radius: 50%; display: grid; place-items: center;
-    background: var(--bg-accent); color: var(--text-accent); font-weight: 500; font-size: 20px;
+  .about-head { display: grid; grid-template-columns: 1.3fr .9fr; gap: clamp(32px, 6vw, 96px); align-items: end; }
+  .about-head .h2 { margin-bottom: 8px; }
+  .ctas { margin-top: 32px; }
+  .photo { position: relative; justify-self: center; text-align: center; }
+  .photo :global(img) {
+    width: min(380px, 80vw); height: auto; border-radius: 0 0 28px 28px;
+    background: radial-gradient(70% 60% at 50% 45%, var(--accent-soft), transparent 70%);
+    -webkit-mask-image: linear-gradient(#000 78%, transparent); mask-image: linear-gradient(#000 78%, transparent);
   }
-  .cta { margin-top: var(--space-6); }
-  .section h2 { margin-bottom: var(--space-3); }
-  .timeline { list-style: none; margin: 0; padding: 0; }
-  .what { display: flex; flex-direction: column; }
-  .when { white-space: nowrap; flex: none; }
+  .photo .label { margin-top: 6px; }
+
+  .jobs { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .job { display: grid; grid-template-columns: 220px 1fr; gap: 32px; padding: 32px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); }
+  .job-meta { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+  .company { color: var(--accent); margin: 4px 0 10px; font-weight: 500; }
+  .summary { margin-bottom: 14px; }
+  .job ul { margin: 0; padding-left: 18px; color: var(--text-2); }
+  .job li + li { margin-top: 8px; }
+  .job li::marker { color: var(--accent); }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .split .label { margin-bottom: 8px; }
+  .split .rows > li > div { align-items: flex-start; }
+
   .skills { margin: 0; }
-  .skill-row { display: grid; grid-template-columns: 180px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-  .skill-row:last-child { border-bottom: none; }
-  .skill-row dt { padding-top: 4px; }
+  .skill-row { display: grid; grid-template-columns: 200px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+  .skill-row dt { padding-top: 5px; }
   .skill-row dd { margin: 0; }
-  @media (max-width: 600px) { .skill-row { grid-template-columns: 1fr; gap: 6px; } }
+
+  .quotes { columns: 2 340px; column-gap: 16px; }
+  .quote { break-inside: avoid; margin: 0 0 16px; padding: 24px; border-radius: 24px; background: var(--surface); border: 1px solid var(--line); }
+  .quote blockquote { margin: 0; color: var(--text-2); line-height: 1.65; }
+  .quote blockquote::before { content: '“'; display: block; font: 400 56px/0.6 var(--font-serif); color: var(--accent); margin-bottom: 12px; }
+  .quote figcaption { margin-top: 16px; }
+  .quote figcaption a { font-weight: 500; }
+  .quote small { display: block; font-size: 13px; color: var(--text-3); }
+
+  @media (max-width: 900px) {
+    .about-head, .split { grid-template-columns: 1fr; }
+    .photo { order: -1; }
+    .job { grid-template-columns: 1fr; gap: 12px; padding: 24px; }
+    .job-meta { flex-direction: row; flex-wrap: wrap; align-items: center; }
+    .skill-row { grid-template-columns: 1fr; gap: 8px; }
+  }
 </style>

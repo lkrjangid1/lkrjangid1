@@ -1,0 +1,16 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+/** A screenshot from disk (bundled) or a remote URL, optimized to WebP at the given width. */
+interface Props {
+  src: ImageMetadata | string;
+  alt: string;
+  width: number;
+  class?: string;
+  eager?: boolean;
+}
+const { src, alt, width, class: className, eager = false } = Astro.props;
+const common = { alt, width, format: 'webp', quality: 80, loading: eager ? 'eager' : 'lazy', class: className } as const;
+---
+{typeof src === 'string' ? <Image src={src} inferSize {...common} /> : <Image src={src} {...common} />}

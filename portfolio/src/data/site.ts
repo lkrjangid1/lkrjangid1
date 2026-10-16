@@ -1,19 +1,33 @@
+// Identity, copy and curated config. Project content itself comes from projects.json.
+
 export const site = {
   name: 'Lokesh Jangid',
+  first: 'Lokesh',
+  last: 'Jangid',
   initials: 'LJ',
+  handle: 'lkrjangid',
   url: 'https://lkrjangid-portfolio.web.app',
   role: 'Senior Mobile Engineer',
-  eyebrow: 'Senior Mobile Engineer · Flutter, Android (Kotlin), iOS (SwiftUI)',
-  claim: 'I build the layer under the app: native bindings, delivery pipelines, and the Flutter apps on top.',
-  claimShort: 'I build the layer under the app.',
-  sub: 'Senior engineer at Univest, a fintech app serving 9M+ users. Currently shipping native-api-bindgen, typed Dart and TypeScript bindings generated from the SDKs already on your machine.',
+  stack: 'Flutter · Android (Kotlin) · iOS (SwiftUI)',
+  location: 'Gurgaon, India',
+  timezone: 'Asia/Kolkata',
+  email: 'lkrjangid1@gmail.com',
+  status: 'Open to senior mobile roles',
+  statusSub: 'Full-time · Consulting · Code review',
+  intro:
+    'Senior Mobile Engineer at Univest. I build Flutter, Android and iOS apps for 9M+ users, and the tooling underneath them.',
   description:
-    'Lokesh Jangid is a senior mobile engineer building Flutter, Android and iOS apps at fintech scale, plus the native bindings and delivery pipelines underneath them.',
-  bio: [
-    'Senior mobile engineer at Univest, where I build brokerage order flows, mutual funds, payments and the in-house Scalper charting terminal for 9M+ users.',
-    'Outside work I build the tooling layer: native-api-bindgen, a self-hosted Flutter code push that became PushPatch, and 24 packages on pub.dev.',
+    'Lokesh Jangid is a Senior Mobile Engineer at Univest building Flutter, Android and iOS apps for 9M+ users, plus native bindings, code push and 24 pub.dev packages.',
+  currently: [
+    { label: 'Senior Software Engineer', at: '@ Univest' },
+    { label: 'Building', at: 'native-api-bindgen' },
+    { label: 'Shipping', at: 'PushPatch' },
   ],
-  availability: 'Open to senior mobile and platform engineering roles · replies within 2 days',
+  bio: [
+    'Senior Mobile Engineer with 4+ years shipping high-scale consumer apps across Flutter, native Android (Kotlin) and native iOS (Swift/SwiftUI).',
+    'At Univest I build brokerage order flows, mutual funds, payments and the Scalper trading terminal for 9M+ users. The rest of the time I build the layer underneath: native-api-bindgen, a self-hosted code push that became PushPatch, and packages on pub.dev.',
+  ],
+  availability: 'Open to senior mobile and platform roles · replies within 2 days',
   resume: '/resume.pdf',
   links: {
     github: 'https://github.com/lkrjangid1',
@@ -33,28 +47,69 @@ export const nav = [
   { href: '/about', label: 'About' },
 ] as const;
 
-export interface Metric {
-  label: string;
-  value: string;
-  note: string;
-  sourceUrl: string;
-}
+/** Big numbers under the hero. `packages` and `articles` are filled in at build time. */
+export const proof = [
+  { value: 9, suffix: 'M+', label: 'Users served', href: 'https://play.google.com/store/apps/details?id=com.univest.capp' },
+  { value: 10, suffix: 'M+', label: 'Play downloads', href: 'https://play.google.com/store/apps/details?id=com.univest.capp' },
+  { value: 600, suffix: 'K+', label: 'Libgen downloads', href: 'https://play.google.com/store/apps/details?id=com.yaaratech.libgen' },
+  { key: 'packages', value: 24, suffix: '', label: 'pub.dev packages', href: 'https://pub.dev/publishers/lkrjangid.tech/packages' },
+  { key: 'articles', value: 177, suffix: '+', label: 'Articles written', href: 'https://flutdev.blogspot.com/' },
+] as const;
 
-const UNIVEST_PLAY = 'https://play.google.com/store/apps/details?id=com.univest.capp';
+export const wins = [
+  ['Cold start', '5.5s → 2.0s'],
+  ['Crash-free', '70% → 95%'],
+  ['₹14L/yr', 'saved with self-hosted code push'],
+  ['~1 µs', 'native calls vs ~270 µs'],
+  ['+20%', 'derivative trades with Scalper'],
+  ['₹1.06 Cr+', 'mutual funds processed'],
+  ['Hotfixes', 'days → minutes'],
+  ['97.1%', 'of android.jar generated'],
+  ['−50%', 'API calls at Univest'],
+] as const;
 
-export const metrics: Metric[] = [
-  { label: 'Users served', value: '9M+', note: 'Univest, Play Store', sourceUrl: UNIVEST_PLAY },
-  { label: 'Cold start', value: '5.5s → 2.0s', note: '64% faster at Univest', sourceUrl: '/work/univest' },
-  { label: 'Infra cost saved', value: '₹14L+/yr', note: 'Self-hosted code push', sourceUrl: '/work/self-hosted-code-push' },
-  { label: 'pub.dev packages', value: '24', note: 'Publisher lkrjangid.tech', sourceUrl: site.links.pubdev },
-];
+/** Per-product presentation: brand accent, icon file in src/assets/icons, monogram fallback. */
+export const appMeta: Record<string, { accent: string; icon?: string; mono: string }> = {
+  univest: { accent: '#2fb36e', icon: 'univest', mono: 'U' },
+  scalper: { accent: '#f4b63a', icon: 'scalper', mono: 'S' },
+  'self-hosted-code-push': { accent: '#ff7a45', mono: 'CP' },
+  pushpatch: { accent: '#4c7dff', icon: 'pushpatch', mono: 'P' },
+  'native-api-bindgen': { accent: '#3db9ff', mono: 'nb' },
+  'incognito-vault': { accent: '#5fd3a8', icon: 'incognito-vault', mono: 'iV' },
+  'finsight-ai': { accent: '#2fb36e', mono: 'Fi' },
+  'oi-visualizer': { accent: '#19c3b4', mono: 'OI' },
+  libgen: { accent: '#5b8def', icon: 'libgen', mono: 'L' },
+  searchly: { accent: '#8b7cf6', icon: 'searchly', mono: 'Se' },
+  'remote-jobs': { accent: '#f2c230', icon: 'remote-jobs', mono: 'R' },
+  'mbm-e-learning': { accent: '#c8234a', icon: 'mbm-e-learning', mono: 'M' },
+  raksha: { accent: '#ff4f81', mono: 'Ra' },
+  buckrate: { accent: '#f5c218', mono: 'B' },
+  weblm: { accent: '#8a95a8', mono: 'W' },
+  'greenhouse-monitoring-control': { accent: '#57c46b', mono: 'G' },
+  'research-assistant': { accent: '#5f8cff', mono: 'AI' },
+  seedfuel: { accent: '#d79a3b', icon: 'seedfuel', mono: 'Sf' },
+};
 
-export const secondaryMetrics: Metric[] = [
-  { label: 'Crash-free users', value: '70% → 95%', note: 'Univest', sourceUrl: '/work/univest' },
-  { label: 'Libgen downloads', value: '600K+', note: 'Solo-built, Play Store', sourceUrl: 'https://play.google.com/store/apps/details?id=com.yaaratech.libgen' },
-  { label: 'Native call latency', value: '~1 µs', note: 'vs ~270 µs MethodChannel', sourceUrl: '/work/native-api-bindgen' },
-  { label: 'Derivative trades', value: '+20%', note: 'Scalper chart engine', sourceUrl: '/work/scalper' },
-];
+/** Shorter names for tiles and dock tooltips when the projects.json title is long. */
+export const shortNames: Record<string, string> = {
+  'research-assistant': 'AI research assistant',
+  'greenhouse-monitoring-control': 'Greenhouse IoT',
+};
+
+/** Projects whose screenshots are store graphics that already include a device frame. */
+export const framedShots = new Set(['searchly', 'remote-jobs']);
+
+/** The "Now shipping" reel on the home page, in order. Copy and links come from projects.json. */
+export const reel = [
+  { slug: 'univest', platform: 'Android · iOS · Flutter, Kotlin, SwiftUI', tagline: 'Trading and investing for 9M+ people.', visual: 'phones' },
+  { slug: 'scalper', platform: 'Inside Univest · Flutter custom rendering', tagline: 'A trading terminal, built from scratch in under a month.', visual: 'phone' },
+  { slug: 'pushpatch', platform: 'Desktop · CLI · Web dashboard', tagline: 'Fix production Flutter apps in minutes, not review cycles.', visual: 'laptop' },
+  { slug: 'native-api-bindgen', platform: 'Open source · Dart, JNI, libclang, JSI', tagline: 'Use native APIs directly. No MethodChannel.', visual: 'terminal' },
+  { slug: 'libgen', platform: 'Android · iPhone (Quillshelf) · Flutter', tagline: 'Every book source, one beautiful reader.', visual: 'phone' },
+  { slug: 'incognito-vault', platform: 'Chrome extension · macOS app', tagline: 'Keep the chats you meant to keep.', visual: 'browser' },
+] as const;
+
+export type ReelVisual = (typeof reel)[number]['visual'];
 
 /** Category per project slug. Anything missing falls back to the heuristic in projects.ts. */
 export const categoryOverrides: Record<string, string> = {
@@ -64,13 +119,14 @@ export const categoryOverrides: Record<string, string> = {
   'finsight-ai': 'production',
   pushpatch: 'product',
   libgen: 'apps',
+  searchly: 'apps',
   'remote-jobs': 'apps',
   'mbm-e-learning': 'apps',
   'incognito-vault': 'apps',
   'oi-visualizer': 'apps',
   raksha: 'ai-iot',
   'greenhouse-monitoring-control': 'ai-iot',
-  'ai-based-research-paper-search-summarization-and-chat-application': 'ai-iot',
+  'research-assistant': 'ai-iot',
   weblm: 'ai-iot',
   buckrate: 'ai-iot',
   seedfuel: 'web',
@@ -90,29 +146,59 @@ export const categoryLabels: Record<string, string> = {
 
 export const featured = ['univest', 'scalper', 'self-hosted-code-push', 'pushpatch'];
 
-export const timeline = [
-  { label: 'Senior Software Engineer, Univest', detail: 'Brokerage, mutual funds, payments, Scalper, code push', period: '04/2024 – now' },
-  { label: 'Platform tooling', detail: 'native-api-bindgen, PushPatch, 24 pub.dev packages', period: '2025 – now' },
-  // TODO(Lokesh): confirm title and dates for Timemarks and the indie-apps period.
-  { label: 'Timemarks', detail: 'Buckrate livestock marketplace and computer-vision weight estimator', period: 'Flutter Web' },
-  { label: 'Indie apps', detail: 'Libgen (600K+ downloads), Remote Jobs, MBM E-Learning', period: 'self-published' },
-  { label: 'Learning builds', detail: 'WhatsApp clone, Agora video, Web3 voting, Hacktoberfest 2020 and 2021', period: '2020 – 2023' },
-];
+/** From the résumé (public/resume.pdf). */
+export const experience = [
+  {
+    role: 'Senior Software Engineer',
+    company: 'Univest Communication Pvt. Ltd.',
+    place: 'Gurgaon',
+    period: '04/2024 – Present',
+    current: true,
+    summary: 'Brokerage, mutual funds, payments and platform engineering for a 9M+ user trading app.',
+    points: [
+      'Architected brokerage order placement and management, built for security, scale and low latency.',
+      'Raised crash-free users from 70% to 95% and cut cold start from 5.5s to 2.0s (64%).',
+      'Delivered mutual funds end to end on BSE across four payment modes: 3K+ orders, ₹1.06 Cr+.',
+      'Built Scalper, a TradingView-style chart engine, from scratch in under a month (~20% more derivative trades).',
+      'Reverse-engineered Shorebird into a self-hosted code push: hotfixes in minutes, ₹14L+ a year saved.',
+      'Set up CI/CD from zero, Appium E2E for QA, and mentored two junior engineers.',
+    ],
+  },
+  {
+    role: 'Software Developer',
+    company: 'Timemarks Examiner Pvt. Ltd.',
+    place: 'Jaipur',
+    period: '02/2021 – 03/2024',
+    current: false,
+    summary: 'Early engineer at a bootstrapped EdTech startup; led 4 interns across 6 products.',
+    points: [
+      'Studyem: white-label Flutter LMS for ~5 institutes and 1,000+ students, with RabbitMQ chat, video calls and a live whiteboard.',
+      'Live quiz platform sustaining ~400 peak concurrent users; API usage cut 70% with SQLite caching.',
+      'Studyem Web as an installable Flutter PWA; Timevictor edu-gaming; Buckrate livestock marketplace with AI weight estimation.',
+    ],
+  },
+] as const;
 
 export const education = [
-  { label: 'MCA', detail: 'Final project: AI research-paper search, summarization and chat' },
-  { label: 'B.Tech', detail: 'Final project: greenhouse monitoring and control over IoT' },
-];
+  { degree: 'Master of Computer Applications', school: 'Uttaranchal University, Dehradun', period: '2024 – 2026', note: 'Pursuing' },
+  { degree: 'B.E. Electrical Engineering', school: 'MBM University, Jodhpur', period: '2019 – 2023', note: 'CGPA 8.28' },
+] as const;
+
+export const achievements = [
+  'Winner, Incubation & Funding Round (SSIP), IIIT Surat, for Raksha',
+  'Hacktoberfest 2020 and 2021 open-source contributor',
+  '600K+ cumulative downloads across self-published Play Store apps',
+] as const;
 
 export const skills: { group: string; items: string[] }[] = [
-  { group: 'Languages', items: ['Dart', 'Kotlin', 'Swift', 'Python', 'JavaScript', 'TypeScript'] },
-  { group: 'Mobile', items: ['Flutter', 'Android SDK', 'Jetpack Compose', 'SwiftUI', 'UIKit', 'BLE'] },
+  { group: 'Languages', items: ['Dart', 'Kotlin', 'Swift', 'Python', 'JavaScript'] },
+  { group: 'Mobile', items: ['Flutter', 'Android SDK', 'Jetpack Compose', 'SwiftUI', 'UIKit', 'PWA', 'BLE'] },
+  { group: 'Architecture', items: ['BLoC', 'Riverpod', 'Provider', 'GetX', 'MVVM', 'Clean Architecture', 'GetIt'] },
+  { group: 'Real-time', items: ['WebSockets', 'RabbitMQ', 'REST', 'Firebase'] },
+  { group: 'Payments', items: ['Juspay headless', 'Razorpay', 'BSE', 'UPI Intent / Collect', 'RevenueCat'] },
+  { group: 'Performance', items: ['Cold start', 'Memory leaks', 'Rendering', 'R8 / ProGuard', 'App size'] },
+  { group: 'Delivery', items: ['CI/CD', 'GitHub Actions', 'OTA code push', 'Appium', 'Shell'] },
   { group: 'Native interop', items: ['JNI', 'package:jni', 'Objective-C runtime', 'JSI', 'libclang', 'Pigeon'] },
-  { group: 'Architecture', items: ['BLoC', 'Riverpod', 'Provider', 'GetX', 'MVVM', 'Clean Architecture'] },
-  { group: 'Real-time & networking', items: ['WebSockets', 'REST', 'RabbitMQ', 'Firebase (Auth, Firestore, FCM)'] },
-  { group: 'Payments & fintech', items: ['Juspay headless', 'Razorpay', 'BSE', 'UPI Intent / Collect', 'RevenueCat'] },
-  { group: 'Performance & delivery', items: ['Cold-start tuning', 'R8 / ProGuard', 'OTA code push', 'CI/CD', 'GitHub Actions'] },
-  { group: 'Data & tools', items: ['SQLite', 'Room', 'OpenCV', 'AppsFlyer', 'CleverTap', 'Figma', 'ESP32'] },
 ];
 
 export interface Post {
@@ -122,7 +208,7 @@ export interface Post {
   series?: string;
 }
 
-/** Selected FlutDev posts (177 total). Each links to the canonical Blogspot original. */
+/** Selected FlutDev posts. Each links to the canonical Blogspot original. */
 export const writing: Post[] = [
   { series: 'Shorebird internals', title: 'Part 4: The science behind Shorebird — how a .so file becomes a running app', date: '2026-05-14', url: 'https://flutdev.blogspot.com/2026/05/part-4-shorebird-science-behind.html' },
   { series: 'Shorebird internals', title: 'Part 3: shorebird.cc and updater.rs', date: '2026-05-14', url: 'https://flutdev.blogspot.com/2026/05/part-3-shorebird-shorebirdcc-updaterrs.html' },
@@ -140,4 +226,5 @@ export const writing: Post[] = [
   { title: 'How to read the Flutter frame chart in DevTools', date: '2023-12-21', url: 'https://flutdev.blogspot.com/2023/12/how-to-read-flutter-frame-chart-in.html' },
 ];
 
+/** Fallback when the FlutDev feed can't be reached at build time. */
 export const writingTotal = 177;

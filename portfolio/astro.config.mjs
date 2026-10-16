@@ -5,7 +5,8 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://lkrjangid-portfolio.web.app',
   trailingSlash: 'never',
-  build: { format: 'file' },
+  // Inline CSS so first paint needs no extra requests (CSP already allows inline styles).
+  build: { format: 'file', inlineStylesheets: 'always' },
   integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/404') })],
   image: {
     domains: ['raw.githubusercontent.com'],

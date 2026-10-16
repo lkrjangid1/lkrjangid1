@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
+import AppIcon from '../components/AppIcon.astro';
 import { getAllPackages } from '../data/work';
 import { isBindgenFamily } from '../data/packages';
 import { sortedRepos, statusLabels } from '../data/repos';
@@ -9,7 +9,7 @@ import { site } from '../data/site';
 const packages = await getAllPackages();
 const family = packages.filter((p) => isBindgenFamily(p.name));
 const standalone = packages.filter((p) => !isBindgenFamily(p.name));
-const bindgenCli = packages.find((p) => p.name === 'native_api_bindgen');
+const cli = packages.find((p) => p.name === 'native_api_bindgen');
 ---
 <Base
   title="Open source"
@@ -17,86 +17,92 @@ const bindgenCli = packages.find((p) => p.name === 'native_api_bindgen');
   ogSlug="open-source"
   description={`${packages.length} pub.dev packages and open-source repos by Lokesh Jangid, including the native-api-bindgen toolchain.`}
 >
-  <div class="container narrow">
+  <div class="wrap">
     <header class="page-head">
-      <h1>Open source</h1>
-      <p class="muted">{packages.length} packages on pub.dev under <a href={site.links.pubdev}>lkrjangid.tech</a>, plus the repos behind them.</p>
+      <div class="page-glow" aria-hidden="true"></div>
+      <p class="label">Open source · pub.dev/publishers/lkrjangid.tech</p>
+      <h1 class="h2" data-split>{packages.length} packages.<br /><span class="serif accent">And the repos behind them.</span></h1>
+      <p class="lead">Flutter plugins, developer tools and a whole native-bindings toolchain, published under <a class="link" href={site.links.pubdev}>lkrjangid.tech</a>.</p>
     </header>
 
-    <section aria-labelledby="pkg-h">
-      <h2 id="pkg-h" class="sr-only">Packages</h2>
+    {family.length > 0 && (
+      <a class="toolchain" href="/work/native-api-bindgen" data-reveal>
+        <div class="tc-copy">
+          <AppIcon slug="native-api-bindgen" name="native-api-bindgen" size={64} />
+          <p class="label">The toolchain · {family.length} packages · {cli?.version}</p>
+          <h2 class="h3 mono-title">native_api_*</h2>
+          <p class="muted">Typed Dart and TypeScript bindings generated from the Android and Apple SDKs on your machine: CLI, IR, generators and runtimes.</p>
+          <span class="go">Read the case study →</span>
+        </div>
+        <ul class="tc-list">
+          {family.map((p) => <li><span class="mono">{p.name}</span><span class="muted">{p.description}</span></li>)}
+        </ul>
+      </a>
+    )}
 
-      {family.length > 0 && (
-        <details class="family">
-          <summary class="row">
-            <span class="name">
-              <span class="mono">native_api_*</span>
-              <span class="small">The native-api-bindgen toolchain: CLI, IR, generators and runtimes · {family.length} packages</span>
-            </span>
-            <span class="label meta">{bindgenCli?.version ?? ''} <span class="toggle">Show</span></span>
-          </summary>
-          <div class="inner">
-            {family.map((p) => (
-              <a class="row pkg" href={p.url} rel="noopener">
-                <span class="name"><span class="mono">{p.name}</span><span class="small">{p.description}</span></span>
-                <span class="label meta">{p.version}</span>
-              </a>
-            ))}
-          </div>
-        </details>
-      )}
-
-      {standalone.map((p) => (
-        <a class="row pkg" href={p.url} rel="noopener">
-          <span class="name">
-            <span class="mono">{p.name}</span>
-            <span class="small">{p.description}</span>
-            {p.platforms.length > 0 && <span class="label">{p.platforms.join(' · ')}</span>}
-          </span>
-          <span class="label meta">
-            {p.version}
-            {p.points != null && <><br />{p.points}/{p.maxPoints} pts</>}
-          </span>
-        </a>
-      ))}
+    <section class="section" aria-labelledby="pkg-h">
+      <div class="section-head"><div><p class="label">Packages</p><h2 id="pkg-h" class="h2" data-split>Standalone plugins.</h2></div></div>
+      <div class="pkg-grid">
+        {standalone.map((p) => (
+          <a class="pkg" href={p.url} rel="noopener" data-reveal data-tilt>
+            <div class="pkg-top"><span class="mono name">{p.name}</span>{p.version && <span class="chip">{p.version}</span>}</div>
+            <p class="muted">{p.description}</p>
+            <div class="pkg-meta">
+              {p.platforms.length > 0 && <span class="label">{p.platforms.join(' · ')}</span>}
+              {p.points != null && <span class="label pts">{p.points}/{p.maxPoints} pts</span>}
+            </div>
+          </a>
+        ))}
+      </div>
     </section>
 
     <section class="section" aria-labelledby="repo-h">
-      <h2 id="repo-h">Repositories</h2>
-      {sortedRepos.map((r) => (
-        <a class="row pkg" href={r.caseStudy ? `/work/${r.slug}` : r.repo} rel={r.caseStudy ? undefined : 'noopener'}>
-          <span class="name">
-            <span class="mono">{r.name}</span>
-            <span class="small">{r.desc}</span>
-          </span>
-          <span class="label meta">{statusLabels[r.status]}<br />{r.year}</span>
-        </a>
-      ))}
-    </section>
-
-    <section class="section" aria-labelledby="contrib-h">
-      <h2 id="contrib-h">Contributions</h2>
-      <p class="small">
-        Hacktoberfest 2020 and 2021 contributor · badges on <a href={site.links.holopin}>Holopin</a> ·
-        everything else on <a href={site.links.github}>GitHub <Icon name="arrow-up-right" size={14} class="inline" /></a>
-      </p>
+      <div class="section-head"><div><p class="label">GitHub</p><h2 id="repo-h" class="h2" data-split>Repositories.</h2></div><a class="btn" href={site.links.github} rel="noopener" data-reveal>github.com/lkrjangid1 ↗</a></div>
+      <ul class="rows">
+        {sortedRepos.map((r) => (
+          <li>
+            <a href={r.caseStudy ? `/work/${r.slug}` : r.repo} rel={r.caseStudy ? undefined : 'noopener'}>
+              <span class="repo-name"><AppIcon slug={r.slug} name={r.name} size={36} /><span><b>{r.name}</b><span class="muted">{r.desc}</span></span></span>
+              <span class="label repo-st">{statusLabels[r.status]} · {r.year}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="muted note">Hacktoberfest 2020 and 2021 contributor · badges on <a class="link" href={site.links.holopin}>Holopin</a>.</p>
     </section>
   </div>
 </Base>
 
 <style>
-  .narrow { max-width: 920px; }
-  .pkg { text-decoration: none; color: inherit; }
-  .pkg:hover .mono { color: var(--accent); }
-  .name { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .name .mono { color: var(--text-primary); font-size: 14px; }
-  .meta { text-align: right; white-space: nowrap; flex: none; }
-  .family summary { cursor: pointer; list-style: none; }
-  .family summary::-webkit-details-marker { display: none; }
-  .toggle { margin-left: 8px; color: var(--text-accent); }
-  .family[open] .toggle { font-size: 0; }
-  .family[open] .toggle::after { content: 'Hide'; font-size: 12px; }
-  .inner { padding-left: 20px; border-left: 2px solid var(--border); margin-bottom: 8px; }
-  .inner .row:last-child { border-bottom: 1px solid var(--border); }
-  :global(.inline) { display: inline; vertical-align: -2px; }
+  .toolchain {
+    display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; padding: 32px; border-radius: 28px;
+    background: radial-gradient(90% 80% at 0% 100%, var(--accent-soft), transparent 60%), var(--surface); border: 1px solid var(--line-2);
+    transition: border-color var(--t-fast);
+  }
+  .toolchain:hover { border-color: var(--accent); }
+  .tc-copy { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+  .mono-title { font-family: var(--font-mono); font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -.03em; color: var(--accent); }
+  .go { margin-top: auto; color: var(--accent); font-weight: 500; }
+  .tc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; max-height: 360px; overflow: auto; }
+  .tc-list li { display: grid; gap: 2px; padding: 9px 12px; border-radius: 10px; }
+  .tc-list li:nth-child(odd) { background: var(--surface-2); }
+  .tc-list .mono { color: var(--text); }
+  .tc-list .muted { font-size: 13.5px; }
+
+  .pkg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .pkg { display: flex; flex-direction: column; gap: 10px; padding: 22px; border-radius: 20px; background: var(--surface); border: 1px solid var(--line); transition: border-color var(--t-fast), transform var(--t-med) var(--ease-out); }
+  .pkg:hover { border-color: var(--accent); }
+  .pkg-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .name { font-size: 15px; color: var(--text); }
+  .pkg .muted { font-size: 15px; line-height: 1.55; }
+  .pkg-meta { margin-top: auto; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .pts { color: var(--mint); }
+
+  .repo-name { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .repo-name > span:last-child { display: flex; flex-direction: column; min-width: 0; }
+  .repo-name .muted { font-size: 14px; }
+  .repo-st { white-space: nowrap; flex: none; }
+  .note { margin-top: 24px; font-size: 15px; }
+  @media (max-width: 900px) { .toolchain { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) { .rows > li > a { flex-direction: column; gap: 8px; } }
 </style>

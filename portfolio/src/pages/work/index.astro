@@ -5,13 +5,12 @@ import ProjectCard from '../../components/ProjectCard.astro';
 import { categoryLabels } from '../../data/site';
 import { getWork } from '../../data/work';
 import { sortedRepos, statusLabels } from '../../data/repos';
+import { shotSrc } from '../../data/shots';
 
 const { projects } = await getWork();
 
 const repoCategory = (status: string) => (status === 'learning' ? 'learning' : status === 'flagship' ? 'tooling' : 'open-source');
-const categories = [
-  ...new Set([...projects.map((p) => p.category), ...sortedRepos.map((r) => repoCategory(r.status))]),
-];
+const categories = [...new Set([...projects.map((p) => p.category), ...sortedRepos.map((r) => repoCategory(r.status))])];
 const total = projects.length + sortedRepos.length;
 ---
 <Base
@@ -20,57 +19,47 @@ const total = projects.length + sortedRepos.length;
   ogSlug="work"
   description={`${total} projects by Lokesh Jangid: fintech apps at Univest, Flutter tooling, indie apps with 600K+ downloads, and open-source experiments.`}
 >
-  <div class="container">
+  <div class="wrap">
     <header class="page-head">
-      <h1>Work</h1>
-      <p class="muted" id="count" aria-live="polite">{total} projects</p>
+      <div class="page-glow" aria-hidden="true"></div>
+      <p class="label">Work</p>
+      <h1 class="h2" data-split>Things I've built<br /><span class="serif accent">and shipped.</span></h1>
+      <p class="lead" id="count" aria-live="polite">{total} projects</p>
     </header>
 
-    <div class="controls" id="filters" hidden>
+    <div class="controls" id="filters">
       <label class="search">
         <span class="sr-only">Search projects</span>
         <Icon name="search" />
-        <input type="search" id="q" placeholder="Search projects" autocomplete="off" />
+        <input type="search" id="q" placeholder="Search projects, stacks, metrics" autocomplete="off" />
       </label>
       <div class="chips" role="group" aria-label="Filter by category">
-        <button type="button" class="chip" data-c="" aria-pressed="true">All</button>
-        {categories.map((c) => (
-          <button type="button" class="chip" data-c={c} aria-pressed="false">{categoryLabels[c] ?? c}</button>
-        ))}
+        <button type="button" class="fchip" data-c="" aria-pressed="true">All</button>
+        {categories.map((c) => <button type="button" class="fchip" data-c={c} aria-pressed="false">{categoryLabels[c] ?? c}</button>)}
       </div>
     </div>
 
     <section class="group" aria-labelledby="pro-h">
-      <h2 id="pro-h">Professional and products</h2>
-      <div class="grid">
+      <h2 id="pro-h" class="label group-title">Professional and products</h2>
+      <div class="grid-cards">
         {projects.map((p) => (
           <ProjectCard
-            href={`/work/${p.slug}`}
-            title={p.name}
-            subtitle={p.subtitle}
-            meta={p.role}
-            metric={p.metrics}
-            tags={p.tech}
-            category={p.category}
+            slug={p.slug} href={`/work/${p.slug}`} title={p.name} subtitle={p.subtitle} meta={p.role}
+            metric={p.metrics} tags={p.tech} category={p.category} featured={p.featured}
+            shot={p.screenshots[0] ? shotSrc(p.screenshots[0]) : undefined}
           />
         ))}
       </div>
     </section>
 
     <section class="group" aria-labelledby="oss-h">
-      <h2 id="oss-h">Open source and experiments</h2>
-      <div class="grid">
+      <h2 id="oss-h" class="label group-title">Open source and experiments</h2>
+      <div class="grid-cards">
         {sortedRepos.map((r) => (
           <ProjectCard
-            href={r.caseStudy ? `/work/${r.slug}` : r.repo}
-            external={!r.caseStudy}
-            title={r.name}
-            subtitle={r.desc}
-            meta={`${r.year}`}
-            tags={r.tech}
-            status={statusLabels[r.status]}
-            category={repoCategory(r.status)}
-            variant={r.status === 'flagship' ? 'featured' : 'default'}
+            slug={r.slug} href={r.caseStudy ? `/work/${r.slug}` : r.repo} external={!r.caseStudy}
+            title={r.name} subtitle={r.desc} meta={`${r.year}`} tags={r.tech}
+            status={statusLabels[r.status]} category={repoCategory(r.status)} featured={r.status === 'flagship'}
           />
         ))}
       </div>
@@ -83,8 +72,8 @@ const total = projects.length + sortedRepos.length;
 <script>
   const root = document.getElementById('filters')!;
   const input = document.getElementById('q') as HTMLInputElement;
-  const chips = [...root.querySelectorAll<HTMLButtonElement>('.chip')];
-  const cards = [...document.querySelectorAll<HTMLElement>('.project')];
+  const chips = [...root.querySelectorAll<HTMLButtonElement>('.fchip')];
+  const cards = [...document.querySelectorAll<HTMLElement>('.pcard')];
   const groups = [...document.querySelectorAll<HTMLElement>('.group')];
   const count = document.getElementById('count')!;
   const empty = document.getElementById('empty')!;
@@ -95,7 +84,6 @@ const total = projects.length + sortedRepos.length;
   let q = params.get('q') ?? '';
   if (!chips.some((b) => b.dataset.c === c)) c = '';
   input.value = q;
-  root.hidden = false;
 
   function apply() {
     const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
@@ -106,14 +94,13 @@ const total = projects.length + sortedRepos.length;
       card.hidden = !ok;
       if (ok) shown++;
     }
-    for (const g of groups) g.hidden = !g.querySelector('.project:not([hidden])');
+    for (const g of groups) g.hidden = !g.querySelector('.pcard:not([hidden])');
     for (const b of chips) b.setAttribute('aria-pressed', String(b.dataset.c === c));
     empty.hidden = shown > 0;
     count.textContent = shown === total ? `${total} projects` : `${shown} of ${total} projects`;
-
     const url = new URL(location.href);
-    c ? url.searchParams.set('c', c) : url.searchParams.delete('c');
-    q ? url.searchParams.set('q', q) : url.searchParams.delete('q');
+    if (c) url.searchParams.set('c', c); else url.searchParams.delete('c');
+    if (q) url.searchParams.set('q', q); else url.searchParams.delete('q');
     history.replaceState(null, '', url);
   }
 
@@ -123,21 +110,15 @@ const total = projects.length + sortedRepos.length;
 </script>
 
 <style>
-  .controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: var(--space-8); }
-  .search {
-    flex: 1 1 240px; display: flex; align-items: center; gap: 8px; padding: 0 12px;
-    background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: var(--radius); color: var(--text-muted);
-  }
+  .controls { position: sticky; top: 72px; z-index: 5; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 40px; padding: 10px; border-radius: 22px; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .search { flex: 1 1 260px; display: flex; align-items: center; gap: 10px; padding: 0 16px; border-radius: var(--r-pill); background: var(--surface); border: 1px solid var(--line-2); color: var(--text-3); }
   .search:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .search input { flex: 1; border: 0; background: transparent; padding: 9px 0; outline: none; font-size: 15px; min-width: 0; }
+  .search input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 12px 0; outline: none; font-size: 15px; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip {
-    font-size: 13px; padding: 6px 12px; border-radius: var(--radius); cursor: pointer;
-    border: 1px solid var(--border-strong); background: transparent; color: var(--text-secondary);
-  }
-  .chip:hover { background: var(--surface-1); color: var(--text-primary); }
-  .chip[aria-pressed='true'] { background: var(--bg-accent); color: var(--text-accent); border-color: var(--accent); }
-  .group + .group { margin-top: var(--space-12); }
-  .group h2 { margin-bottom: var(--space-4); }
-  .empty { padding: var(--space-8) 0; }
+  .fchip { font-size: 13px; padding: 8px 14px; border-radius: var(--r-pill); border: 1px solid var(--line-2); background: transparent; color: var(--text-2); transition: background var(--t-fast), color var(--t-fast); }
+  .fchip:hover { background: var(--surface-2); color: var(--text); }
+  .fchip[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .group + .group { margin-top: 72px; }
+  .group-title { margin-bottom: 20px; }
+  .empty { padding: 48px 0; text-align: center; }
 </style>

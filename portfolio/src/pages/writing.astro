@@ -1,48 +1,62 @@
 ---
 import Base from '../layouts/Base.astro';
-import Icon from '../components/Icon.astro';
-import { site, writing, writingTotal } from '../data/site';
+import { site, writing } from '../data/site';
+import { getArticleCount } from '../data/stats';
 
-const posts = [...writing].sort((a, b) => b.date.localeCompare(a.date));
+const total = await getArticleCount();
+const series = writing.filter((p) => p.series).sort((a, b) => a.title.localeCompare(b.title));
+const posts = writing.filter((p) => !p.series).sort((a, b) => b.date.localeCompare(a.date));
 const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
-<Base
-  title="Writing"
-  current="/writing"
-  ogSlug="writing"
-  description="Selected posts from FlutDev on Flutter internals, Shorebird code push, native interop and app performance."
->
-  <div class="container narrow">
+<Base title="Writing" current="/writing" ogSlug="writing" description="Selected posts from FlutDev on Flutter internals, Shorebird code push, native interop and app performance.">
+  <div class="wrap">
     <header class="page-head">
-      <h1>Writing</h1>
-      <p class="muted">Selected posts from <a href={site.links.blog}>FlutDev</a>, where I've published {writingTotal}+ articles on Flutter and native development.</p>
+      <div class="page-glow" aria-hidden="true"></div>
+      <p class="label">Writing · FlutDev</p>
+      <h1 class="h2" data-split>{total} articles.<br /><span class="serif accent">One rabbit hole at a time.</span></h1>
+      <p class="lead">Selected posts on Flutter internals, native interop and performance. Every link opens the original on <a class="link" href={site.links.blog}>FlutDev</a>.</p>
     </header>
 
-    <ul class="posts">
-      {posts.map((p) => (
-        <li>
-          <a class="row post" href={p.url} rel="noopener">
-            <span class="title">
-              {p.series && <span class="label series">{p.series}</span>}
-              <span>{p.title}</span>
-            </span>
-            <time class="label" datetime={p.date}>{fmt.format(new Date(p.date))}</time>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <section class="series" aria-labelledby="series-h" data-reveal>
+      <div>
+        <p class="label">Series · May 2026 · 4 parts</p>
+        <h2 id="series-h" class="h3">Shorebird internals</h2>
+        <p class="muted">How Flutter code push really works, from bidiff and zstd to a running .so. The research behind the self-hosted code push at Univest and PushPatch.</p>
+      </div>
+      <ol class="stack">
+        {series.map((p, i) => (
+          <li><a href={p.url} rel="noopener"><span class="mono">{String(i + 1).padStart(2, '0')}</span><span>{p.title.replace(/^Part \d+:\s*/, '')}</span><span aria-hidden="true">↗</span></a></li>
+        ))}
+      </ol>
+    </section>
 
-    <p class="more"><a class="btn" href={site.links.blog} rel="noopener">All posts on FlutDev <Icon name="arrow-up-right" /></a></p>
+    <section class="section" aria-labelledby="posts-h">
+      <h2 id="posts-h" class="label">More posts</h2>
+      <ul class="posts">
+        {posts.map((p) => (
+          <li><a href={p.url} rel="noopener"><span>{p.title}</span><time class="label" datetime={p.date}>{fmt.format(new Date(p.date))}</time></a></li>
+        ))}
+      </ul>
+      <p class="more"><a class="btn" href={site.links.blog} rel="noopener">All {total} posts on FlutDev ↗</a></p>
+    </section>
   </div>
 </Base>
 
 <style>
-  .narrow { max-width: 920px; }
-  .posts { list-style: none; margin: 0; padding: 0; }
-  .post { text-decoration: none; color: var(--text-primary); }
-  .post:hover .title > span:last-child { color: var(--accent); }
-  .title { display: flex; flex-direction: column; }
-  .series { color: var(--text-accent); }
-  time { white-space: nowrap; flex: none; }
-  .more { margin-top: var(--space-8); }
+  .series {
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; padding: 32px; border-radius: 28px; border: 1px solid var(--line-2);
+    background: radial-gradient(100% 80% at 100% 0%, color-mix(in srgb, #ff7a45 14%, transparent), transparent 60%), var(--surface);
+  }
+  .series .h3 { margin: 12px 0 10px; font-size: clamp(28px, 3vw, 40px); }
+  .stack { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .stack a { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 14px 16px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line); transition: transform var(--t-fast) var(--ease-out), border-color var(--t-fast); }
+  .stack a:hover { transform: translateX(6px); border-color: #ff7a45; }
+  .stack .mono { color: #ff7a45; }
+  .posts { list-style: none; margin: 16px 0 0; padding: 0; }
+  .posts a { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 22px 4px; border-bottom: 1px solid var(--line); font: 500 clamp(18px, 1.8vw, 23px)/1.35 var(--font-display); letter-spacing: -.01em; transition: color var(--t-fast), padding var(--t-med) var(--ease-out); }
+  .posts a:hover { color: var(--accent); padding-left: 12px; }
+  .posts time { white-space: nowrap; flex: none; }
+  .more { margin-top: 40px; }
+  @media (max-width: 900px) { .series { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .posts a { flex-direction: column; gap: 6px; } }
 </style>

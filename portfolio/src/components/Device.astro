@@ -1,0 +1,53 @@
+---
+import type { ImageMetadata } from 'astro';
+import Shot from './Shot.astro';
+
+/** Phone, laptop or browser frame around one or more screenshots; several screenshots cross-fade. */
+interface Props {
+  kind: 'phone' | 'laptop' | 'browser';
+  shots: (ImageMetadata | string)[];
+  alt: string;
+  size?: 'mini' | 'md' | 'big';
+  url?: string;
+  class?: string;
+  /** Load the first screen eagerly when the frame is above the fold (it is often the LCP element). */
+  eager?: boolean;
+}
+const { kind, shots, alt, size = 'md', url = '', class: className, eager = false } = Astro.props;
+const cycle = shots.length > 1;
+const width = kind === 'phone' ? (size === 'mini' ? 260 : 600) : 1440;
+const screens = shots.map((src, i) => ({ src, alt: shots.length > 1 ? `${alt}, screen ${i + 1}` : alt, on: i === 0 }));
+---
+{kind === 'phone' && (
+  <div class:list={['phone', size, className]} data-cycle={cycle ? '' : undefined}>
+    <div class="screen">
+      {screens.map((s) => <Shot src={s.src} alt={s.alt} width={width} class={s.on ? 'on' : ''} eager={eager && s.on} />)}
+    </div>
+  </div>
+)}
+{kind === 'laptop' && (
+  <div class:list={['laptop', className]} data-cycle={cycle ? '' : undefined}>
+    <div class="lid"><div class="screen">
+      {screens.map((s) => <Shot src={s.src} alt={s.alt} width={width} class={s.on ? 'on' : ''} eager={eager && s.on} />)}
+    </div></div>
+    <div class="base"></div>
+  </div>
+)}
+{kind === 'browser' && (
+  <div class:list={['browser', className]} data-cycle={cycle ? '' : undefined}>
+    <div class="bar"><i></i><i></i><i></i><span class="url">{url}</span></div>
+    <div class="screen">
+      {screens.map((s) => <Shot src={s.src} alt={s.alt} width={width} class={s.on ? 'on' : ''} eager={eager && s.on} />)}
+    </div>
+  </div>
+)}
+
+<style>
+  .phone.md { width: 260px; }
+  .phone.big { width: 290px; }
+  .phone.mini { width: 120px; border-radius: 22px; padding: 6px; }
+  .phone.mini::before { width: 30px; height: 9px; top: 11px; border-radius: 6px; }
+  .phone.mini .screen { border-radius: 17px; }
+  .laptop .screen :global(img), .browser .screen :global(img) { object-position: top left; }
+  @media (max-width: 560px) { .phone.big { width: 240px; } }
+</style>

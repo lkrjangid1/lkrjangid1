@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import { brand } from '../data/icons';
+
+interface Props {
+  slug: string;
+  name?: string;
+  size?: number;
+  class?: string;
+  label?: boolean;
+}
+
+const { slug, name = slug, size = 56, class: className, label = false } = Astro.props;
+const b = brand(slug, name);
+// Logos without their own tile get a white squircle with padding.
+const padded = slug === 'pushpatch';
+---
+<span
+  class:list={['app-icon', className, { 'has-img': b.icon, padded }]}
+  style={`--app:${b.accent};--size:${size}px`}
+  role={label ? 'img' : undefined}
+  aria-label={label ? name : undefined}
+  aria-hidden={label ? undefined : 'true'}
+>
+  {b.icon ? <Image src={b.icon} alt="" width={size * 2} height={size * 2} format={b.icon.format === 'svg' ? 'svg' : 'webp'} loading="lazy" /> : b.mono}
+</span>
+
+<style>
+  .has-img { background: transparent; box-shadow: 0 10px 24px -12px var(--app); overflow: hidden; }
+  .has-img :global(img) { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+  .padded { background: #fff; padding: 16%; }
+  .padded :global(img) { object-fit: contain; border-radius: 0; }
+</style>
