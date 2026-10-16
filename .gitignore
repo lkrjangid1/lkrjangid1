@@ -9,3 +9,6 @@ functions/node_modules/
 *.log
 .DS_Store
 .lighthouseci/
+
+# Source originals; optimized copies live in src/assets
+raw_assets/
