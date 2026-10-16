@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lokesh Jangid · Senior Mobile Engineer</title>
+<meta name="description" content="Senior Mobile Engineer at Univest. Flutter, Android and iOS apps for 9M+ users, and the tooling underneath them.">
+<script>
+  // Apply the saved theme before first paint so there is no flash.
+  try { const t = localStorage.getItem('lj-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Non-blocking font load: system fonts paint first, web fonts swap in. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"></noscript>
+<link rel="preconnect" href="https://raw.githubusercontent.com">
+<link rel="preload" as="image" href="assets/portrait.webp" fetchpriority="high">
+<link rel="stylesheet" href="assets/tokens.css">
+<link rel="stylesheet" href="assets/home.css">
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="top">
+  <div class="nav-inner wrap">
+    <a href="#top" class="logo">lkrjangid<span>.</span></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#lineup">Products</a>
+      <a href="#open-source">Open source</a>
+      <a href="#writing">Writing</a>
+      <a href="#about">About</a>
+    </nav>
+    <div class="nav-actions">
+      <div class="theme" role="group" aria-label="Theme">
+        <button type="button" data-theme-set="system" aria-label="System theme" title="System">◐</button>
+        <button type="button" data-theme-set="light" aria-label="Light theme" title="Light">☀</button>
+        <button type="button" data-theme-set="dark" aria-label="Dark theme" title="Dark">☾</button>
+      </div>
+      <a class="btn btn-sm nav-resume" href="https://lkrjangid.weebly.com/uploads/1/0/6/1/106169155/lkrjangid_multi.pdf" rel="noopener">Résumé ↓</a>
+      <a class="btn btn-sm btn-primary" href="#contact">Hire me</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ HERO ============ -->
+<section class="hero" aria-labelledby="hero-name">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="wrap hero-top">
+    <a class="status" href="#contact" data-reveal>
+      <span class="dot pulse"></span>
+      <span><strong>Open to senior mobile roles</strong><small>Full-time · Consulting · Code review</small></span>
+      <span class="status-go" aria-hidden="true">→</span>
+    </a>
+    <p class="where" data-reveal>Based in India<br><span class="muted">Local time <time id="clock">—</time> IST</span></p>
+  </div>
+
+  <div class="hero-stage">
+    <img class="portrait" src="assets/portrait.webp" alt="Lokesh Jangid" width="900" height="1200" fetchpriority="high"
+         onerror="this.onerror=null;this.src='assets/portrait-placeholder.svg';this.classList.add('placeholder')">
+    <h1 id="hero-name" class="display name" data-split>Lokesh Jangid</h1>
+  </div>
+
+  <div class="wrap hero-bottom">
+    <p class="lead hero-intro" data-reveal>
+      Senior Mobile Engineer at <strong>Univest</strong>. I build Flutter, Android and iOS apps for
+      <strong>9M+ users</strong>, <span class="serif accent">and the tooling underneath them.</span>
+    </p>
+    <div class="hero-side" data-reveal>
+      <div class="currently" aria-live="polite">
+        <div class="currently-head"><span class="label">Currently</span><span class="ticks" aria-hidden="true"><i class="on"></i><i></i><i></i></span></div>
+        <ul class="currently-list">
+          <li class="on">Senior Software Engineer <span class="muted">@ Univest</span></li>
+          <li>Building <span class="muted">native-api-bindgen</span></li>
+          <li>Shipping <span class="muted">PushPatch</span></li>
+        </ul>
+      </div>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#work">See what's shipping ↓</a>
+        <a class="btn" href="#contact">Work with me ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- App dock -->
+  <div class="dock-wrap" data-reveal>
+    <p class="label dock-label">Now shipping · pick one</p>
+    <nav class="dock" aria-label="Products">
+      <a href="#p-univest"  class="app-icon" style="--app:var(--app-univest)"  data-tip="Univest">U</a>
+      <a href="#p-scalper"  class="app-icon" style="--app:var(--app-scalper)"  data-tip="Scalper">S</a>
+      <a href="#p-pushpatch" class="app-icon" style="--app:var(--app-pushpatch)" data-tip="PushPatch">P</a>
+      <a href="#p-bindgen"  class="app-icon" style="--app:var(--app-bindgen)"  data-tip="native-api-bindgen">nb</a>
+      <a href="#p-vault"    class="app-icon" style="--app:var(--app-vault)"    data-tip="Incognito Vault">iV</a>
+      <span class="dock-sep" aria-hidden="true"></span>
+      <a href="#t-libgen"   class="app-icon" style="--app:var(--app-libgen)"   data-tip="Libgen">L</a>
+      <a href="#t-remote"   class="app-icon" style="--app:var(--app-remote)"   data-tip="Remote Jobs">R</a>
+      <a href="#t-oi"       class="app-icon" style="--app:var(--app-oi)"       data-tip="OI Visualizer">OI</a>
+      <a href="#t-raksha"   class="app-icon" style="--app:var(--app-raksha)"   data-tip="Raksha">Ra</a>
+    </nav>
+  </div>
+
+  <!-- Proof strip -->
+  <div class="wrap proof" aria-label="Impact in numbers">
+    <div class="stat" data-reveal><b data-count="9" data-suffix="M+">9M+</b><span class="label">Users served</span></div>
+    <div class="stat" data-reveal><b data-count="10" data-suffix="M+">10M+</b><span class="label">Play downloads</span></div>
+    <div class="stat" data-reveal><b data-count="600" data-suffix="K+">600K+</b><span class="label">Libgen installs</span></div>
+    <div class="stat" data-reveal><b data-count="24">24</b><span class="label">pub.dev packages</span></div>
+    <div class="stat" data-reveal><b data-count="177" data-suffix="+">177+</b><span class="label">Articles written</span></div>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee" aria-label="Highlights">
+  <div class="marquee-track">
+    <span>Cold start <b>5.5s → 2.0s</b></span><span>Crash-free <b>70% → 95%</b></span><span><b>₹14L/yr</b> saved with self-hosted code push</span>
+    <span><b>~1 µs</b> native calls vs ~270 µs</span><span><b>+20%</b> derivative trades with Scalper</span><span><b>₹1.06 Cr+</b> mutual funds processed</span>
+    <span>Hotfixes <b>days → minutes</b></span><span><b>97.1%</b> of android.jar generated</span>
+  </div>
+  <div class="marquee-track" aria-hidden="true">
+    <span>Cold start <b>5.5s → 2.0s</b></span><span>Crash-free <b>70% → 95%</b></span><span><b>₹14L/yr</b> saved with self-hosted code push</span>
+    <span><b>~1 µs</b> native calls vs ~270 µs</span><span><b>+20%</b> derivative trades with Scalper</span><span><b>₹1.06 Cr+</b> mutual funds processed</span>
+    <span>Hotfixes <b>days → minutes</b></span><span><b>97.1%</b> of android.jar generated</span>
+  </div>
+</div>
+
+<!-- ============ FEATURED REEL ============ -->
+<section id="work" class="reel-intro wrap" aria-labelledby="work-h">
+  <div>
+    <p class="label">Featured · Production and products</p>
+    <h2 id="work-h" class="h2" data-split>Now shipping.</h2>
+    <p class="serif reel-tag accent" data-reveal>From order books to OTA patches.</p>
+  </div>
+  <p class="lead reel-note" data-reveal>Fintech at scale by day, developer tooling the rest of the time. Scroll to step inside each one; everything else is in <a class="link" href="#lineup">the lineup below</a>.</p>
+</section>
+
+<div class="reel">
+  <aside class="rail" aria-label="Featured products">
+    <span class="label rail-count"><b id="rail-n">01</b> / 05</span>
+    <a href="#p-univest"  class="app-icon" style="--app:var(--app-univest);--size:36px"  aria-label="Univest">U</a>
+    <a href="#p-scalper"  class="app-icon" style="--app:var(--app-scalper);--size:36px"  aria-label="Scalper">S</a>
+    <a href="#p-pushpatch" class="app-icon" style="--app:var(--app-pushpatch);--size:36px" aria-label="PushPatch">P</a>
+    <a href="#p-bindgen"  class="app-icon" style="--app:var(--app-bindgen);--size:36px"  aria-label="native-api-bindgen">nb</a>
+    <a href="#p-vault"    class="app-icon" style="--app:var(--app-vault);--size:36px"    aria-label="Incognito Vault">iV</a>
+  </aside>
+
+  <!-- 01 Univest -->
+  <article id="p-univest" class="product wrap" style="--app:var(--app-univest)" data-index="1">
+    <div class="product-copy" data-reveal>
+      <div class="product-head">
+        <span class="app-icon" style="--size:64px">U</span>
+        <div><span class="label">01 / 05</span><span class="pill">Android · iOS · Flutter, Kotlin, SwiftUI</span></div>
+      </div>
+      <h3 class="display product-name">Univest</h3>
+      <p class="serif product-tag">Trading and investing for 9M+ people.</p>
+      <p class="muted">As Senior Software Engineer I architected brokerage order placement and management, binary-encrypted WebSocket market data, end-to-end mutual funds on BSE with UPI and net banking, and one Juspay checkout reused across four product flows.</p>
+      <ul class="metrics">
+        <li><b>9M+</b> users</li><li><b>5.5s → 2.0s</b> cold start</li><li><b>70% → 95%</b> crash-free</li><li><b>₹1.06 Cr+</b> MF processed</li>
+      </ul>
+      <div class="store">
+        <a class="btn btn-sm" href="https://play.google.com/store/apps/details?id=com.univest.capp" rel="noopener">Google Play ↗</a>
+        <a class="btn btn-sm" href="https://apps.apple.com/in/app/univest-stocks-investment/id6443753518" rel="noopener">App Store ↗</a>
+      </div>
+    </div>
+    <div class="product-visual two-phones" data-reveal>
+      <div class="phone tilt-l"><div class="screen"><img class="on" alt="Univest order form" loading="lazy" data-shot="order_form.jpeg"></div></div>
+      <div class="phone tilt-r"><div class="screen"><img class="on" alt="Univest basket order form" loading="lazy" data-shot="order_form_basket.jpeg"></div></div>
+    </div>
+  </article>
+
+  <!-- 02 Scalper -->
+  <article id="p-scalper" class="product wrap flip" style="--app:var(--app-scalper)" data-index="2">
+    <div class="product-copy" data-reveal>
+      <div class="product-head">
+        <span class="app-icon" style="--size:64px">S</span>
+        <div><span class="label">02 / 05</span><span class="pill">Inside Univest · Flutter custom rendering</span></div>
+      </div>
+      <h3 class="display product-name">Scalper</h3>
+      <p class="serif product-tag">A trading terminal, built from scratch in under a month.</p>
+      <p class="muted">A TradingView-style chart engine with custom indicators, drawing tools and pattern recognition, rendering live tick streams without lag. Scalper 2.0 added trade-from-chart: order and position lines, stop-loss and targets with full order CRUD.</p>
+      <ul class="metrics"><li><b>+12%</b> derivative trade share</li><li><b>+8%</b> more with 2.0</li><li><b>~20%</b> combined</li></ul>
+    </div>
+    <div class="product-visual" data-reveal>
+      <div class="phone big" data-cycle>
+        <div class="screen">
+          <img class="on" alt="Scalper 2.0 chart" loading="lazy" data-shot="scalper_2_chart.jpeg">
+          <img alt="Scalper chart" loading="lazy" data-shot="scalper.jpeg">
+          <img alt="Scalper drawing tools" loading="lazy" data-shot="scalper_drawing_tools.jpeg">
+          <img alt="Scalper indicators" loading="lazy" data-shot="scalper_chart_indicators.jpeg">
+          <img alt="Scalper order placement" loading="lazy" data-shot="scalper_order.jpeg">
+          <img alt="Scalper option chain" loading="lazy" data-shot="scalper_option_chain.jpeg">
+        </div>
+      </div>
+      <svg class="candles" viewBox="0 0 220 120" aria-hidden="true">
+        <g class="c up"><line x1="20" y1="30" x2="20" y2="100"/><rect x="13" y="45" width="14" height="40"/></g>
+        <g class="c down"><line x1="50" y1="40" x2="50" y2="110"/><rect x="43" y="55" width="14" height="35"/></g>
+        <g class="c up"><line x1="80" y1="20" x2="80" y2="90"/><rect x="73" y="30" width="14" height="45"/></g>
+        <g class="c up"><line x1="110" y1="10" x2="110" y2="70"/><rect x="103" y="18" width="14" height="38"/></g>
+        <g class="c down"><line x1="140" y1="25" x2="140" y2="85"/><rect x="133" y="32" width="14" height="30"/></g>
+        <g class="c up"><line x1="170" y1="5" x2="170" y2="60"/><rect x="163" y="12" width="14" height="36"/></g>
+        <g class="c up"><line x1="200" y1="2" x2="200" y2="45"/><rect x="193" y="6" width="14" height="28"/></g>
+      </svg>
+    </div>
+  </article>
+
+  <!-- 03 PushPatch -->
+  <article id="p-pushpatch" class="product wrap" style="--app:var(--app-pushpatch)" data-index="3">
+    <div class="product-copy" data-reveal>
+      <div class="product-head">
+        <span class="app-icon" style="--size:64px">P</span>
+        <div><span class="label">03 / 05</span><span class="pill">Desktop · CLI · Web dashboard</span></div>
+      </div>
+      <h3 class="display product-name">PushPatch</h3>
+      <p class="serif product-tag">Fix production Flutter apps in minutes, not review cycles.</p>
+      <p class="muted">Dart-only patches to released apps, applied as binary diffs on device. Staged rollouts from 1%, live adoption and device-health monitoring, one-click rollback, and self-hosting. It grew out of the self-hosted code push I reverse-engineered from Shorebird at Univest, which saved ₹14L+ a year.</p>
+      <ul class="metrics"><li><b>&lt; 5 min</b> fix to production</li><li><b>₹14L+/yr</b> saved at Univest</li><li><b>1%</b> staged rollouts</li></ul>
+      <div class="store">
+        <a class="btn btn-sm" href="https://pushpatch.in/" rel="noopener">pushpatch.in ↗</a>
+        <a class="btn btn-sm" href="https://flutdev.blogspot.com/2026/05/part-1-how-shorebird-actually-works.html" rel="noopener">How Shorebird works ↗</a>
+      </div>
+    </div>
+    <div class="product-visual" data-reveal>
+      <div class="laptop" data-cycle>
+        <div class="lid"><div class="screen">
+          <img class="on" alt="PushPatch dashboard" loading="lazy" data-shot="pushpatch_dashboard.png">
+          <img alt="PushPatch home" loading="lazy" data-shot="pushpatch_home.png">
+          <img alt="PushPatch release workflow" loading="lazy" data-shot="pushpatch_workflow.png">
+        </div></div>
+        <div class="base"></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- 04 native-api-bindgen -->
+  <article id="p-bindgen" class="product wrap flip" style="--app:var(--app-bindgen)" data-index="4">
+    <div class="product-copy" data-reveal>
+      <div class="product-head">
+        <span class="app-icon" style="--size:64px">nb</span>
+        <div><span class="label">04 / 05</span><span class="pill">Open source · Dart, JNI, libclang, JSI</span></div>
+      </div>
+      <h3 class="display product-name">native&#8209;api&#8209;bindgen</h3>
+      <p class="serif product-tag">Use native APIs directly. No MethodChannel.</p>
+      <p class="muted">Reads the Android and Apple SDKs already on your machine and generates typed Dart and TypeScript bindings. A canonical IR feeds per-target generators that report a reason code for anything they skip.</p>
+      <div class="bench" aria-label="1 MB round trip: bindgen 1.80 ms, MethodChannel 9.02 ms">
+        <div class="bench-row"><span class="mono">bindgen</span><span class="bar"><i style="--w:20%" class="hi"></i></span><span class="mono">1.80 ms</span></div>
+        <div class="bench-row"><span class="mono">MethodChannel</span><span class="bar"><i style="--w:100%"></i></span><span class="mono">9.02 ms</span></div>
+        <p class="label">1 MB round trip · Oct 2026</p>
+      </div>
+      <div class="store">
+        <a class="btn btn-sm" href="https://lkrjangid1.github.io/native-api-bindgen-docs/" rel="noopener">Docs ↗</a>
+        <a class="btn btn-sm" href="https://github.com/lkrjangid1/native-api-bindgen" rel="noopener">GitHub ↗</a>
+        <a class="btn btn-sm" href="https://pub.dev/packages/native_api_bindgen" rel="noopener">pub.dev ↗</a>
+      </div>
+    </div>
+    <div class="product-visual" data-reveal>
+      <div class="terminal">
+        <div class="bar"><i></i><i></i><i></i><span class="mono dim" style="margin-left:8px">~/app — zsh</span></div>
+        <pre id="term" aria-label="native-api-bindgen terminal session"><span class="p">$</span> dart pub global activate native_api_bindgen
+<span class="p">$</span> native-api-bindgen doctor
+<span class="ok">✓</span> Android SDK · JDK · Xcode · libclang
+<span class="p">$</span> native-api-bindgen generate flutter
+<span class="dim">  parsing android.jar → IR …</span>
+<span class="ok">✓ 51,429 of 52,938 methods generated (97.1%)</span>
+<span class="dim">  1,509 skipped, each with a reason code</span>
+<span class="p">$</span> <span class="caret"></span></pre>
+      </div>
+    </div>
+  </article>
+
+  <!-- 05 Incognito Vault -->
+  <article id="p-vault" class="product wrap" style="--app:var(--app-vault)" data-index="5">
+    <div class="product-copy" data-reveal>
+      <div class="product-head">
+        <span class="app-icon" style="--size:64px">iV</span>
+        <div><span class="label">05 / 05</span><span class="pill">Chrome extension · macOS app</span></div>
+      </div>
+      <h3 class="display product-name">Incognito Vault</h3>
+      <p class="serif product-tag">Keep the chats you meant to keep.</p>
+      <p class="muted">Saves Claude and ChatGPT incognito chats to Markdown with YAML front matter, captures artifacts, and keeps history locally in IndexedDB with no cloud and no analytics. A dependency-free HTML-to-Markdown parser running in a Manifest V3 service worker.</p>
+      <ul class="metrics"><li>Live on <b>Chrome Web Store</b></li><li>Live on <b>Mac App Store</b></li></ul>
+      <div class="store">
+        <a class="btn btn-sm" href="https://chromewebstore.google.com/detail/incognito-vault/ncbpdacmhjnikheahffamjcfkenkjjnb" rel="noopener">Chrome Web Store ↗</a>
+        <a class="btn btn-sm" href="https://apps.apple.com/in/app/incognito-vault/id6803170393?mt=12" rel="noopener">Mac App Store ↗</a>
+      </div>
+    </div>
+    <div class="product-visual" data-reveal>
+      <div class="browser" data-cycle>
+        <div class="bar"><i></i><i></i><i></i><span class="url">chrome-extension://incognito-vault</span></div>
+        <div class="screen">
+          <img class="on" alt="Incognito Vault saved chats" loading="lazy" data-shot="incognito_vault_1.png">
+          <img alt="Incognito Vault chat view" loading="lazy" data-shot="incognito_vault_2.png">
+          <img alt="Incognito Vault export" loading="lazy" data-shot="incognito_vault_3.png">
+          <img alt="Incognito Vault settings" loading="lazy" data-shot="incognito_vault_4.png">
+        </div>
+      </div>
+    </div>
+  </article>
+</div>
+
+<!-- ============ LINEUP (BENTO) ============ -->
+<section id="lineup" class="wrap section" aria-labelledby="lineup-h">
+  <div class="section-head">
+    <div><p class="label">The lineup</p><h2 id="lineup-h" class="h2" data-split>Everything else<br>I've shipped.</h2></div>
+    <p class="lead" data-reveal>Indie apps with real users, hackathon wins, AI experiments and client work.</p>
+  </div>
+
+  <div class="bento">
+    <a id="t-libgen" class="tile t-wide" style="--app:var(--app-libgen)" href="https://play.google.com/store/apps/details?id=com.yaaratech.libgen" rel="noopener" data-reveal>
+      <div class="tile-copy">
+        <span class="app-icon" style="--size:44px">L</span>
+        <h3 class="h3">Libgen</h3><p class="muted">Book search and reading. Solo-built in Flutter with Dart scraping pipelines, LevelPlay ads and RevenueCat.</p>
+        <p class="tile-metric">600K+ downloads · 150K+ MAU</p>
+      </div>
+      <div class="tile-shots">
+        <div class="phone mini"><div class="screen"><img class="on" alt="Libgen home" loading="lazy" data-shot="libgen_home.jpeg"></div></div>
+        <div class="phone mini"><div class="screen"><img class="on" alt="Libgen details" loading="lazy" data-shot="libgen_details.jpeg"></div></div>
+      </div>
+    </a>
+
+    <!-- Play listing returns 404 (Oct 2026); link restored once the app is live again. -->
+    <div id="t-remote" class="tile" style="--app:var(--app-remote)" data-reveal>
+      <span class="app-icon" style="--size:44px">R</span>
+      <h3 class="h3">Remote Jobs</h3><p class="muted">An automated pipeline turns remote-job posts on X into an in-app feed.</p>
+      <p class="tile-metric">12,000+ users</p>
+    </div>
+
+    <a id="t-mbm" class="tile" style="--app:var(--app-mbm)" href="https://play.google.com/store/apps/details?id=com.mbm.elereaning.mbmecj" rel="noopener" data-reveal>
+      <span class="app-icon" style="--size:44px">M</span>
+      <h3 class="h3">MBM E-Learning</h3><p class="muted">Semester- and branch-personalised study material for MBM University students.</p>
+      <p class="tile-metric">15K+ downloads</p>
+    </a>
+
+    <div id="t-oi" class="tile t-wide t-image" style="--app:var(--app-oi)" data-reveal>
+      <div class="tile-copy">
+        <span class="app-icon" style="--size:44px">OI</span>
+        <h3 class="h3">OI Visualizer</h3><p class="muted">Open-interest analytics across strikes, with OI change versus price and interactive payoff charts.</p>
+      </div>
+      <img class="tile-img" alt="OI Visualizer chart" loading="lazy" data-shot="oi_visualizer.png">
+    </div>
+
+    <a id="t-raksha" class="tile" style="--app:var(--app-raksha)" href="https://bit.ly/3Dlh4JE" rel="noopener" data-reveal>
+      <span class="app-icon" style="--size:44px">Ra</span>
+      <h3 class="h3">Raksha</h3><p class="muted">ESP32 safety band with a Flutter app. A double press sends an SOS with live location.</p>
+      <p class="tile-metric">🏆 Winner · SSIP, IIIT Surat</p>
+    </a>
+
+    <!-- calculator.buckrate.com did not respond (Oct 2026); link restored once it's back. -->
+    <div class="tile t-wide t-image" style="--app:var(--app-buckrate)" data-reveal>
+      <div class="tile-copy">
+        <span class="app-icon" style="--size:44px">B</span>
+        <h3 class="h3">Buckrate</h3><p class="muted">Computer-vision livestock weight estimation for a Flutter Web marketplace, at Timemarks.</p>
+        <p class="tile-metric">75–80% accuracy, no scales</p>
+      </div>
+      <img class="tile-img" alt="Buckrate calculator" loading="lazy" data-shot="buckrate_web.png">
+    </div>
+
+    <a class="tile t-tall" style="--app:var(--app-research)" href="https://github.com/lkrjangid1/research_assistant" rel="noopener" data-reveal>
+      <span class="app-icon" style="--size:44px">AI</span>
+      <h3 class="h3">Research assistant</h3><p class="muted">Search arXiv, get expertise-aware summaries and chat across papers. Flutter, Gemini 1.5 Pro and FastAPI.</p>
+      <div class="phone mini center"><div class="screen"><img class="on" alt="Research assistant home" loading="lazy" data-shot="ra_home.png"></div></div>
+    </a>
+
+    <a class="tile t-wide t-image" style="--app:var(--app-seedfuel)" href="http://lkrjangid1.github.io/seedfuel" rel="noopener" data-reveal>
+      <div class="tile-copy">
+        <span class="app-icon" style="--size:44px">Sf</span>
+        <h3 class="h3">SeedFuel</h3><p class="muted">Brand and ordering site for a no-added-sugar laddu brand. Plain HTML, CSS and JS.</p>
+      </div>
+      <img class="tile-img" alt="SeedFuel website" loading="lazy" data-shot="seedfuel_home.png">
+    </a>
+
+    <div class="tile" style="--app:var(--app-greenhouse)" data-reveal>
+      <span class="app-icon" style="--size:44px">G</span>
+      <h3 class="h3">Greenhouse IoT</h3><p class="muted">Live water, humidity, temperature and light, with manual and automatic control from a Flutter app.</p>
+    </div>
+
+    <div class="tile" style="--app:var(--app-univest)" data-reveal>
+      <span class="app-icon" style="--size:44px">Fi</span>
+      <h3 class="h3">FinSight AI</h3><p class="muted">AI finance companion, built natively in Kotlin and SwiftUI at Univest.</p>
+    </div>
+
+    <div class="tile" style="--app:var(--app-weblm)" data-reveal>
+      <span class="app-icon" style="--size:44px">W</span>
+      <h3 class="h3">Weblm</h3><p class="muted">Chat with any website. LangChain and Python.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPEN SOURCE ============ -->
+<section id="open-source" class="wrap section" aria-labelledby="os-h">
+  <div class="section-head">
+    <div><p class="label">Open source · pub.dev/publishers/lkrjangid.tech</p><h2 id="os-h" class="h2" data-split>24 packages.<br><span class="serif accent">Used in other people's apps.</span></h2></div>
+  </div>
+
+  <div class="os-grid">
+    <a class="family card" href="https://pub.dev/packages/native_api_bindgen" rel="noopener" data-reveal>
+      <p class="label">The toolchain · 14 packages</p>
+      <h3 class="h3 mono-title">native_api_*</h3>
+      <p class="muted">CLI, IR, generators and runtimes behind native-api-bindgen.</p>
+      <div class="family-chips">
+        <span class="chip">bindgen</span><span class="chip">core</span><span class="chip">ir</span><span class="chip">generator</span><span class="chip">runtime</span>
+        <span class="chip">android</span><span class="chip">ios</span><span class="chip">flutter_android</span><span class="chip">flutter_ios</span>
+        <span class="chip">rn_android</span><span class="chip">rn_ios</span><span class="chip">ui</span>
+      </div>
+    </a>
+    <ul class="pkgs" data-reveal>
+      <li><a href="https://pub.dev/packages/flutter_account_manager" rel="noopener"><span class="mono">flutter_account_manager</span><span class="muted">Native accounts, tokens and background sync</span><span class="chip">1.0.0</span></a></li>
+      <li><a href="https://pub.dev/packages/curl_request_parser" rel="noopener"><span class="mono">curl_request_parser</span><span class="muted">200+ curl options → Dart http code</span><span class="chip">1.0.1</span></a></li>
+      <li><a href="https://pub.dev/packages/smooth_chucker" rel="noopener"><span class="mono">smooth_chucker</span><span class="muted">Isolate-based HTTP inspector, Material 3</span><span class="chip">0.0.3</span></a></li>
+      <li><a href="https://pub.dev/packages/rar" rel="noopener"><span class="mono">rar</span><span class="muted">RAR archives on Android, iOS, macOS, web</span><span class="chip">0.3.0</span></a></li>
+      <li><a href="https://pub.dev/packages/comic_reader" rel="noopener"><span class="mono">comic_reader</span><span class="muted">Read CBZ and CBT comic archives</span><span class="chip">0.4.0</span></a></li>
+      <li><a href="https://pub.dev/packages/network_speed" rel="noopener"><span class="mono">network_speed</span><span class="muted">Real-time network speed, Android and iOS</span><span class="chip">0.0.2</span></a></li>
+      <li><a href="https://pub.dev/packages/drag_split_layout" rel="noopener"><span class="mono">drag_split_layout</span><span class="muted">Resizable split-pane layouts</span><span class="chip">0.1.1</span></a></li>
+      <li><a href="https://pub.dev/publishers/lkrjangid.tech/packages" rel="noopener"><span class="mono">+ 3 more</span><span class="muted">pinned_shortcuts, global_context_menu, cutout_text_effect…</span><span class="chip">All ↗</span></a></li>
+    </ul>
+  </div>
+
+  <div class="repos" data-reveal>
+    <p class="label">Repos and experiments</p>
+    <div class="repo-row">
+      <a class="repo" href="https://github.com/lkrjangid1/Organic-Chemistry-Map" rel="noopener"><b>Organic chemistry map</b><span>React Flow · SMILES</span><em class="st show">Showcase</em></a>
+      <a class="repo" href="https://github.com/lkrjangid1/fcm_admin" rel="noopener"><b>FCM admin</b><span>NestJS · BullMQ</span><em class="st prog">In progress</em></a>
+      <a class="repo" href="https://github.com/lkrjangid1/whiteboard-flutter" rel="noopener"><b>Whiteboard</b><span>Flutter · Firebase</span><em class="st">Learning build</em></a>
+      <a class="repo" href="https://github.com/lkrjangid1/Agora-in-Flutter" rel="noopener"><b>Agora in Flutter</b><span>Video calling</span><em class="st">Learning build</em></a>
+      <a class="repo" href="https://github.com/lkrjangid1/Election-Flutter-Web3" rel="noopener"><b>Election dApp</b><span>Flutter · Solidity</span><em class="st">Learning build</em></a>
+      <a class="repo" href="https://github.com/lkrjangid1" rel="noopener"><b>+ 9 more on GitHub</b><span>wh-clone, mysql-flutter, telegram-index-api…</span><em class="st">All ↗</em></a>
+    </div>
+    <p class="muted small-note">Hacktoberfest 2020 and 2021 contributor.</p>
+  </div>
+</section>
+
+<!-- ============ WRITING ============ -->
+<section id="writing" class="wrap section" aria-labelledby="writing-h">
+  <div class="section-head">
+    <div><p class="label">Writing · FlutDev</p><h2 id="writing-h" class="h2" data-split>177 articles.<br><span class="serif accent">One rabbit hole at a time.</span></h2></div>
+    <a class="btn" href="https://flutdev.blogspot.com/" rel="noopener" data-reveal>All posts ↗</a>
+  </div>
+  <div class="writing">
+    <div class="series" data-reveal>
+      <p class="label">Series · May 2026</p>
+      <h3 class="h3">Shorebird internals</h3>
+      <p class="muted">How Flutter code push really works, from bidiff to a running .so.</p>
+      <ol class="stack">
+        <li><a href="https://flutdev.blogspot.com/2026/05/part-1-how-shorebird-actually-works.html" rel="noopener"><span class="mono">01</span>How Shorebird actually works</a></li>
+        <li><a href="https://flutdev.blogspot.com/2026/05/part-2-bidiff-algorithm-zstd-compression.html" rel="noopener"><span class="mono">02</span>bidiff and zstd compression</a></li>
+        <li><a href="https://flutdev.blogspot.com/2026/05/part-3-shorebird-shorebirdcc-updaterrs.html" rel="noopener"><span class="mono">03</span>shorebird.cc and updater.rs</a></li>
+        <li><a href="https://flutdev.blogspot.com/2026/05/part-4-shorebird-science-behind.html" rel="noopener"><span class="mono">04</span>How a .so becomes a running app</a></li>
+      </ol>
+    </div>
+    <ul class="posts" data-reveal>
+      <li><a href="https://flutdev.blogspot.com/2026/02/uikit-ios-development-from-first.html" rel="noopener"><span>UIKit from first principles: a SecureRoom deep dive</span><time class="label">Feb 2026</time></a></li>
+      <li><a href="https://flutdev.blogspot.com/2026/02/understanding-pigeon-methods-in-flutter.html" rel="noopener"><span>Pigeon methods for native communication</span><time class="label">Feb 2026</time></a></li>
+      <li><a href="https://flutdev.blogspot.com/2026/02/embedding-flutter-screen-inside.html" rel="noopener"><span>Embedding a Flutter screen in an existing Android and iOS app</span><time class="label">Feb 2026</time></a></li>
+      <li><a href="https://flutdev.blogspot.com/2025/12/tracking-users-from-ads-campaigns-in.html" rel="noopener"><span>Install Referrer and deferred deep links in Flutter</span><time class="label">Dec 2025</time></a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="wrap section about" aria-labelledby="about-h">
+  <div class="about-copy">
+    <p class="label">About</p>
+    <h2 id="about-h" class="h2" data-split>I like the layer<br><span class="serif accent">under the app.</span></h2>
+    <p class="lead" data-reveal>At Univest I build brokerage order flows, mutual funds, payments and the Scalper trading terminal for <strong>9M+ users</strong>. The rest of the time I build the tooling underneath: <strong>native-api-bindgen</strong>, a self-hosted code push that became <strong>PushPatch</strong>, and 24 packages on pub.dev.</p>
+    <div class="skills" data-reveal>
+      <span class="chip">Flutter</span><span class="chip">Dart</span><span class="chip">Kotlin</span><span class="chip">Swift / SwiftUI</span><span class="chip">Jetpack Compose</span>
+      <span class="chip">JNI · JSI</span><span class="chip">WebSockets</span><span class="chip">Juspay · BSE · UPI</span><span class="chip">OTA code push</span><span class="chip">Firebase</span><span class="chip">CI/CD</span>
+    </div>
+  </div>
+  <ol class="timeline" data-reveal>
+    <li><span class="when label">04/2024 – now</span><b>Senior Software Engineer, Univest</b><span class="muted">Brokerage, mutual funds, payments, Scalper, code push</span></li>
+    <li><span class="when label">2025 – now</span><b>Platform tooling</b><span class="muted">native-api-bindgen, PushPatch, 24 pub.dev packages</span></li>
+    <li><span class="when label">Timemarks</span><b>Flutter Web</b><span class="muted">Buckrate marketplace and CV weight estimator</span></li>
+    <li><span class="when label">Indie</span><b>Self-published apps</b><span class="muted">Libgen, Remote Jobs, MBM E-Learning</span></li>
+    <li><span class="when label">2020 – 2023</span><b>Learning builds</b><span class="muted">Open source, Hacktoberfest, SSIP win with Raksha</span></li>
+  </ol>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="wrap section contact" aria-labelledby="contact-h">
+  <div class="contact-glow" aria-hidden="true"></div>
+  <p class="label">Contact</p>
+  <h2 id="contact-h" class="h2" data-split>Have an app to build<br><span class="serif accent">or fix?</span></h2>
+  <div class="contact-cards">
+    <a class="ccard" href="https://www.linkedin.com/in/lkrjangid" rel="noopener" data-reveal>
+      <p class="label">Full-time</p><h3 class="h3">Hire me</h3>
+      <p class="muted">Senior mobile or platform roles. Flutter, native Android and iOS, fintech scale.</p>
+      <span class="ccard-go">Message on LinkedIn ↗</span>
+    </a>
+    <a class="ccard" href="/contact" data-reveal>
+      <p class="label">Consulting</p><h3 class="h3">Second pair of eyes</h3>
+      <p class="muted">Code push setup, startup time, crash rate, native plugins and performance reviews.</p>
+      <span class="ccard-go">Send a message →</span>
+    </a>
+  </div>
+  <div class="contact-links" data-reveal>
+    <a href="https://github.com/lkrjangid1" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/lkrjangid" rel="noopener">LinkedIn</a>
+    <a href="https://x.com/lkrjangid" rel="noopener">X</a><a href="https://pub.dev/publishers/lkrjangid.tech/packages" rel="noopener">pub.dev</a>
+    <a href="https://flutdev.blogspot.com/" rel="noopener">FlutDev</a><a href="https://g.dev/lkrjangid" rel="noopener">g.dev</a>
+  </div>
+</section>
+</main>
+
+<footer class="footer wrap">
+  <span>© 2026 Lokesh Jangid</span>
+  <span class="footer-status"><span class="dot"></span> Available · replies within 2 days</span>
+  <a href="#top">Back to top ↑</a>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js" defer></script>
+<script src="assets/showcase.js" defer></script>
+</body>
+</html>
