@@ -10,8 +10,8 @@
     "cloudflare_bypass",
     "native_api_ios",
     "native_api_flutter_android",
-    "native_api_flutter_ios",
     "native_api_core",
+    "native_api_flutter_ios",
     "native_api_runtime",
     "native_api_bindgen",
     "native_api_react_native_ios",
@@ -22,7 +22,7 @@
     "native_api_android",
     "global_context_menu",
     "curl_request_parser",
-    "flutter_account_manager",
-    "smooth_chucker"
+    "smooth_chucker",
+    "flutter_account_manager"
   ]
 }
