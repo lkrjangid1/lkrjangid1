@@ -137,18 +137,49 @@
         {
           "label": "Play Store",
           "url": "https://play.google.com/store/apps/details?id=com.yaaratech.libgen"
+        },
+        {
+          "label": "Website",
+          "url": "https://libgen-d4497.web.app/"
         }
       ],
       "points": [
         "Entire app built in Flutter with multi-source scraping and aggregation pipelines written in Dart.",
         "Smooth, user-friendly experience to browse and search through any book.",
-        "Monetized via LevelPlay ad bidding and RevenueCat in-app purchases."
+        "Monetized via LevelPlay ad bidding and RevenueCat in-app purchases.",
+        "Quillshelf brings it to iPhone: import EPUB and PDF files, and read with themes, highlights and daily goals."
       ],
       "screenshots": [
-        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_home.jpeg",
-        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_search.jpeg",
-        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_filter.jpeg",
-        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_details.jpeg"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_v3_home.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_v3_search.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_v3_book_details.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_v3_library.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/libgen_v3_reader.webp"
+      ]
+    },
+    {
+      "title": "Searchly — File & Torrent Search",
+      "role": "Personal project · Android",
+      "metrics": "1K+ installs · 4.0★ on Google Play",
+      "tech": [
+        "Flutter",
+        "Web Scraping"
+      ],
+      "links": [
+        {
+          "label": "Play Store",
+          "url": "https://play.google.com/store/apps/details?id=com.yaaratech.x1337"
+        }
+      ],
+      "points": [
+        "Fast file search engine that queries many sources at once and groups results by source: torrents, files, books, movies and more.",
+        "Light and dark themes, bookmarks for favourite files, and all settings in one place."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/searchly_search.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/searchly_dark.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/searchly_bookmark.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/searchly_settings.webp"
       ]
     },
     {
@@ -172,8 +203,9 @@
         "Automated pipeline retrieves remote-job posts from X (Twitter) and publishes them to in-app feeds, keeping users linked to fresh opportunities."
       ],
       "screenshots": [
-        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/remote_jobs_home.jpeg",
-        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/remote_jobs_menu.jpeg"
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/remote_jobs_v2_home.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/remote_jobs_v2_search.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/remote_jobs_v2_bookmark.webp"
       ]
     },
     {
@@ -239,8 +271,8 @@
       ],
       "links": [
         {
-          "label": "Try the calculator",
-          "url": "https://calculator.buckrate.com/?tab=0"
+          "label": "Website",
+          "url": "https://buckrate.com/"
         }
       ],
       "points": [
