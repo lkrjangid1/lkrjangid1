@@ -6,6 +6,7 @@ import Icon from '../../components/Icon.astro';
 import { getWork, type CaseStudy } from '../../data/work';
 import type { Project } from '../../data/projects';
 import { categoryLabels, site } from '../../data/site';
+import { shotSrc } from '../../data/shots';
 
 export async function getStaticPaths() {
   const { projects, caseStudies } = await getWork();
@@ -113,17 +114,11 @@ const jsonLd = {
       <section class="section" aria-labelledby="shots-h">
         <h2 id="shots-h">Screenshots</h2>
         <div class="shots" tabindex="0" role="region" aria-label={`${name} screenshots, scrollable`}>
-          {project.screenshots.map((src, i) => (
-            <Image
-              src={src}
-              inferSize
-              height={480}
-              format="webp"
-              quality={80}
-              loading={i < 2 ? 'eager' : 'lazy'}
-              alt={`${name} screenshot ${i + 1}`}
-            />
-          ))}
+          {project.screenshots.map((url, i) => {
+            const src = shotSrc(url);
+            const common = { height: 480, format: 'webp', quality: 80, loading: i < 2 ? 'eager' : 'lazy', alt: `${name} screenshot ${i + 1}` } as const;
+            return typeof src === 'string' ? <Image src={src} inferSize {...common} /> : <Image src={src} {...common} />;
+          })}
         </div>
       </section>
     )}

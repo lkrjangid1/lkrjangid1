@@ -1,0 +1,65 @@
+# Builds portfolio/ and deploys it to Firebase Hosting (project lkrjangid-portfolio).
+# The site reads projects.json, recommendations.json and screen_shots/ from this repo,
+# so editing those files and pushing redeploys the site with no code change.
+
+name: Deploy portfolio
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'portfolio/**'
+      - 'projects.json'
+      - 'recommendations.json'
+      - 'pub_packages.json'
+      - 'screen_shots/**'
+      - '.github/workflows/deploy-portfolio.yml'
+  pull_request:
+    paths: ['portfolio/**', 'projects.json', 'recommendations.json', 'screen_shots/**']
+  schedule:
+    - cron: '30 0 * * *' # 06:00 IST daily, picks up pub.dev and blog changes
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-portfolio-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: portfolio
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: portfolio/package-lock.json
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - run: npm ci && npm test
+        working-directory: portfolio/functions
+      - name: Lighthouse budgets
+        run: npx --yes @lhci/cli@0.15.1 autorun
+      - uses: actions/upload-artifact@v4
+        with: { name: dist, path: portfolio/dist }
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: { name: dist, path: portfolio/dist }
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_LKRJANGID_PORTFOLIO }}
+          projectId: lkrjangid-portfolio
+          entryPoint: portfolio
+          # Pull requests get a preview channel; everything else goes live.
+          channelId: ${{ github.event_name == 'pull_request' && '' || 'live' }}

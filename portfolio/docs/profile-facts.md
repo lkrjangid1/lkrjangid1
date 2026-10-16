@@ -68,21 +68,13 @@ Collected Oct 16, 2026 from the résumé (`public/resume.pdf`), Play Store listi
 | FlutDev articles | Résumé 125+; blog feed reports 177 | 177 |
 | Remote Jobs | Play listing returns 404 | Hide the link, or relaunch |
 
-## projects.json additions to make in lkrjangid1/lkrjangid1
-```json
-{
-  "title": "Searchly — File & Torrent Search",
-  "role": "Personal project · Flutter",
-  "metrics": "Live on Google Play",
-  "tech": ["Flutter", "Dart", "Web Scraping"],
-  "links": [{ "label": "Play Store", "url": "https://play.google.com/store/apps/details?id=com.yaaratech.x1337" }],
-  "points": [
-    "Fast file search engine across many sources: torrents, files, books and movies.",
-    "Light and dark themes, bookmarks and a settings hub."
-  ],
-  "screenshots": []
-}
-```
-The Searchly `role` and `tech` values above are guesses based on Libgen, which has the same `com.yaaratech` publisher. Correct them before publishing.
+## projects.json changes (done in commit "projects: add Searchly…")
+- **Searchly:** added after Libgen, with 4 screenshots in `screen_shots/searchly_*.webp`. **Check:** its `role` ("Personal project · Android") and `tech` (Flutter, Web Scraping) are guesses based on Libgen, which has the same `com.yaaratech` publisher.
+- **Libgen:** website link and a Quillshelf point added; screenshots switched to `libgen_v3_*.webp`. The old JPEGs remain in the folder.
+- **Remote Jobs:** screenshots switched to `remote_jobs_v2_*.webp`. The 404 Play link is unchanged until decided.
+- **Buckrate:** link changed to https://buckrate.com/. The old screenshot stays because it's unclear whether Lokesh built the new site.
+- **Not changed:** any of the disputed numbers above.
 
-Buckrate's link should change to `{ "label": "Website", "url": "https://buckrate.com/" }`. Libgen should add `{ "label": "Website", "url": "https://libgen-d4497.web.app/" }`.
+## Other data in this repo
+- `recommendations.json` holds 6 LinkedIn recommendations (Univest ×2, TecoNico, Studyem ×3), loaded by `src/data/recommendations.ts` for a testimonials section. **Check:** the TecoNico recommendation mentions a Flutter role on a smart-home project that isn't on the résumé.
+- `pub_packages.json` is synced daily from pub.dev by `.github/workflows/update-pub-packages.yml`.

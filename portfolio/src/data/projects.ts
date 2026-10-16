@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { categoryOverrides, featured as featuredSlugs } from './site';
+import { readRepoJson } from './source';
 
-export const PROJECTS_SRC = 'https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/projects.json';
 export const SCREENSHOT_BASE = 'https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/';
 
 const LinkSchema = z.object({ label: z.string(), url: z.string().url() });
@@ -134,11 +134,7 @@ export function parseProjectsFile(data: unknown, caseStudies: ReadonlySet<string
 let cache: Promise<{ projects: Project[]; packages: RawPackage[] }> | undefined;
 
 export function loadProjectsFile(caseStudies: ReadonlySet<string> = new Set()) {
-  cache ??= (async () => {
-    const res = await fetch(PROJECTS_SRC);
-    if (!res.ok) throw new Error(`projects.json fetch failed: HTTP ${res.status}`);
-    return parseProjectsFile(await res.json(), caseStudies);
-  })();
+  cache ??= readRepoJson('projects.json').then((data) => parseProjectsFile(data, caseStudies));
   return cache;
 }
 

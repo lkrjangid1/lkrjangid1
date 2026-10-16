@@ -11,5 +11,6 @@ export default defineConfig({
     domains: ['raw.githubusercontent.com'],
   },
   // Keep scripts as external files so the CSP in firebase.json can use script-src 'self'.
-  vite: { build: { assetsInlineLimit: 0 } },
+  // Also let the dev server read screen_shots/ one level up in the profile repo.
+  vite: { build: { assetsInlineLimit: 0 }, server: { fs: { allow: ['..'] } } },
 });
