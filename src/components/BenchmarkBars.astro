@@ -1,0 +1,60 @@
+---
+interface Row {
+  label: string;
+  value: number;
+  highlight?: boolean;
+}
+interface Props {
+  title: string;
+  unit: string;
+  rows: Row[];
+  source?: string;
+}
+
+const { title, unit, rows, source } = Astro.props;
+const max = Math.max(...rows.map((r) => r.value));
+const labelW = 140;
+const valueW = 80;
+const chartW = 640;
+const barW = chartW - labelW - valueW;
+const rowH = 36;
+const height = rows.length * rowH + 28;
+const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => +(max * t).toFixed(2));
+const desc = rows.map((r) => `${r.label}: ${r.value} ${unit}`).join('; ');
+---
+<figure class="bench">
+  <figcaption class="label">{title}</figcaption>
+  <svg viewBox={`0 0 ${chartW} ${height}`} role="img" aria-label={`${title}. ${desc}`} preserveAspectRatio="xMinYMin meet">
+    {ticks.map((t) => {
+      const x = labelW + (t / max) * barW;
+      return (
+        <g>
+          <line x1={x} x2={x} y1="0" y2={rows.length * rowH} class="grid" />
+          <text x={x} y={rows.length * rowH + 18} text-anchor="middle" class="tick">{t} {unit}</text>
+        </g>
+      );
+    })}
+    {rows.map((r, i) => {
+      const w = Math.max(2, (r.value / max) * barW);
+      const y = i * rowH + 9;
+      return (
+        <g>
+          <text x="0" y={y + 13} class="name">{r.label}</text>
+          <rect x={labelW} y={y} width={w} height="18" rx="3" class:list={['bar', { hi: r.highlight }]} />
+          <text x={labelW + w + 8} y={y + 13} class="val">{r.value} {unit}</text>
+        </g>
+      );
+    })}
+  </svg>
+  {source && <p class="label">Source: {source}</p>}
+</figure>
+
+<style>
+  .bench { margin: 0; padding: 18px 20px; border: 1px solid var(--border); border-radius: var(--radius-card); background: var(--surface-2); }
+  svg { width: 100%; height: auto; margin: 10px 0 6px; overflow: visible; }
+  .grid { stroke: var(--border); stroke-width: 1; }
+  .tick { font: 11px var(--font-mono); fill: var(--text-muted); }
+  .name, .val { font: 13px var(--font-mono); fill: var(--text-primary); }
+  .bar { fill: var(--border-strong); }
+  .bar.hi { fill: var(--accent); }
+</style>

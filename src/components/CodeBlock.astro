@@ -1,0 +1,52 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  code: string;
+  lang?: string;
+  output?: string;
+  copy?: boolean;
+}
+const { code, lang = 'sh', output, copy = true } = Astro.props;
+---
+<div class="codeblock" data-lang={lang}>
+  {copy && (
+    <button type="button" class="copy" data-code={code} aria-label="Copy code">
+      <Icon name="copy" class="i-copy" /><Icon name="check" class="i-done" />
+    </button>
+  )}
+  <pre><code set:text={code} />{output && <code class="out" set:text={'\n' + output} />}</pre>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.codeblock .copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.code ?? '');
+        btn.classList.add('done');
+        btn.setAttribute('aria-label', 'Copied');
+        setTimeout(() => {
+          btn.classList.remove('done');
+          btn.setAttribute('aria-label', 'Copy code');
+        }, 1600);
+      } catch {
+        btn.setAttribute('aria-label', 'Copy failed');
+      }
+    });
+  });
+</script>
+
+<style>
+  .codeblock { position: relative; background: var(--surface-1); border: 1px solid var(--border); border-radius: var(--radius); }
+  pre { margin: 0; padding: 16px 52px 16px 18px; overflow-x: auto; line-height: 1.7; }
+  code { font-family: var(--font-mono); font-size: 13px; color: var(--text-primary); }
+  .out { color: var(--success); }
+  .copy {
+    position: absolute; top: 8px; right: 8px; display: grid; place-items: center;
+    width: 32px; height: 32px; padding: 0; cursor: pointer;
+    border: 1px solid var(--border-strong); border-radius: 6px; background: var(--surface-2); color: var(--text-secondary);
+  }
+  .copy:hover { color: var(--text-primary); }
+  .copy :global(.i-done), .copy.done :global(.i-copy) { display: none; }
+  .copy.done :global(.i-done) { display: block; color: var(--success); }
+</style>

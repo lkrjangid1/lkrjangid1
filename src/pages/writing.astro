@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site, writing, writingTotal } from '../data/site';
+
+const posts = [...writing].sort((a, b) => b.date.localeCompare(a.date));
+const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+<Base
+  title="Writing"
+  current="/writing"
+  ogSlug="writing"
+  description="Selected posts from FlutDev on Flutter internals, Shorebird code push, native interop and app performance."
+>
+  <div class="container narrow">
+    <header class="page-head">
+      <h1>Writing</h1>
+      <p class="muted">Selected posts from <a href={site.links.blog}>FlutDev</a>, where I've published {writingTotal}+ articles on Flutter and native development.</p>
+    </header>
+
+    <ul class="posts">
+      {posts.map((p) => (
+        <li>
+          <a class="row post" href={p.url} rel="noopener">
+            <span class="title">
+              {p.series && <span class="label series">{p.series}</span>}
+              <span>{p.title}</span>
+            </span>
+            <time class="label" datetime={p.date}>{fmt.format(new Date(p.date))}</time>
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <p class="more"><a class="btn" href={site.links.blog} rel="noopener">All posts on FlutDev <Icon name="arrow-up-right" /></a></p>
+  </div>
+</Base>
+
+<style>
+  .narrow { max-width: 920px; }
+  .posts { list-style: none; margin: 0; padding: 0; }
+  .post { text-decoration: none; color: var(--text-primary); }
+  .post:hover .title > span:last-child { color: var(--accent); }
+  .title { display: flex; flex-direction: column; }
+  .series { color: var(--text-accent); }
+  time { white-space: nowrap; flex: none; }
+  .more { margin-top: var(--space-8); }
+</style>

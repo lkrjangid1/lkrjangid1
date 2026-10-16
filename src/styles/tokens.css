@@ -1,0 +1,25 @@
+/* Values mirror docs/portfolio-designs.html; --text-muted darkened in light mode to pass 4.5:1. */
+:root {
+  color-scheme: light dark;
+  --surface-0: #f6f5f1; --surface-1: #efede6; --surface-2: #ffffff;
+  --text-primary: #141413; --text-secondary: #5f5e5a; --text-muted: #6b6a64;
+  --border: rgba(20, 20, 19, .12); --border-strong: rgba(20, 20, 19, .22);
+  --accent: #185FA5; --bg-accent: #E6F1FB; --text-accent: #0C447C;
+  --success: #3B6D11; --danger: #A32D2D;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --radius: 8px; --radius-card: 12px;
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px;
+  --space-6: 24px; --space-8: 32px; --space-12: 48px; --space-16: 64px;
+  --container: 1200px;
+  --nav-h: 64px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-0: #141413; --surface-1: #1c1c1b; --surface-2: #232322;
+    --text-primary: #f1efe8; --text-secondary: #b4b2a9; --text-muted: #8f8e87;
+    --border: rgba(241, 239, 232, .12); --border-strong: rgba(241, 239, 232, .22);
+    --accent: #85B7EB; --bg-accent: #0C447C; --text-accent: #B5D4F4;
+    --success: #97C459; --danger: #F09595;
+  }
+}

@@ -1,0 +1,18 @@
+---
+title: Self-hosted code push
+headline: Shorebird, reverse-engineered
+summary: Over-the-air Flutter hotfixes on Univest's own infrastructure, built by studying how Shorebird patches a running app.
+role: Univest · platform engineering
+stack: [Flutter, Android, iOS, bidiff, zstd, OTA]
+order: 3
+problem: Production fixes waited days for store review, and the commercial code-push licence was a recurring cost.
+approach: Studied Shorebird's internals — bidiff patching, zstd compression, the Rust updater — and rebuilt the delivery pipeline to run self-hosted.
+result: Hotfixes ship in minutes instead of days, and the licensing cost, about ₹14L a year, is gone.
+links:
+  - { label: 'Part 1: How Shorebird works', url: 'https://flutdev.blogspot.com/2026/05/part-1-how-shorebird-actually-works.html' }
+  - { label: 'Part 2: bidiff and zstd', url: 'https://flutdev.blogspot.com/2026/05/part-2-bidiff-algorithm-zstd-compression.html' }
+  - { label: 'Part 3: updater.rs', url: 'https://flutdev.blogspot.com/2026/05/part-3-shorebird-shorebirdcc-updaterrs.html' }
+  - { label: 'Part 4: .so to running app', url: 'https://flutdev.blogspot.com/2026/05/part-4-shorebird-science-behind.html' }
+---
+
+The full write-up is a four-part series on FlutDev, linked above. This work later became [PushPatch](/work/pushpatch), a code-push product for any Flutter team.

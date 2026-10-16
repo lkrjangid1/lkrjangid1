@@ -1,0 +1,20 @@
+# Copy to lkrjangid1/lkrjangid1 as .github/workflows/notify-portfolio.yml
+# Needs a repo secret PORTFOLIO_DISPATCH_TOKEN: a fine-grained PAT with
+# "Contents: read and write" on the portfolio site repo (repository_dispatch requires it).
+name: Notify portfolio
+
+on:
+  push:
+    branches: [main]
+    paths: [projects.json, screen_shots/**]
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          curl -fsS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.PORTFOLIO_DISPATCH_TOKEN }}" \
+            https://api.github.com/repos/lkrjangid1/lkrjangid-portfolio/dispatches \
+            -d '{"event_type":"projects-updated"}'

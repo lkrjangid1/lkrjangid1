@@ -1,0 +1,101 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import MetricCard from '../components/MetricCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { metrics, secondaryMetrics, site, categoryLabels } from '../data/site';
+import { getWork } from '../data/work';
+import { repos } from '../data/repos';
+
+const { projects } = await getWork();
+const selected = projects.filter((p) => p.featured).slice(0, 4);
+const bindgen = repos.find((r) => r.slug === 'native-api-bindgen')!;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  jobTitle: site.role,
+  worksFor: { '@type': 'Organization', name: 'Univest' },
+  description: site.description,
+  knowsAbout: ['Flutter', 'Dart', 'Kotlin', 'Swift', 'Android', 'iOS', 'JNI', 'Code push'],
+  sameAs: [site.links.github, site.links.linkedin, site.links.x, site.links.pubdev, site.links.gdev],
+};
+---
+<Base current="/" jsonLd={jsonLd}>
+  <div class="container">
+    <section class="hero" aria-labelledby="claim">
+      <p class="eyebrow">{site.eyebrow}</p>
+      <h1 id="claim" class="claim">
+        <span class="long">{site.claim}</span>
+        <span class="short">{site.claimShort}</span>
+      </h1>
+      <p class="sub">{site.sub}</p>
+      <div class="btns">
+        <a class="btn btn-primary" href="/work">See work <Icon name="arrow-right" /></a>
+        <a class="btn" href={site.resume} download>Résumé <Icon name="download" /></a>
+      </div>
+    </section>
+
+    <section class="section" aria-label="Proof">
+      <div class="grid-metrics">
+        {metrics.map((m) => <MetricCard {...m} />)}
+      </div>
+      <div class="grid-metrics secondary">
+        {secondaryMetrics.map((m) => <MetricCard {...m} size="sm" />)}
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="featured-h">
+      <div class="section-head"><h2 id="featured-h">Featured</h2></div>
+      <ProjectCard
+        href="/work/native-api-bindgen"
+        title={bindgen.name}
+        subtitle={bindgen.desc}
+        meta="Open source · sole author · 2026"
+        metric="~1 µs native calls vs ~270 µs MethodChannel"
+        tags={bindgen.tech}
+        category="tooling"
+        variant="featured"
+      />
+    </section>
+
+    <section class="section" aria-labelledby="selected-h">
+      <div class="section-head">
+        <h2 id="selected-h">Selected work</h2>
+        <a href="/work" class="all">All work <Icon name="arrow-right" /></a>
+      </div>
+      <div class="grid">
+        {selected.map((p) => (
+          <ProjectCard
+            href={`/work/${p.slug}`}
+            title={p.name}
+            subtitle={p.subtitle}
+            meta={p.role}
+            metric={p.metrics}
+            tags={p.tech}
+            category={categoryLabels[p.category] ?? p.category}
+          />
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero { padding: var(--space-16) 0 0; }
+  .claim { font-size: 48px; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; margin: 12px 0 16px; max-width: 900px; }
+  .short { display: none; }
+  .sub { color: var(--text-secondary); font-size: 17px; max-width: 680px; margin-bottom: 28px; }
+  .secondary { margin-top: var(--space-4); }
+  .all { display: inline-flex; align-items: center; gap: 6px; font-size: 15px; text-decoration: none; }
+  @media (max-width: 1200px) { .claim { font-size: 40px; } }
+  @media (max-width: 768px) {
+    .hero { padding-top: var(--space-8); }
+    .claim { font-size: 28px; }
+    .long { display: none; }
+    .short { display: inline; }
+    .secondary { margin-top: var(--space-2); }
+  }
+</style>

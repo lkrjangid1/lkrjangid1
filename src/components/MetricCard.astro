@@ -1,0 +1,33 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  note: string;
+  sourceUrl: string;
+  size?: 'lg' | 'sm';
+}
+const { label, value, note, sourceUrl, size = 'lg' } = Astro.props;
+const external = /^https?:/.test(sourceUrl);
+---
+<a class:list={['metric', size]} href={sourceUrl} rel={external ? 'noopener' : undefined}>
+  <span class="label">{label}</span>
+  <span class="value">{value}</span>
+  <span class="label note">{note}<span class="sr-only"> (source)</span></span>
+</a>
+
+<style>
+  .metric {
+    display: flex; flex-direction: column; gap: 2px; padding: 16px 18px;
+    background: var(--surface-1); border: 1px solid transparent; border-radius: var(--radius);
+    text-decoration: none; color: inherit; transition: border-color .15s ease;
+  }
+  .metric:hover { border-color: var(--border-strong); color: inherit; }
+  .value { font-size: 28px; font-weight: 500; line-height: 1.25; letter-spacing: -0.01em; color: var(--text-primary); }
+  .sm .value { font-size: 20px; }
+  .note { text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
+  @media (max-width: 600px) {
+    .metric { padding: 12px 14px; }
+    .value { font-size: 20px; }
+    .sm .value { font-size: 17px; }
+  }
+</style>
