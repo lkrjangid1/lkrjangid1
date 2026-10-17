@@ -1,0 +1,53 @@
+---
+import { Image } from 'astro:assets';
+import hacktoberfest from '../assets/oss/hacktoberfest-2020-2021.webp';
+import holopin from '../assets/oss/holopin-board.webp';
+import { site } from '../data/site';
+
+/** Open-source contributions: Hacktoberfest swag (2020 and 2021) and the Holopin badge board. */
+const HACKTOBERFEST = 'https://hacktoberfest.com/';
+---
+<div class="contrib">
+  <a class="ui-card flush glow hf" href={HACKTOBERFEST} rel="noopener" data-reveal data-cursor="Hacktoberfest" style="--app:#9a7cff">
+    <Image src={hacktoberfest} alt="Hacktoberfest 2020 and 2021 contributor swag: T-shirts covered in stickers from DigitalOcean, Docker, GitHub, Appwrite, DEV and other sponsors." width={1067} format="webp" quality={84} />
+  </a>
+
+  <div class="side">
+    <a class="ui-card flush holo" href={site.links.holopin} rel="noopener" data-reveal data-cursor="Holopin">
+      <Image src={holopin} alt="Holopin badge board: DigitalOcean, Hacktoberfest × Appwrite participant, Hacktoberfest 10 participant, Hacktoberfest 11 registered and Level 0 badges." width={1200} format="webp" quality={84} />
+      <span class="holo-bar">
+        <span><b>Holopin</b> · @lkrjangid</span>
+        <span class="label">6 badges ↗</span>
+      </span>
+    </a>
+
+    <div class="ui-card glow facts" style="--app:#9a7cff" data-reveal>
+      <p class="label">Hacktoberfest</p>
+      <ul>
+        <li><b>2020</b><span>Contributor · swag earned</span></li>
+        <li><b>2021</b><span>Contributor · swag earned</span></li>
+        <li><b>2023 – 24</b><span>Holopin participant badges</span></li>
+      </ul>
+      <p class="muted note">Pull requests to open-source projects during Hacktoberfest, alongside my own packages on pub.dev.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .contrib { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--gap-grid); align-items: stretch; }
+  .hf :global(img), .holo :global(img) { display: block; width: 100%; height: auto; transition: transform var(--t-slow) var(--ease-out); }
+  .hf:hover :global(img), .holo:hover :global(img) { transform: scale(1.015); }
+  .side { display: grid; gap: var(--gap-grid); grid-template-rows: auto 1fr; }
+  .holo { background: #141414; }
+  .holo-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 20px; border-top: 1px solid rgba(255, 255, 255, .08); color: #f4f5f7; font-size: 15px; }
+  .holo-bar b { font-weight: 600; }
+  .holo-bar .label { color: rgba(244, 245, 247, .6); }
+  .facts { display: flex; flex-direction: column; gap: 14px; }
+  .facts ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .facts li { display: grid; grid-template-columns: 118px 1fr; gap: 12px; align-items: baseline; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+  .facts li:last-child { border-bottom: 0; padding-bottom: 0; }
+  .facts b { font: 600 22px/1 var(--font-display); letter-spacing: -.02em; color: var(--app); }
+  .facts span { color: var(--text-2); font-size: 15px; }
+  .note { font-size: 14px; margin-top: auto; }
+  @media (max-width: 960px) { .contrib { grid-template-columns: 1fr; } }
+</style>

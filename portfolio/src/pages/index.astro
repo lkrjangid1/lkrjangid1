@@ -11,6 +11,7 @@ import ProductMarquee from '../components/ProductMarquee.astro';
 import SkillsRadar from '../components/SkillsRadar.astro';
 import Timeline from '../components/Timeline.astro';
 import GithubActivity from '../components/GithubActivity.astro';
+import Contributions from '../components/Contributions.astro';
 import { getGithubStats } from '../data/github';
 import portrait from '../assets/portrait.webp';
 import '../styles/home.css';
@@ -268,6 +269,16 @@ const jsonLd = {
       <a class="ui-card repo" href="/open-source"><b>+ {sortedRepos.length - repoStrip.length - 1} more</b><span>Every repo, with its status</span><em class="st">All →</em></a>
     </div>
   </section>
+
+  <!-- ============ CONTRIBUTIONS ============ -->
+  <div class="wrap">
+    <section class="section" aria-labelledby="contrib-h">
+      <SectionHead id="contrib-h" label="Open-source contributions · Hacktoberfest · Holopin" title="Contributor," accent="two Octobers running." lead="Hacktoberfest contributor in 2020 and 2021, with swag to prove it, and badges collected on Holopin.">
+        <a class="btn" href={site.links.holopin} rel="noopener" data-cursor="Holopin">Holopin board ↗</a>
+      </SectionHead>
+      <Contributions />
+    </section>
+  </div>
 
   <!-- ============ GITHUB ============ -->
   {github && (

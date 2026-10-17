@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import AppIcon from '../components/AppIcon.astro';
 import SectionHead from '../components/SectionHead.astro';
+import Contributions from '../components/Contributions.astro';
 import { getAllPackages } from '../data/work';
 import { isBindgenFamily } from '../data/packages';
 import { sortedRepos, statusLabels } from '../data/repos';
@@ -68,8 +69,15 @@ const cli = packages.find((p) => p.name === 'native_api_bindgen');
           </li>
         ))}
       </ul>
-      <p class="muted note">Hacktoberfest 2020 and 2021 contributor · badges on <a class="link" href={site.links.holopin}>Holopin</a>.</p>
     </section>
+
+    <section class="section" aria-labelledby="contrib-h">
+      <SectionHead id="contrib-h" size="sub" label="Open-source contributions · Hacktoberfest · Holopin" title="Contributor," accent="two Octobers running." lead="Hacktoberfest contributor in 2020 and 2021, with swag to prove it, and badges collected on Holopin.">
+        <a class="btn" href={site.links.holopin} rel="noopener" data-cursor="Holopin">Holopin board ↗</a>
+      </SectionHead>
+      <Contributions />
+    </section>
+
   </div>
 </Base>
 
