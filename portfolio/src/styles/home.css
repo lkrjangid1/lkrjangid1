@@ -232,16 +232,6 @@
 /* ---------- Recommendations ---------- */
 .quotes { columns: 3 320px; column-gap: var(--gap-grid); }
 
-/* ---------- Experience ---------- */
-.xp { list-style: none; margin: 0; padding: 0; grid-template-columns: repeat(4, 1fr); }
-.xp li { display: flex; flex-direction: column; gap: 8px; }
-.xp .h3 { margin-top: 6px; }
-.company { color: var(--accent); font-weight: 500; font-size: 15px; }
-.xp .muted { font-size: 15px; }
-.now { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; color: var(--mint); }
-@media (max-width: 1100px) { .xp { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 600px) { .xp { grid-template-columns: 1fr; } }
-
 /* ---------- Contact ---------- */
 .contact { position: relative; }
 .contact-glow { position: absolute; inset: 10% 0 auto; height: 520px; z-index: -1; background: var(--glow); }

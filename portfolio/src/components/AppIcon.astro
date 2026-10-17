@@ -26,7 +26,11 @@ const padded = slug === 'pushpatch';
 </span>
 
 <style>
-  .has-img { background: transparent; box-shadow: 0 10px 24px -12px var(--app); overflow: hidden; }
+  /* One elevation for every icon (image or monogram): neutral shadow plus a hairline edge ring,
+     so white, dark and coloured icons all sit at the same height. */
+  .app-icon { position: relative; box-shadow: var(--icon-shadow); }
+  .app-icon::after { content: ''; position: absolute; inset: 0; border-radius: inherit; box-shadow: var(--icon-ring); pointer-events: none; }
+  .has-img { background: transparent; overflow: hidden; }
   .has-img :global(img) { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
   /* Padding from the icon size, not %, which would resolve against the parent's width. */
   .padded { background: #fff; padding: calc(var(--size) * .16); }

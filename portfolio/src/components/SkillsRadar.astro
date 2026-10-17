@@ -1,0 +1,181 @@
+---
+import { radar, skillTiers } from '../data/site';
+
+/** Radar of skills by group (sectors) and tier (rings: core in the middle). Server-rendered SVG; the script only switches the active group. */
+const C = 300;
+const R = { 3: 124, 2: 180, 1: 230 } as const;
+const OUTER = 262;
+const n = radar.length;
+const step = (2 * Math.PI) / n;
+const start = -Math.PI / 2 - step / 2;
+const pt = (r: number, a: number) => [C + r * Math.cos(a), C + r * Math.sin(a)].map((v) => +v.toFixed(1));
+const wedge = (r0: number, r1: number, a0: number, a1: number) => {
+  const [x0, y0] = pt(r1, a0), [x1, y1] = pt(r1, a1), [x2, y2] = pt(r0, a1), [x3, y3] = pt(r0, a0);
+  return `M${x0} ${y0} A${r1} ${r1} 0 0 1 ${x1} ${y1} L${x2} ${y2} A${r0} ${r0} 0 0 0 ${x3} ${y3} Z`;
+};
+const arc = (r: number, a0: number, a1: number) => {
+  const [x0, y0] = pt(r, a0), [x1, y1] = pt(r, a1);
+  return `M${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1}`;
+};
+
+const groups = radar.map((g, gi) => {
+  const a0 = start + gi * step, a1 = a0 + step;
+  const byLevel = [3, 2, 1].flatMap((lv) => g.skills.filter((s) => s.level === lv));
+  // Every skill gets its own angle slot across the sector (so dots never stack), at its tier's ring.
+  const placed: { l: number; r: number; t: number; b: number }[] = [];
+  const box = (x: number, y: number, right: boolean, w: number) => (right ? { l: x + 10, r: x + 14 + w, t: y - 12, b: y + 6 } : { l: x - 14 - w, r: x - 10, t: y - 12, b: y + 6 });
+  const hits = (q: { l: number; r: number; t: number; b: number }) => placed.some((p) => q.l < p.r && p.l < q.r && q.t < p.b && p.t < q.b);
+  const spots = byLevel.map((s, i) => {
+    const a = a0 + step * ((i + 0.5) / byLevel.length);
+    return pt(R[s.level] + (i % 2 ? 9 : -9), a);
+  });
+  // Dots are obstacles too, so labels never cover another skill's dot.
+  for (const [x, y] of spots) placed.push({ l: x - 7, r: x + 7, t: y - 7, b: y + 7 });
+  const dots = byLevel.map((s, i) => {
+    const [x, y] = spots[i];
+    placed.splice(placed.findIndex((p) => p.l === x - 7 && p.t === y - 7), 1); // a label may sit next to its own dot
+    // Label collision pass: prefer the outward side, else flip, else nudge.
+    const w = s.name.length * 7.4;
+    let right = x >= C, ly = y;
+    for (let tries = 0; tries < 12 && hits(box(x, ly, right, w)); tries++) {
+      if (tries === 0) right = !right;
+      else { right = x >= C; ly += 9 * (tries % 2 ? 1 : -1) * Math.ceil(tries / 2); }
+    }
+    placed.push(box(x, ly, right, w));
+    return { ...s, x, y, ly, right };
+  });
+  const mid = a0 + step / 2;
+  const [lx, ly] = pt(OUTER + 20, mid);
+  return { ...g, gi, a0, a1, dots, lx, ly, wedge: wedge(56, 246, a0, a1), arc: arc(OUTER, a0 + 0.04, a1 - 0.04) };
+});
+const total = radar.reduce((n, g) => n + g.skills.length, 0);
+---
+<div class="radar-wrap" data-radar>
+  <div class="ui-card flush radar-card">
+    <svg viewBox="-70 -30 740 660" role="img" aria-label={`Skills radar: ${total} skills in ${n} groups. Core skills sit closest to the centre.`}>
+      <defs>
+        <radialGradient id="rg-core" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#3db9ff" stop-opacity=".35" />
+          <stop offset="100%" stop-color="#3db9ff" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      {[R[3], R[2], R[1], 246].map((r) => <circle cx={C} cy={C} r={r} class="ring" />)}
+      {groups.map((g) => { const [x, y] = pt(246, g.a0); return <line x1={C} y1={C} x2={x} y2={y} class="spoke" />; })}
+      {groups.map((g) => (
+        <g class:list={['sector', { on: g.gi === 0 }]} data-group={g.gi} style={`--g:${g.color}`}>
+          <path d={g.wedge} class="wedge" />
+          <path d={g.arc} class="arc" />
+          <text x={g.lx} y={g.ly} class="glabel" text-anchor="middle" dominant-baseline="middle">{g.group.toUpperCase()}</text>
+          {g.dots.map((d) => (
+            <g class="skill">
+              <circle cx={d.x} cy={d.y} r="11" class="halo" />
+              <circle cx={d.x} cy={d.y} r={d.level === 3 ? 5.5 : d.level === 2 ? 4.5 : 3.5} class="dot" />
+              <text x={d.right ? d.x + 12 : d.x - 12} y={d.ly + 4} text-anchor={d.right ? 'start' : 'end'} class="sname">{d.name}</text>
+            </g>
+          ))}
+        </g>
+      ))}
+      <circle cx={C} cy={C} r="56" fill="url(#rg-core)" />
+      <circle cx={C} cy={C} r="44" class="core" />
+      <text x={C} y={C + 2} text-anchor="middle" class="core-n" data-core-n>{radar[0].skills.length}</text>
+      <text x={C} y={C + 22} text-anchor="middle" class="core-l">SKILLS</text>
+    </svg>
+    <p class="label legend">Core = centre · rings: core / strong / working</p>
+  </div>
+
+  <div class="radar-side">
+    <div class="groups" role="tablist" aria-label="Skill groups">
+      {groups.map((g) => (
+        <button type="button" role="tab" class:list={['group', { on: g.gi === 0 }]} aria-selected={g.gi === 0 ? 'true' : 'false'} data-group={g.gi} style={`--g:${g.color}`}>
+          <span class="gdot"></span><span class="gname">{g.group}</span><span class="label">{g.skills.length} skills</span>
+        </button>
+      ))}
+    </div>
+    {groups.map((g) => (
+      <div class="ui-card detail" role="tabpanel" data-panel={g.gi} hidden={g.gi !== 0} style={`--g:${g.color}`}>
+        <div class="dhead"><h3 class="h3">{g.group}</h3><span class="label">{g.skills.length} on the radar</span></div>
+        <p class="muted blurb">{g.blurb}</p>
+        <ul class="bars">
+          {g.dots.map((s) => (
+            <li>
+              <span class="bname">{s.name}</span><span class="label tier">{skillTiers[s.level]}</span>
+              <span class="segs" aria-hidden="true">{Array.from({ length: 12 }, (_, i) => <i class={i < s.level * 4 ? 'f' : ''}></i>)}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-radar]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.group')];
+    const sectors = [...root.querySelectorAll<SVGGElement>('.sector')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    const coreN = root.querySelector('[data-core-n]');
+    const select = (i: number) => {
+      tabs.forEach((t, j) => { t.classList.toggle('on', j === i); t.setAttribute('aria-selected', String(j === i)); });
+      sectors.forEach((s, j) => s.classList.toggle('on', j === i));
+      panels.forEach((p, j) => (p.hidden = j !== i));
+      if (coreN) coreN.textContent = String(panels[i].querySelectorAll('.bars li').length);
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(i));
+      t.addEventListener('pointerenter', () => select(i));
+    });
+    sectors.forEach((s, i) => s.addEventListener('pointerenter', () => select(i)));
+  });
+</script>
+
+<style>
+  .radar-wrap { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: var(--gap-grid); align-items: start; }
+  /* The radar card is always dark, like a screen, in both themes. */
+  .radar-card {
+    position: relative; aspect-ratio: 1 / 1.02; display: grid; place-items: center; padding: clamp(12px, 2vw, 28px);
+    background: radial-gradient(70% 60% at 50% 45%, #10141c, #05060a 75%); border-color: rgba(255, 255, 255, .08); color: #f4f5f7;
+  }
+  svg { width: 100%; height: auto; overflow: visible; }
+  .ring { fill: none; stroke: rgba(255, 255, 255, .08); stroke-dasharray: 2 5; }
+  .ring:last-of-type { stroke-dasharray: none; }
+  .spoke { stroke: rgba(255, 255, 255, .06); }
+  .wedge { fill: var(--g); opacity: 0; transition: opacity .35s; }
+  .arc { fill: none; stroke: var(--g); stroke-width: 3; stroke-linecap: round; opacity: .25; transition: opacity .35s; }
+  .glabel { font: 500 11px var(--font-mono); letter-spacing: .2em; fill: var(--g); opacity: .45; transition: opacity .35s; }
+  .halo { fill: var(--g); opacity: 0; transition: opacity .35s; }
+  .dot { fill: var(--g); opacity: .35; transition: opacity .35s; }
+  /* Names show for the active group only; other groups stay as dimmed dots so labels never collide. */
+  .sname { font: 500 14px var(--font-body); fill: #f4f5f7; opacity: 0; transition: opacity .35s; paint-order: stroke; stroke: #07080b; stroke-width: 4px; stroke-linejoin: round; }
+  .sector.on .wedge { opacity: .1; }
+  .sector.on .arc, .sector.on .glabel, .sector.on .dot, .sector.on .sname { opacity: 1; }
+  .sector.on .halo { opacity: .22; }
+  .core { fill: #0b0e14; stroke: rgba(61, 185, 255, .45); }
+  .core-n { font: 600 30px var(--font-display); fill: #f4f5f7; }
+  .core-l { font: 500 9px var(--font-mono); letter-spacing: .2em; fill: rgba(244, 245, 247, .55); }
+  .legend { position: absolute; bottom: 18px; left: 0; right: 0; text-align: center; color: rgba(244, 245, 247, .45); }
+
+  .radar-side { display: grid; gap: 10px; }
+  .groups { display: grid; gap: 8px; }
+  .group {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; width: 100%; text-align: left;
+    padding: 14px 18px; border-radius: var(--r-item); border: 1px solid var(--line); background: var(--surface); color: var(--text-2);
+    transition: border-color var(--t-fast), background var(--t-fast), color var(--t-fast);
+  }
+  .group:hover { color: var(--text); border-color: var(--line-2); }
+  .group.on { color: var(--text); border-color: color-mix(in srgb, var(--g) 55%, transparent); background: color-mix(in srgb, var(--g) 10%, var(--surface)); }
+  .group.on .label { color: var(--text-2); }
+  .gdot { width: 9px; height: 9px; border-radius: 50%; background: var(--g); box-shadow: 0 0 0 4px color-mix(in srgb, var(--g) 18%, transparent); }
+  .gname { font: 600 19px/1.2 var(--font-display); letter-spacing: -.02em; }
+  .detail { margin-top: 6px; }
+  .dhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .blurb { margin: 8px 0 18px; font-size: 15px; }
+  .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .bars li { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: baseline; }
+  .bname { font-weight: 500; font-size: 15px; }
+  .tier { color: var(--g); }
+  .segs { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; }
+  .segs i { height: 7px; border-radius: 2px; background: var(--surface-3); }
+  .segs i.f { background: var(--g); }
+  @media (max-width: 960px) { .radar-wrap { grid-template-columns: 1fr; } .groups { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
+  @media (max-width: 560px) { .sname { font-size: 18px; } .glabel { font-size: 15px; } }
+</style>

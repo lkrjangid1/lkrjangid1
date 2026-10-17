@@ -112,7 +112,8 @@ if (!reduced) {
     const ring = document.querySelector<HTMLElement>('.cursor-ring');
     const dot = document.querySelector<HTMLElement>('.cursor-dot');
     const label = document.querySelector<HTMLElement>('.cursor-label');
-    if (ring && dot && label) {
+    const tag = document.querySelector<HTMLElement>('.cursor-tag');
+    if (ring && dot && label && tag) {
       root.classList.add('has-cursor');
       let x = -100, y = -100, rx = -100, ry = -100;
       const LINK = 'a, button, summary, label, [role="button"], .fchip';
@@ -138,7 +139,7 @@ if (!reduced) {
       document.addEventListener('pointerenter', () => root.classList.remove('c-hide'));
       const loop = () => {
         rx += (x - rx) * 0.2; ry += (y - ry) * 0.2;
-        ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+        ring.style.transform = tag.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
         requestAnimationFrame(loop);
       };
       loop();

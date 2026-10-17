@@ -41,6 +41,9 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+        env:
+          # GitHub stats are fetched at build time; the token lifts the anonymous rate limit.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npm ci && npm test
         working-directory: portfolio/functions
       - name: Lighthouse budgets

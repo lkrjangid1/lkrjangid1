@@ -10,7 +10,7 @@ const isCurrent = (href: string) => current === href || current.startsWith(href 
 ---
 <header class="nav">
   <div class="nav-inner wrap">
-    <a href="/" class="logo" aria-label={`${site.name}, home`}>{site.handle}<span>.</span></a>
+    <a href="/" class="logo" aria-label={`${site.handle} — ${site.name}, home`}>{site.handle}<span>.</span></a>
 
     <nav class="nav-links" aria-label="Primary">
       {nav.map((item) => (

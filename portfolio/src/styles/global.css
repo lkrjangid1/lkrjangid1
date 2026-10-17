@@ -19,6 +19,19 @@
   /* Rhythm. */
   --gap-grid: 16px;
   --gap-head: 48px;
+  /* App icon elevation (same for every icon). */
+  --icon-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 8px 18px -8px rgba(0, 0, 0, .6);
+  --icon-ring: inset 0 0 0 1px rgba(255, 255, 255, .1);
+}
+:root[data-theme="light"] {
+  --icon-shadow: 0 1px 2px rgba(11, 12, 15, .1), 0 8px 18px -8px rgba(11, 12, 15, .28);
+  --icon-ring: inset 0 0 0 1px rgba(11, 12, 15, .08);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --icon-shadow: 0 1px 2px rgba(11, 12, 15, .1), 0 8px 18px -8px rgba(11, 12, 15, .28);
+    --icon-ring: inset 0 0 0 1px rgba(11, 12, 15, .08);
+  }
 }
 
 /* v1 token names still used by BenchmarkBars, CodeBlock and the contact form, mapped onto v2. */
@@ -87,28 +100,35 @@ main { flex: 1; }
 .rows > li > a:hover { color: var(--accent); padding-left: 12px; }
 
 /* ---------- Custom cursor (enabled by site.ts on fine pointers only) ----------
-   ring: follows with easing · dot: exact position
-   states on <html>: c-link (ring grows), c-label (filled disc with text), c-down (pressed), c-text (native I-beam), c-hide */
-.cursor { display: none; }
+   .cursor   ring (eased) + dot (exact), white with mix-blend-mode: difference ON THE LAYER ITSELF,
+             so it inverts against whatever is underneath: dark on light pages, light on dark ones.
+   .cursor-tag  separate normal-blend layer for the labelled accent disc.
+   states on <html>: c-link (ring grows), c-label (disc with text), c-down (pressed), c-text (native I-beam), c-hide */
+.cursor, .cursor-tag { display: none; }
 .has-cursor, .has-cursor a, .has-cursor button, .has-cursor summary, .has-cursor label { cursor: none; }
 .has-cursor input, .has-cursor textarea, .has-cursor select, .has-cursor [contenteditable] { cursor: text; }
-.has-cursor .cursor { display: block; position: fixed; inset: 0 auto auto 0; z-index: 9999; pointer-events: none; }
-.cursor-ring, .cursor-dot { position: fixed; top: 0; left: 0; border-radius: 50%; pointer-events: none; will-change: transform; }
+.has-cursor .cursor { display: block; position: fixed; inset: 0; z-index: 9999; pointer-events: none; mix-blend-mode: difference; }
+.has-cursor .cursor-tag { display: grid; place-items: center; position: fixed; top: 0; left: 0; z-index: 9998; pointer-events: none; will-change: transform; }
+.cursor-ring, .cursor-dot { position: fixed; top: 0; left: 0; border-radius: 50%; will-change: transform; }
 .cursor-ring {
-  width: 30px; height: 30px; margin: -15px 0 0 -15px; display: grid; place-items: center;
-  border: 1px solid rgba(255, 255, 255, .9); mix-blend-mode: difference;
-  transition: width .35s var(--ease-out), height .35s var(--ease-out), margin .35s var(--ease-out), background .25s, border-color .25s, opacity .25s, scale .2s var(--ease-out);
+  width: 32px; height: 32px; margin: -16px 0 0 -16px; border: 1.5px solid #fff;
+  transition: width .35s var(--ease-out), height .35s var(--ease-out), margin .35s var(--ease-out), background .25s, opacity .25s, scale .2s var(--ease-out);
 }
-.cursor-dot { width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; background: #fff; mix-blend-mode: difference; transition: opacity .2s, scale .2s; }
-.cursor-label { font: 600 12px/1 var(--font-body); letter-spacing: .02em; color: var(--accent-ink); white-space: nowrap; opacity: 0; scale: .6; transition: opacity .2s, scale .3s var(--ease-out); }
-.c-link .cursor-ring { width: 52px; height: 52px; margin: -26px 0 0 -26px; background: rgba(255, 255, 255, .06); }
+.cursor-dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: #fff; transition: opacity .2s, scale .2s; }
+.cursor-tag {
+  width: 88px; height: 88px; margin: -44px 0 0 -44px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 10px 40px -10px var(--accent);
+  opacity: 0; scale: .3; transition: opacity .25s, scale .35s var(--ease-out);
+}
+.cursor-label { font: 600 12px/1 var(--font-body); letter-spacing: .02em; color: var(--accent-ink); white-space: nowrap; }
+.c-link .cursor-ring { width: 56px; height: 56px; margin: -28px 0 0 -28px; background: #fff; }
 .c-link .cursor-dot { scale: 0; }
-.c-label .cursor-ring { width: 88px; height: 88px; margin: -44px 0 0 -44px; background: var(--accent); border-color: transparent; mix-blend-mode: normal; box-shadow: 0 10px 40px -10px var(--accent); }
-.c-label .cursor-label { opacity: 1; scale: 1; }
-.c-label .cursor-dot { scale: 0; }
-.c-down .cursor-ring { scale: .82; }
+.c-label .cursor-tag { opacity: 1; scale: 1; }
+.c-label .cursor-ring, .c-label .cursor-dot { opacity: 0; }
+.c-down .cursor-ring { scale: .8; }
+.c-down .cursor-tag { scale: .9; }
 .c-down .cursor-dot { scale: 1.6; }
-.c-text .cursor-ring, .c-text .cursor-dot, .c-hide .cursor-ring, .c-hide .cursor-dot { opacity: 0; }
+.c-text .cursor-ring, .c-text .cursor-dot, .c-hide .cursor-ring, .c-hide .cursor-dot, .c-hide .cursor-tag { opacity: 0; }
 
 /* Cycling device frames: only the first screen loads up front. Lazy images that aren't displayed
    aren't fetched, so the rest download once site.ts starts the cycle (after load, when visible). */

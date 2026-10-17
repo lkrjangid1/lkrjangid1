@@ -1,0 +1,77 @@
+---
+import { education, experience } from '../data/site';
+
+/** Career timeline: company and dates on the left, a rail with dots in the middle, role and wins on the right. */
+interface Props {
+  limit?: number;
+}
+const { limit = 6 } = Astro.props;
+
+const entries = [
+  ...experience.map((e) => ({ kind: 'Work', when: e.period, org: e.company.replace(/ Pvt\. Ltd\.| Communication/g, ''), place: e.place, title: e.role, now: e.current, points: e.points.slice(0, limit) })),
+  ...education.map((e) => ({ kind: 'Education', when: e.period, org: e.school.split(',')[0], place: e.school.split(',')[1]?.trim() ?? '', title: e.degree, now: false, points: [e.note] })),
+];
+const total = String(entries.length).padStart(2, '0');
+---
+<ol class="tl">
+  {entries.map((e, i) => (
+    <li class:list={['tl-row', { now: e.now, edu: e.kind === 'Education' }]} data-reveal>
+      <div class="tl-left">
+        <span class="label when">{e.when}</span>
+        <p class="org">{e.org}</p>
+        {e.place && <span class="label place"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.1 7-12a7 7 0 0 0-14 0c0 5.9 7 12 7 12Z" /><circle cx="12" cy="10" r="2.5" /></svg>{e.place}</span>}
+      </div>
+      <div class="tl-rail" aria-hidden="true"><span class="node"></span></div>
+      <div class="tl-right">
+        <p class="label idx">{String(i + 1).padStart(2, '0')} / {total}{e.now && <span class="nowpill">Now</span>}{e.kind === 'Education' && <span class="kind">Education</span>}</p>
+        <h3 class="role">{e.title}</h3>
+        <ul class="wins">{e.points.map((p) => <li>{p}</li>)}</ul>
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .tl { list-style: none; margin: 0; padding: 0; }
+  .tl-row { display: grid; grid-template-columns: minmax(0, 1fr) 64px minmax(0, 1.6fr); }
+  .tl-left { text-align: right; padding: 0 0 72px; }
+  .when { color: var(--accent); }
+  .org { font: 600 clamp(28px, 3.2vw, 44px)/1.05 var(--font-display); letter-spacing: -.035em; margin: 14px 0 12px; }
+  .now .org { color: var(--accent); }
+  .place { display: inline-flex; align-items: center; gap: 6px; }
+  .place svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+
+  .tl-rail { position: relative; display: flex; justify-content: center; }
+  .tl-rail::before { content: ''; position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line-2); }
+  .tl-row:first-child .tl-rail::before { top: 10px; background: linear-gradient(var(--accent), var(--line-2) 60%); }
+  .tl-row:last-child .tl-rail::before { bottom: auto; height: 12px; }
+  .node {
+    position: relative; z-index: 1; width: 22px; height: 22px; margin-top: 2px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--line-2); display: grid; place-items: center;
+  }
+  .node::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); }
+  .now .node { border-color: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); animation: node-pulse 2.4s var(--ease-in-out) infinite; }
+  .now .node::after { background: var(--accent); }
+  .edu .node { border-style: dashed; }
+  @keyframes node-pulse { 50% { box-shadow: 0 0 0 11px color-mix(in srgb, var(--accent) 6%, transparent); } }
+
+  .tl-right { padding: 0 0 72px; }
+  .idx { display: flex; align-items: center; gap: 10px; }
+  .nowpill, .kind { padding: 3px 9px; border-radius: var(--r-pill); font-size: 11px; }
+  .nowpill { color: var(--accent); background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+  .kind { border: 1px solid var(--line-2); }
+  .role { font: 600 clamp(26px, 2.8vw, 38px)/1.1 var(--font-display); letter-spacing: -.03em; margin: 14px 0 20px; }
+  .wins { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; color: var(--text-2); max-width: 760px; }
+  .wins li { display: grid; grid-template-columns: 28px 1fr; }
+  .wins li::before { content: ''; width: 16px; height: 1px; margin-top: .8em; background: var(--accent); }
+
+  @media (max-width: 760px) {
+    .tl-row { grid-template-columns: 28px minmax(0, 1fr); }
+    .tl-left { grid-column: 2; grid-row: 1; text-align: left; padding: 0 0 8px; }
+    .tl-rail { grid-column: 1; grid-row: 1 / span 2; justify-content: flex-start; }
+    .tl-rail::before { left: 10px; }
+    .tl-right { grid-column: 2; padding-bottom: 56px; }
+    .node { margin-left: 0; }
+    .org { margin: 8px 0; }
+  }
+</style>

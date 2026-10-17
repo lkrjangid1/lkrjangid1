@@ -97,7 +97,7 @@ export const shortNames: Record<string, string> = {
 };
 
 /** Projects whose screenshots are store graphics that already include a device frame. */
-export const framedShots = new Set(['searchly', 'remote-jobs']);
+export const framedShots = new Set(['searchly', 'remote-jobs', 'mbm-e-learning']);
 
 /** The "Now shipping" reel on the home page, in order. Copy and links come from projects.json. */
 export const reel = [
@@ -199,6 +199,57 @@ export const skills: { group: string; items: string[] }[] = [
   { group: 'Performance', items: ['Cold start', 'Memory leaks', 'Rendering', 'R8 / ProGuard', 'App size'] },
   { group: 'Delivery', items: ['CI/CD', 'GitHub Actions', 'OTA code push', 'Appium', 'Shell'] },
   { group: 'Native interop', items: ['JNI', 'package:jni', 'Objective-C runtime', 'JSI', 'libclang', 'Pigeon'] },
+];
+
+/**
+ * Skills radar. Level is a tier, not a percentage: 3 = core (daily, shipped at scale), 2 = strong
+ * (shipped in production), 1 = working knowledge. Tiers were drafted from résumé emphasis;
+ * TODO(Lokesh): adjust any that feel off.
+ */
+export type SkillLevel = 1 | 2 | 3;
+export const skillTiers: Record<SkillLevel, string> = { 3: 'Core', 2: 'Strong', 1: 'Working' };
+export const radar: { group: string; color: string; blurb: string; skills: { name: string; level: SkillLevel }[] }[] = [
+  {
+    group: 'Mobile', color: '#3db9ff', blurb: 'Flutter first, with native Android and iOS when the app needs it.',
+    skills: [
+      { name: 'Flutter', level: 3 }, { name: 'Dart', level: 3 }, { name: 'Kotlin · Compose', level: 2 },
+      { name: 'Swift · SwiftUI', level: 2 }, { name: 'Flutter Web · PWA', level: 2 }, { name: 'UIKit', level: 1 },
+    ],
+  },
+  {
+    group: 'Native interop', color: '#9a7cff', blurb: 'The layer under the app: bindings, channels and runtimes.',
+    skills: [
+      { name: 'JNI · package:jni', level: 3 }, { name: 'Pigeon · channels', level: 3 }, { name: 'Obj-C runtime', level: 2 },
+      { name: 'libclang', level: 2 }, { name: 'JSI · React Native', level: 1 },
+    ],
+  },
+  {
+    group: 'Fintech', color: '#2fb36e', blurb: 'Order flows, payments and live market data for 9M+ users.',
+    skills: [
+      { name: 'WebSockets', level: 3 }, { name: 'Juspay headless', level: 3 }, { name: 'BSE · UPI', level: 3 },
+      { name: 'Razorpay', level: 2 }, { name: 'RabbitMQ', level: 2 },
+    ],
+  },
+  {
+    group: 'Delivery', color: '#ff7a45', blurb: 'Shipping fast and safely: code push, CI and performance.',
+    skills: [
+      { name: 'OTA code push', level: 3 }, { name: 'Cold start · perf', level: 3 }, { name: 'GitHub Actions', level: 2 },
+      { name: 'R8 · Gradle', level: 2 }, { name: 'Appium', level: 1 },
+    ],
+  },
+  {
+    group: 'Backend & data', color: '#f4b63a', blurb: 'Enough backend to ship products end to end.',
+    skills: [
+      { name: 'Firebase', level: 3 }, { name: 'SQLite · Room', level: 2 }, { name: 'Python · FastAPI', level: 2 },
+      { name: 'NestJS', level: 1 }, { name: 'MongoDB', level: 1 },
+    ],
+  },
+  {
+    group: 'AI & IoT', color: '#ff4f81', blurb: 'Computer vision, LLM apps and hardware side projects.',
+    skills: [
+      { name: 'ESP32 · IoT', level: 2 }, { name: 'Gemini · LangChain', level: 1 }, { name: 'OpenCV', level: 1 }, { name: 'PaddleOCR', level: 1 },
+    ],
+  },
 ];
 
 export interface Post {

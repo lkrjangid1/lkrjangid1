@@ -8,9 +8,13 @@ import Icon from '../components/Icon.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Quote from '../components/Quote.astro';
 import ProductMarquee from '../components/ProductMarquee.astro';
+import SkillsRadar from '../components/SkillsRadar.astro';
+import Timeline from '../components/Timeline.astro';
+import GithubActivity from '../components/GithubActivity.astro';
+import { getGithubStats } from '../data/github';
 import portrait from '../assets/portrait.webp';
 import '../styles/home.css';
-import { experience, proof, shortNames, site, wins, writing } from '../data/site';
+import { experience, proof, radar, shortNames, site, wins, writing } from '../data/site';
 import { getWork, getAllPackages } from '../data/work';
 import { buildLineup, buildReel } from '../data/home';
 import { brand } from '../data/icons';
@@ -25,6 +29,8 @@ const lineup = buildLineup(projects);
 const packages = await getAllPackages();
 const articleCount = await getArticleCount();
 const recommendations = await getRecommendations();
+const github = await getGithubStats();
+const skillCount = radar.reduce((n, g) => n + g.skills.length, 0);
 
 const counts: Record<string, number> = { packages: packages.length, articles: articleCount };
 const stats = proof.map((s) => ({ ...s, value: 'key' in s ? counts[s.key] ?? s.value : s.value }));
@@ -254,6 +260,17 @@ const jsonLd = {
     </div>
   </section>
 
+  <!-- ============ GITHUB ============ -->
+  {github && (
+    <section id="github" class="wrap section" aria-labelledby="gh-h">
+      <SectionHead id="gh-h" label="GitHub · activity" title="Building" accent="in public."
+        lead="Pulled from GitHub at every build: a year of contributions, followers and public repositories.">
+        <a class="btn" href={github.url} rel="noopener" data-cursor="GitHub">@{github.user} ↗</a>
+      </SectionHead>
+      <GithubActivity stats={github} />
+    </section>
+  )}
+
   <!-- ============ WRITING ============ -->
   <section id="writing" class="wrap section" aria-labelledby="writing-h">
     <SectionHead id="writing-h" label="Writing · FlutDev" title={`${articleCount} articles.`} accent="One rabbit hole at a time.">
@@ -284,36 +301,24 @@ const jsonLd = {
     </section>
   )}
 
+  <!-- ============ SKILLS ============ -->
+  <section id="skills" class="wrap section" aria-labelledby="skills-h">
+    <SectionHead id="skills-h" label="Skills" title="The stack behind" accent="the products."
+      lead={`${skillCount} tools in ${radar.length} groups. The closer to the core, the more I use it. Hover a group to light up its sector.`} />
+    <SkillsRadar />
+  </section>
+
   <!-- ============ EXPERIENCE ============ -->
   <section id="about" class="wrap section" aria-labelledby="about-h">
-    <SectionHead id="about-h" label="Experience" title="I like the layer" accent="under the app." lead={site.bio[1]}>
+    <SectionHead id="about-h" label="Experience" title="Where I've" accent="built."
+      lead="From an early engineer at an EdTech startup to trading, payments and platform tooling at a 9M+ user fintech.">
+      <div class="pills"><span class="chip">{experience.length} roles</span><span class="chip">Since Feb 2021</span></div>
       <div class="btns">
         <a class="btn" href="/about">More about me →</a>
         <a class="btn" href={site.resume} download data-cursor="PDF">Résumé <Icon name="download" size={14} /></a>
       </div>
     </SectionHead>
-    <ol class="ui-grid xp" data-reveal>
-      {experience.map((e) => (
-        <li class="ui-card hoverable">
-          <span class="label">{e.period}{e.current && <span class="now"><span class="dot pulse"></span>Now</span>}</span>
-          <h3 class="h3">{e.role}</h3>
-          <p class="company">{e.company.replace(/ Pvt\. Ltd\.| Communication/g, '')} · {e.place}</p>
-          <p class="muted">{e.summary}</p>
-        </li>
-      ))}
-      <li class="ui-card hoverable">
-        <span class="label">Open source</span>
-        <h3 class="h3">Platform tooling</h3>
-        <p class="company">native-api-bindgen · PushPatch</p>
-        <p class="muted">{packages.length} pub.dev packages and a self-hosted code-push platform.</p>
-      </li>
-      <li class="ui-card hoverable">
-        <span class="label">2019 – 2023</span>
-        <h3 class="h3">B.E. Electrical</h3>
-        <p class="company">MBM University · Jodhpur</p>
-        <p class="muted">Raksha won SSIP funding at IIIT Surat; Hacktoberfest 2020 and 2021.</p>
-      </li>
-    </ol>
+    <Timeline limit={4} />
   </section>
 
   <!-- ============ CONTACT ============ -->
