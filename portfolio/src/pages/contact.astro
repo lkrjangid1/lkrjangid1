@@ -12,7 +12,7 @@ import { site } from '../data/site';
     </header>
 
     <div class="contact-grid">
-    <form id="contact" class="ui-card lg form" action="/api/contact" method="post" novalidate>
+    <form id="contact" class="ui-card lg form" data-email={site.email} action="/api/contact" method="post" novalidate>
       <div class="field">
         <label for="name">Name</label>
         <input id="name" name="name" autocomplete="name" required maxlength="100" aria-describedby="name-err" />
@@ -129,14 +129,20 @@ import { site } from '../data/site';
       if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
       form.reset();
       setStatus("Thanks — message sent. I'll reply within 2 days.", 'ok');
-    } catch (err) {
-      const offline = !navigator.onLine || err instanceof TypeError;
-      setStatus(
-        offline
-          ? "Couldn't reach the server. Check your connection and try again."
-          : `Couldn't send: ${(err as Error).message}. Try again or reach me on LinkedIn.`,
-        'error',
-      );
+    } catch {
+      if (!navigator.onLine) {
+        setStatus("You're offline. Check your connection and try again.", 'error');
+      } else {
+        // Server unavailable: hand the message to the visitor's mail app so nothing they typed is lost.
+        const v = (n: string) => (form.elements.namedItem(n) as HTMLInputElement).value.trim();
+        const mail = `mailto:${form.dataset.email}?subject=${encodeURIComponent(`Portfolio: message from ${v('name')}`)}&body=${encodeURIComponent(`${v('message')}\n\n— ${v('name')} <${v('email')}>`)}`;
+        setStatus("The form couldn't send just now. ", 'error');
+        const a = document.createElement('a');
+        a.href = mail;
+        a.textContent = 'Send it by email instead →';
+        a.className = 'link';
+        status.append(a);
+      }
     } finally {
       send.disabled = false;
     }
