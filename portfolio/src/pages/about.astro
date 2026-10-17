@@ -12,7 +12,8 @@ import { getRecommendations } from '../data/recommendations';
 
 const recommendations = await getRecommendations();
 ---
-<Base title="About" current="/about" ogSlug="about" description={site.bio.join(' ')}>
+<Base rawTitle="About Lokesh Jangid · Senior Mobile Engineer, Gurgaon" current="/about" ogSlug="about" ogType="profile" pageType="ProfilePage"
+  description="Lokesh Jangid is a Senior Mobile Engineer in Gurgaon with 4+ years shipping Flutter, Android and iOS apps: experience, education, skills and recommendations.">
   <div class="wrap">
     <header class="page-head about-head">
       <div class="page-glow" aria-hidden="true"></div>

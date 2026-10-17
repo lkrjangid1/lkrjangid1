@@ -7,7 +7,14 @@ export default defineConfig({
   trailingSlash: 'never',
   // Inline CSS so first paint needs no extra requests (CSP already allows inline styles).
   build: { format: 'file', inlineStylesheets: 'always' },
-  integrations: [mdx(), sitemap({ filter: (page) => !page.includes('/404') })],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !page.includes('/404'),
+      // lastmod = build date: the site rebuilds daily from projects.json and live stats.
+      serialize: (item) => ({ ...item, lastmod: new Date().toISOString() }),
+    }),
+  ],
   image: {
     domains: ['raw.githubusercontent.com'],
   },

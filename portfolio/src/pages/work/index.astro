@@ -7,18 +7,27 @@ import { categoryLabels } from '../../data/site';
 import { getWork } from '../../data/work';
 import { sortedRepos, statusLabels } from '../../data/repos';
 import { shotSrc } from '../../data/shots';
+import { site } from '../../data/site';
 
 const { projects } = await getWork();
 
 const repoCategory = (status: string) => (status === 'learning' ? 'learning' : status === 'flagship' ? 'tooling' : 'open-source');
 const categories = [...new Set([...projects.map((p) => p.category), ...sortedRepos.map((r) => repoCategory(r.status))])];
 const total = projects.length + sortedRepos.length;
+const listLd = {
+  '@type': 'ItemList',
+  name: 'Projects by Lokesh Jangid',
+  numberOfItems: projects.length,
+  itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${site.url}/work/${p.slug}`, name: p.name })),
+};
 ---
 <Base
-  title="Work"
+  title="Projects: Flutter, Android & iOS apps"
   current="/work"
   ogSlug="work"
-  description={`${total} projects by Lokesh Jangid: fintech apps at Univest, Flutter tooling, indie apps with 600K+ downloads, and open-source experiments.`}
+  pageType="CollectionPage"
+  jsonLd={listLd}
+  description={`${total} projects by Lokesh Jangid: fintech apps at Univest, the Scalper trading terminal, Libgen (600K+ downloads), Flutter tooling and open source.`}
 >
   <div class="wrap">
     <header class="page-head">

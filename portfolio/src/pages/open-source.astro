@@ -7,17 +7,29 @@ import { getAllPackages } from '../data/work';
 import { isBindgenFamily } from '../data/packages';
 import { sortedRepos, statusLabels } from '../data/repos';
 import { site } from '../data/site';
+import { ids } from '../data/seo';
 
 const packages = await getAllPackages();
 const family = packages.filter((p) => isBindgenFamily(p.name));
 const standalone = packages.filter((p) => !isBindgenFamily(p.name));
 const cli = packages.find((p) => p.name === 'native_api_bindgen');
+const listLd = {
+  '@type': 'ItemList',
+  name: 'pub.dev packages by Lokesh Jangid',
+  numberOfItems: packages.length,
+  itemListElement: packages.map((p, i) => ({
+    '@type': 'ListItem', position: i + 1,
+    item: { '@type': 'SoftwareSourceCode', name: p.name, description: p.description, url: p.url, programmingLanguage: 'Dart', codeRepository: p.url, author: { '@id': ids.person } },
+  })),
+};
 ---
 <Base
-  title="Open source"
+  title={`Open source: ${packages.length} Flutter & Dart packages`}
   current="/open-source"
   ogSlug="open-source"
-  description={`${packages.length} pub.dev packages and open-source repos by Lokesh Jangid, including the native-api-bindgen toolchain.`}
+  pageType="CollectionPage"
+  jsonLd={listLd}
+  description={`${packages.length} Flutter and Dart packages on pub.dev by Lokesh Jangid, the native-api-bindgen toolchain, GitHub repos and Hacktoberfest contributions.`}
 >
   <div class="wrap">
     <header class="page-head">

@@ -71,23 +71,10 @@ const terminal = [
   '<span class="p">$</span> <span class="caret"></span>',
 ];
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: site.name,
-  url: site.url,
-  image: new URL('/og/home.png', site.url).href,
-  jobTitle: site.role,
-  email: `mailto:${site.email}`,
-  address: { '@type': 'PostalAddress', addressLocality: 'Gurgaon', addressCountry: 'IN' },
-  worksFor: { '@type': 'Organization', name: 'Univest' },
-  alumniOf: [{ '@type': 'CollegeOrUniversity', name: 'MBM University' }],
-  description: site.description,
-  knowsAbout: ['Flutter', 'Dart', 'Kotlin', 'Swift', 'Android', 'iOS', 'JNI', 'Code push'],
-  sameAs: Object.values(site.links),
-};
+
 ---
-<Base current="/" jsonLd={jsonLd}>
+<Base current="/" rawTitle="Lokesh Jangid — Senior Flutter & Mobile Engineer" ogType="profile" pageType="ProfilePage"
+  description="Lokesh Jangid, Senior Mobile Engineer at Univest. Flutter, Android and iOS apps for 9M+ users, plus native-api-bindgen, PushPatch and open-source Flutter packages.">
   <!-- ============ HERO ============ -->
   <section class="hero" aria-labelledby="hero-name">
     <div class="hero-glow" aria-hidden="true"></div>

@@ -10,6 +10,7 @@ import { categoryLabels, framedShots, site } from '../../data/site';
 import { shotSrc } from '../../data/shots';
 import { brand } from '../../data/icons';
 import SectionHead from '../../components/SectionHead.astro';
+import { ids } from '../../data/seo';
 
 export async function getStaticPaths() {
   const { projects, caseStudies } = await getWork();
@@ -20,7 +21,13 @@ export async function getStaticPaths() {
   }
   // Case studies first (in their configured order), then the remaining projects.
   items.sort((a, b) => (a.study?.data.order ?? 99) - (b.study?.data.order ?? 99));
-  return items.map((item, i) => ({ params: { slug: item.slug }, props: { ...item, next: items[(i + 1) % items.length] } }));
+  const related = (item: (typeof items)[number]) => {
+    const cat = item.project?.category;
+    const others = projects.filter((p) => p.slug !== item.slug);
+    return [...others.filter((p) => p.category === cat), ...others.filter((p) => p.category !== cat)]
+      .slice(0, 3).map((p) => ({ slug: p.slug, name: p.name, subtitle: p.subtitle }));
+  };
+  return items.map((item, i) => ({ params: { slug: item.slug }, props: { ...item, next: items[(i + 1) % items.length], related: related(item) } }));
 }
 
 interface Item {
@@ -28,9 +35,9 @@ interface Item {
   project?: Project;
   study?: CaseStudy;
 }
-type Props = Item & { next: Item };
+type Props = Item & { next: Item; related: { slug: string; name: string; subtitle: string }[] };
 
-const { slug, project, study, next } = Astro.props;
+const { slug, project, study, next, related } = Astro.props;
 const Content = study ? (await render(study)).Content : undefined;
 
 const name = study?.data.title ?? project!.name;
@@ -52,18 +59,40 @@ const blocks = study
     ]
   : [];
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': study?.data.repo ? 'SoftwareSourceCode' : 'CreativeWork',
-  name,
-  headline,
-  description: summary,
-  author: { '@type': 'Person', name: site.name, url: site.url },
-  url: new URL(`/work/${slug}`, site.url).href,
-  ...(study?.data.repo ? { codeRepository: study.data.repo, programmingLanguage: stack } : { keywords: stack.join(', ') }),
+// Schema: apps with store listings are applications; code-first projects are source code; the rest creative works.
+const storeOs: [RegExp, string][] = [[/play store|google play/i, 'Android'], [/(?<!mac )app store/i, 'iOS'], [/mac app store/i, 'macOS'], [/chrome web store/i, 'Chrome']];
+const platforms = [...new Set(links.flatMap((l) => storeOs.filter(([re]) => re.test(l.label)).map(([, os]) => os)))];
+const appCategory: Record<string, string> = {
+  univest: 'FinanceApplication', scalper: 'FinanceApplication', 'finsight-ai': 'FinanceApplication', 'oi-visualizer': 'FinanceApplication',
+  libgen: 'ReferenceApplication', searchly: 'UtilitiesApplication', 'remote-jobs': 'BusinessApplication', 'mbm-e-learning': 'EducationalApplication',
+  'incognito-vault': 'UtilitiesApplication', pushpatch: 'DeveloperApplication',
 };
+const pageUrl = new URL(`/work/${slug}`, site.url).href;
+const repo = study?.data.repo ?? links.find((l) => /github\.com/.test(l.url))?.url;
+const common = { '@id': `${pageUrl}#project`, name, description: summary, url: pageUrl, author: { '@id': ids.person }, keywords: stack.join(', ') };
+const jsonLd = platforms.length
+  ? {
+      '@type': platforms.every((p) => p === 'Android' || p === 'iOS') ? 'MobileApplication' : 'SoftwareApplication',
+      ...common,
+      operatingSystem: platforms.join(', '),
+      applicationCategory: appCategory[slug] ?? 'UtilitiesApplication',
+      offers: { '@type': 'Offer', price: 0, priceCurrency: 'INR' },
+      sameAs: links.map((l) => l.url),
+    }
+  : repo
+    ? { '@type': 'SoftwareSourceCode', ...common, codeRepository: repo, programmingLanguage: stack }
+    : { '@type': 'CreativeWork', ...common, ...(links.length ? { sameAs: links.map((l) => l.url) } : {}) };
+
+const facts = [
+  role && { k: 'Role', v: role },
+  stack.length > 0 && { k: 'Stack', v: stack.join(', ') },
+  platforms.length > 0 && { k: 'Available on', v: platforms.join(' · ') },
+  metrics.length > 0 && { k: 'Impact', v: metrics.join(' · ') },
+  study?.data.year && { k: 'Year', v: study.data.year },
+].filter(Boolean) as { k: string; v: string }[];
 ---
-<Base title={name} current="/work" ogSlug={`work-${slug}`} description={`${name}: ${headline}. ${summary}`.slice(0, 300)} jsonLd={jsonLd}>
+<Base title={project?.subtitle || headline ? `${name} — ${project?.subtitle || headline}` : name} current="/work" ogSlug={`work-${slug}`} crumbs={{ [slug]: name }}
+  description={[`${name}: ${summary}`, stack.length ? `Built with ${stack.slice(0, 4).join(', ')}.` : '', metrics.join(' · ')].filter(Boolean).join(' ')} jsonLd={jsonLd} ogType={platforms.length ? 'website' : 'article'}>
   <article class="wrap" style={`--app:${brand(slug, name).accent}`}>
     <header class:list={['page-head', 'hero', { 'with-visual': shots.length > 0 }]}>
       <div class="app-glow" aria-hidden="true"></div>
@@ -112,6 +141,15 @@ const jsonLd = {
       </section>
     )}
 
+    {facts.length > 0 && (
+      <section class="section" aria-labelledby="glance-h">
+        <SectionHead id="glance-h" size="sub" label="At a glance" title="Project facts" split={false} />
+        <dl class="ui-card lg glance" data-reveal>
+          {facts.map((f) => <div><dt class="label">{f.k}</dt><dd>{f.v}</dd></div>)}
+        </dl>
+      </section>
+    )}
+
     {points.length > 0 && (
       <section class="section" aria-labelledby="built-h">
         <SectionHead id="built-h" size="sub" label="What I built" title="Highlights" />
@@ -131,6 +169,20 @@ const jsonLd = {
         <div class:list={['gallery', { portrait }]} tabindex="0" role="region" aria-label={`${name} screenshots, scrollable`} data-cursor="Drag">
           {shots.map((s, i) => <Shot src={s} alt={`${name} screenshot ${i + 1}`} width={portrait ? 520 : 1200} />)}
         </div>
+      </section>
+    )}
+
+    {related.length > 0 && (
+      <section class="section" aria-labelledby="more-h">
+        <SectionHead id="more-h" size="sub" label="Keep exploring" title="More projects" split={false} />
+        <ul class="ui-grid more">
+          {related.map((r) => (
+            <li><a class="ui-card hoverable glow rel" href={`/work/${r.slug}`} style={`--app:${brand(r.slug, r.name).accent}`} data-cursor="Open">
+              <AppIcon slug={r.slug} name={r.name} size={40} />
+              <span><b>{r.name}</b>{r.subtitle && <span class="muted">{r.subtitle}</span>}</span>
+            </a></li>
+          ))}
+        </ul>
       </section>
     )}
 
@@ -165,6 +217,14 @@ const jsonLd = {
   .block .h3 { margin: 12px 0 8px; }
 
   .narrow { max-width: 820px; }
+  .glance { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px 32px; margin: 0; }
+  .glance dt { margin-bottom: 6px; }
+  .glance dd { margin: 0; color: var(--text); font-size: 16px; line-height: 1.5; }
+  .more { list-style: none; margin: 0; padding: 0; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .rel { display: flex; align-items: center; gap: 14px; }
+  .rel b { display: block; font-weight: 500; }
+  .rel .muted { display: block; font-size: 14px; }
+  @media (max-width: 900px) { .more { grid-template-columns: 1fr; } }
   .points { margin: 0; padding-left: calc(var(--pad-lg) + 20px); color: var(--text-2); font-size: 18px; max-width: 980px; }
   .points li + li { margin-top: 12px; }
   .points li::marker { color: var(--app); }

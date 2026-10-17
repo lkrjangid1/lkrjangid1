@@ -11,22 +11,59 @@ import bodyFont from '@fontsource/inter/files/inter-latin-400-normal.woff2?url';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
+import { breadcrumbs, clamp, ids, pageTitle, personNode, websiteNode } from '../data/seo';
 
 interface Props {
+  /** Page part of the title; " · Lokesh Jangid" is appended and the whole fitted to 60 chars. */
   title?: string;
+  /** Full title used as-is (home, about). */
+  rawTitle?: string;
   description?: string;
   current?: string;
   ogSlug?: string;
+  ogType?: 'website' | 'profile' | 'article';
+  /** schema.org type of this page: WebPage, ProfilePage, CollectionPage, ContactPage… */
+  pageType?: string;
+  /** Readable names for breadcrumb path segments (slug → name). */
+  crumbs?: Record<string, string>;
+  /** Extra page-specific schema.org nodes, merged into the shared @graph. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
 }
 
-const { title, description = site.description, current = '', ogSlug = 'home', jsonLd, noindex = false } = Astro.props;
-const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+const {
+  title, rawTitle, description = site.description, current = '', ogSlug = 'home', ogType = 'website',
+  pageType = 'WebPage', crumbs = {}, jsonLd, noindex = false,
+} = Astro.props;
+const fullTitle = rawTitle ?? (title ? pageTitle(title) : `${site.name} — ${site.role}`);
+const desc = clamp(description, 155);
 // build.format 'file' makes pathname end in .html; Firebase serves clean URLs, so canonicalize to those.
 const cleanPath = Astro.url.pathname.replace(/\.html$/, '').replace(/\/index$/, '').replace(/\/$/, '') || '/';
 const canonical = new URL(cleanPath, site.url).href;
 const ogImage = new URL(`/og/${ogSlug}.png`, site.url).href;
+
+const crumbList = breadcrumbs(cleanPath, { work: 'Work', 'open-source': 'Open source', writing: 'Writing', about: 'About', contact: 'Contact', ...crumbs });
+const graph = noindex ? null : {
+  '@context': 'https://schema.org',
+  '@graph': [
+    websiteNode,
+    personNode,
+    {
+      '@type': pageType,
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: fullTitle,
+      description: desc,
+      isPartOf: { '@id': ids.website },
+      about: { '@id': ids.person },
+      primaryImageOfPage: { '@type': 'ImageObject', url: ogImage, width: 1200, height: 630 },
+      inLanguage: 'en',
+      ...(pageType === 'ProfilePage' ? { mainEntity: { '@id': ids.person } } : {}),
+      ...(crumbList ? { breadcrumb: crumbList } : {}),
+    },
+    ...[jsonLd ?? []].flat(),
+  ],
+};
 ---
 <!doctype html>
 <html lang="en">
@@ -37,9 +74,12 @@ const ogImage = new URL(`/og/${ogSlug}.png`, site.url).href;
     <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
     <title>{fullTitle}</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={desc} />
+    <meta name="author" content={site.name} />
     <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="robots" content={noindex ? 'noindex' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+    <link rel="me" href={site.links.github} />
+    <link rel="me" href={site.links.linkedin} />
     <meta name="theme-color" content="#07080b" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#fafaf8" media="(prefers-color-scheme: light)" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -47,20 +87,25 @@ const ogImage = new URL(`/og/${ogSlug}.png`, site.url).href;
     <link rel="alternate" type="application/rss+xml" title={`${site.name} — writing`} href="/rss.xml" />
     <slot name="head" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_IN" />
     <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={desc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
+    {ogType === 'profile' && <><meta property="profile:first_name" content={site.first} /><meta property="profile:last_name" content={site.last} /></>}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lkrjangid" />
+    <meta name="twitter:creator" content="@lkrjangid" />
     <meta name="twitter:title" content={fullTitle} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content={ogImage} />
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    <meta name="twitter:image:alt" content={fullTitle} />
+    {graph && <script type="application/ld+json" set:html={JSON.stringify(graph)} />}
   </head>
   <body id="top">
     <div class="grain" aria-hidden="true"></div>
