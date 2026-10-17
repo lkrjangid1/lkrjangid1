@@ -37,3 +37,9 @@ All other project screenshots still load from `projects.json` (`screen_shots/` i
 | File | Source |
 |---|---|
 | `public/resume.pdf` | Weebly upload `lkrjangid_multi.pdf` (3 pages) |
+
+## Open-source contributions (`oss/`)
+| File | Size | Source |
+|---|---|---|
+| `hacktoberfest-2020-2021.webp` | 1067×800, 102 KB | Weebly upload `chatgpt-image-aug-2-2026-09-54-24-am_orig.png` (designed graphic of 2020 and 2021 swag) |
+| `holopin-board.webp` | 2428×764, 102 KB | https://holopin.me/lkrjangid, captured Oct 17, 2026 with 6 badges. Re-download it when new badges arrive. |
