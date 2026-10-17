@@ -12,12 +12,12 @@ interface Props {
 
 const { slug, name = slug, size = 56, class: className, label = false } = Astro.props;
 const b = brand(slug, name);
-// Logos without their own tile get a white squircle with padding.
-const padded = slug === 'pushpatch';
+// Bare logo marks (no tile of their own) sit inset on their configured tile colour.
+const padded = !!(b.icon && b.tile);
 ---
 <span
   class:list={['app-icon', className, { 'has-img': b.icon, padded }]}
-  style={`--app:${b.accent};--size:${size}px`}
+  style={`--app:${b.accent};--size:${size}px${padded ? `;--tile:${b.tile}` : ''}`}
   role={label ? 'img' : undefined}
   aria-label={label ? name : undefined}
   aria-hidden={label ? undefined : 'true'}
@@ -33,6 +33,6 @@ const padded = slug === 'pushpatch';
   .has-img { background: transparent; overflow: hidden; }
   .has-img :global(img) { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
   /* Padding from the icon size, not %, which would resolve against the parent's width. */
-  .padded { background: #fff; padding: calc(var(--size) * .16); }
+  .padded { background: var(--tile); padding: calc(var(--size) * .16); }
   .padded :global(img) { object-fit: contain; border-radius: 0; }
 </style>

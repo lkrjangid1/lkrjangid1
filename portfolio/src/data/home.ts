@@ -1,6 +1,6 @@
 import type { ImageMetadata } from 'astro';
 import type { Link, Project } from './projects';
-import { framedShots, reel, shortNames, type ReelVisual } from './site';
+import { framedShots, hiddenOnHome, reel, shortNames, type ReelVisual } from './site';
 import { repos } from './repos';
 import { shotSrc } from './shots';
 
@@ -67,7 +67,7 @@ export function buildReel(projects: Project[]): ReelItem[] {
 /** Every project not in the reel, as a bento tile shaped by its screenshots. */
 export function buildLineup(projects: Project[]): Tile[] {
   const inReel = new Set<string>(reel.map((r) => r.slug));
-  return projects.filter((p) => !inReel.has(p.slug)).map((p) => {
+  return projects.filter((p) => !inReel.has(p.slug) && !hiddenOnHome.has(p.slug)).map((p) => {
     const shots = p.screenshots.map(shotSrc);
     const layout = shots.length === 0 ? 'text' : !isPortrait(shots[0]) ? 'image' : framedShots.has(p.slug) ? 'posters' : 'phones';
     return {

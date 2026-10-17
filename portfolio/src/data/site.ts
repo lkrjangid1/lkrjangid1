@@ -69,12 +69,13 @@ export const wins = [
 ] as const;
 
 /** Per-product presentation: brand accent, icon file in src/assets/icons, monogram fallback. */
-export const appMeta: Record<string, { accent: string; icon?: string; mono: string }> = {
+/** `tile`: background for logos that are a bare mark (no tile of their own); the logo is inset on it. */
+export const appMeta: Record<string, { accent: string; icon?: string; mono: string; tile?: string }> = {
   univest: { accent: '#2fb36e', icon: 'univest', mono: 'U' },
   scalper: { accent: '#f4b63a', icon: 'scalper', mono: 'S' },
   'self-hosted-code-push': { accent: '#ff7a45', mono: 'CP' },
-  pushpatch: { accent: '#4c7dff', icon: 'pushpatch', mono: 'P' },
-  'native-api-bindgen': { accent: '#3db9ff', mono: 'nb' },
+  pushpatch: { accent: '#4c7dff', icon: 'pushpatch', mono: 'P', tile: '#ffffff' },
+  'native-api-bindgen': { accent: '#6f8ff8', icon: 'native-api-bindgen', mono: 'nb', tile: '#0d1018' },
   'incognito-vault': { accent: '#5fd3a8', icon: 'incognito-vault', mono: 'iV' },
   'finsight-ai': { accent: '#2fb36e', mono: 'Fi' },
   'oi-visualizer': { accent: '#19c3b4', mono: 'OI' },
@@ -95,6 +96,9 @@ export const shortNames: Record<string, string> = {
   'research-assistant': 'AI research assistant',
   'greenhouse-monitoring-control': 'Greenhouse IoT',
 };
+
+/** Projects left off the home page (lineup, marquee, dock). They keep their page and stay on /work. */
+export const hiddenOnHome = new Set(['self-hosted-code-push']);
 
 /** Projects whose screenshots are store graphics that already include a device frame. */
 export const framedShots = new Set(['searchly', 'remote-jobs', 'mbm-e-learning']);
