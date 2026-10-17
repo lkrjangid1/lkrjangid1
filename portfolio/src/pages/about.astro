@@ -7,13 +7,14 @@ import Quote from '../components/Quote.astro';
 import Timeline from '../components/Timeline.astro';
 import SkillsRadar from '../components/SkillsRadar.astro';
 import portrait from '../assets/portrait.webp';
-import { achievements, experience, site } from '../data/site';
+import { achievements, experience, services, site } from '../data/site';
 import { getRecommendations } from '../data/recommendations';
 
 const recommendations = await getRecommendations();
 ---
-<Base rawTitle="About Lokesh Jangid · Senior Mobile Engineer, Gurgaon" current="/about" ogSlug="about" ogType="profile" pageType="ProfilePage"
-  description="Lokesh Jangid is a Senior Mobile Engineer in Gurgaon with 4+ years shipping Flutter, Android and iOS apps: experience, education, skills and recommendations.">
+<Base rawTitle="About Lokesh Jangid · Flutter, Android & iOS Developer" current="/about" ogSlug="about" ogType="profile" pageType="ProfilePage"
+  keywords={['Flutter developer Gurgaon', 'Flutter developer Gurugram', 'Android developer', 'iOS developer', 'software engineer résumé', 'remote Flutter developer']}
+  description="Lokesh Jangid is a Senior Flutter developer in Gurugram, India with 4+ years shipping Flutter, Android and iOS apps. Experience, skills, résumé and references.">
   <div class="wrap">
     <header class="page-head about-head">
       <div class="page-glow" aria-hidden="true"></div>
@@ -27,7 +28,7 @@ const recommendations = await getRecommendations();
         </div>
       </div>
       <figure class="photo">
-        <Image src={portrait} alt={`Portrait of ${site.name}`} width={640} format="webp" quality={84} loading="eager" />
+        <Image src={portrait} alt={`${site.name}, Flutter developer in Gurugram, India`} width={640} format="webp" quality={84} loading="eager" />
         <figcaption class="label">{site.location} · <time data-clock={site.timezone}>—</time> IST</figcaption>
       </figure>
     </header>
@@ -35,6 +36,14 @@ const recommendations = await getRecommendations();
     <section class="section" aria-labelledby="xp-h">
       <SectionHead id="xp-h" size="sub" label={`Experience · ${experience.length} roles · since Feb 2021`} title="Where I've built." />
       <Timeline />
+    </section>
+
+    <section class="section" aria-labelledby="do-h">
+      <SectionHead id="do-h" size="sub" label="What I do · remote from India" title="Flutter, Android and iOS," accent="end to end." split={false} />
+      <ul class="do" data-reveal>
+        {services.map((s) => <li class="ui-card"><h3 class="h4">{s.title}</h3><p class="muted">{s.short}</p></li>)}
+      </ul>
+      <p class="muted do-more">Hiring, or need a hand on one of these? <a class="link" href="/contact">See how I work and get in touch →</a></p>
     </section>
 
     <section class="section" aria-labelledby="ach-h">
@@ -74,6 +83,10 @@ const recommendations = await getRecommendations();
 
 
   .quotes { columns: 2 340px; column-gap: var(--gap-grid); }
+  .do { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: var(--gap-grid); }
+  .do h3 { margin: 0 0 6px; }
+  .do p { margin: 0; }
+  .do-more { margin-top: 20px; }
 
   @media (max-width: 900px) {
     .about-head, .split { grid-template-columns: 1fr; }

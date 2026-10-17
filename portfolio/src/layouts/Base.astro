@@ -29,11 +29,13 @@ interface Props {
   /** Extra page-specific schema.org nodes, merged into the shared @graph. */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
+  /** Supporting search phrases for this page (meta keywords; Bing reads it, Google ignores it). */
+  keywords?: string[];
 }
 
 const {
   title, rawTitle, description = site.description, current = '', ogSlug = 'home', ogType = 'website',
-  pageType = 'WebPage', crumbs = {}, jsonLd, noindex = false,
+  pageType = 'WebPage', crumbs = {}, jsonLd, noindex = false, keywords = [],
 } = Astro.props;
 const fullTitle = rawTitle ?? (title ? pageTitle(title) : `${site.name} — ${site.role}`);
 const desc = clamp(description, 155);
@@ -76,6 +78,8 @@ const graph = noindex ? null : {
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
     <meta name="author" content={site.name} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(', ')} />}
+    <meta name="google-site-verification" content="Bw5_BS8q9GGMSX_JCouSwaPHmNi-zUr1rnStY9cnjMA" />
     <link rel="canonical" href={canonical} />
     <meta name="robots" content={noindex ? 'noindex' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
     <link rel="me" href={site.links.github} />

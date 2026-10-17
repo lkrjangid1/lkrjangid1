@@ -73,8 +73,9 @@ const terminal = [
 
 
 ---
-<Base current="/" rawTitle="Lokesh Jangid — Senior Flutter & Mobile Engineer" ogType="profile" pageType="ProfilePage"
-  description="Lokesh Jangid, Senior Mobile Engineer at Univest. Flutter, Android and iOS apps for 9M+ users, plus native-api-bindgen, PushPatch and open-source Flutter packages.">
+<Base current="/" rawTitle="Lokesh Jangid · Senior Flutter Developer in India" ogType="profile" pageType="ProfilePage"
+  keywords={['Flutter developer', 'Senior Flutter developer', 'Flutter app developer India', 'mobile app developer', 'Android developer', 'iOS developer', 'software developer', 'hire Flutter developer', 'Lokesh Jangid']}
+  description="Lokesh Jangid, Senior Flutter developer in India: Flutter, Android and iOS apps for 9M+ users at Univest, 24 pub.dev packages and OTA code push. Hire me.">
   <!-- ============ HERO ============ -->
   <section class="hero" aria-labelledby="hero-name">
     <div class="hero-glow" aria-hidden="true"></div>
@@ -88,8 +89,8 @@ const terminal = [
     </div>
 
     <div class="hero-stage">
-      <Image class="portrait" src={portrait} alt={`Portrait of ${site.name}`} width={900} loading="eager" fetchpriority="high" format="webp" quality={84} />
-      <h1 id="hero-name" class="display name" data-split-chars>{site.name}</h1>
+      <Image class="portrait" src={portrait} alt={`${site.name}, Senior Flutter developer in India`} width={900} loading="eager" fetchpriority="high" format="webp" quality={84} />
+      <h1 id="hero-name" class="display name"><span class="hero-role">{site.role} · Android &amp; iOS · India</span>{site.name}</h1>
     </div>
 
     <div class="wrap hero-bottom">
@@ -144,7 +145,7 @@ const terminal = [
 
   <!-- ============ REEL ============ -->
   <section id="work" class="wrap section" aria-labelledby="work-h">
-    <SectionHead id="work-h" label="Featured · production and products" title="Now shipping." accent="From order books to OTA patches."
+    <SectionHead id="work-h" label="Featured · Flutter apps in production" title="Now shipping." accent="From order books to OTA patches."
       lead="Fintech at scale by day, developer tooling the rest of the time. Scroll to step inside each one." />
   </section>
 
@@ -310,7 +311,7 @@ const terminal = [
 
   <!-- ============ SKILLS ============ -->
   <section id="skills" class="wrap section" aria-labelledby="skills-h">
-    <SectionHead id="skills-h" label="Skills" title="The stack behind" accent="the products."
+    <SectionHead id="skills-h" label="Skills · Flutter, Kotlin, Swift" title="The stack behind" accent="the products."
       lead={`${skillCount} tools in ${radar.length} groups. The closer to the core, the more I use it. Hover a group to light up its sector.`} />
     <SkillsRadar />
   </section>

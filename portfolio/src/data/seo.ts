@@ -1,6 +1,6 @@
 // SEO helpers: snippet-safe text and the shared schema.org graph (one WebSite and one Person entity,
 // referenced by @id from every page so search engines resolve a single Lokesh Jangid entity).
-import { education, site } from './site';
+import { education, site, skills } from './site';
 
 export const ids = {
   website: `${site.url}/#website`,
@@ -38,12 +38,31 @@ export const personNode = {
   url: `${site.url}/`,
   image: `${site.url}/og/home.png`,
   email: `mailto:${site.email}`,
+  alternateName: site.handle,
   jobTitle: site.role,
   description: site.description,
-  worksFor: { '@type': 'Organization', name: 'Univest', url: 'https://univest.in/' },
-  address: { '@type': 'PostalAddress', addressLocality: 'Gurgaon', addressRegion: 'Haryana', addressCountry: 'IN' },
+  // The real title lives on the role; `jobTitle` above is the search-facing headline.
+  worksFor: {
+    '@type': 'OrganizationRole',
+    roleName: site.jobTitle,
+    startDate: '2024-04',
+    worksFor: { '@type': 'Organization', name: 'Univest', url: 'https://univest.in/' },
+  },
+  hasOccupation: {
+    '@type': 'Occupation',
+    name: 'Flutter Developer',
+    alternateName: ['Mobile App Developer', 'Android Developer', 'iOS Developer', 'Software Developer'],
+    occupationalCategory: '15-1252.00 Software Developers',
+    occupationLocation: { '@type': 'Country', name: 'India' },
+    skills: skills.flatMap((g) => g.items).join(', '),
+  },
+  address: { '@type': 'PostalAddress', addressLocality: 'Gurugram', addressRegion: 'Haryana', addressCountry: 'IN' },
   alumniOf: education.map((e) => ({ '@type': 'CollegeOrUniversity', name: e.school.split(',')[0] })),
-  knowsAbout: ['Flutter', 'Dart', 'Kotlin', 'Jetpack Compose', 'Swift', 'SwiftUI', 'Android development', 'iOS development', 'JNI', 'OTA code push', 'Mobile app performance', 'Fintech payments'],
+  knowsAbout: [
+    'Flutter', 'Flutter app development', 'Cross-platform mobile development', 'Dart', 'Kotlin', 'Jetpack Compose',
+    'Swift', 'SwiftUI', 'Android app development', 'iOS app development', 'Firebase', 'JNI', 'OTA code push',
+    'Mobile app performance optimization', 'Fintech payments',
+  ],
   sameAs: Object.values(site.links),
 };
 

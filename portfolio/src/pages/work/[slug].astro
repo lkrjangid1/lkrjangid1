@@ -69,7 +69,7 @@ const appCategory: Record<string, string> = {
 };
 const pageUrl = new URL(`/work/${slug}`, site.url).href;
 const repo = study?.data.repo ?? links.find((l) => /github\.com/.test(l.url))?.url;
-const common = { '@id': `${pageUrl}#project`, name, description: summary, url: pageUrl, author: { '@id': ids.person }, keywords: stack.join(', ') };
+const common = { '@id': `${pageUrl}#project`, name, description: summary, url: pageUrl, author: { '@id': ids.person }, creator: { '@id': ids.person }, keywords: stack.join(', ') };
 const jsonLd = platforms.length
   ? {
       '@type': platforms.every((p) => p === 'Android' || p === 'iOS') ? 'MobileApplication' : 'SoftwareApplication',
@@ -83,6 +83,22 @@ const jsonLd = platforms.length
     ? { '@type': 'SoftwareSourceCode', ...common, codeRepository: repo, programmingLanguage: stack }
     : { '@type': 'CreativeWork', ...common, ...(links.length ? { sameAs: links.map((l) => l.url) } : {}) };
 
+// Search-facing labels: "Flutter app" when built with Flutter, else the platform or main tech.
+const has = (re: RegExp) => stack.some((t) => re.test(t));
+const [kind, kindNoun] = has(/flutter/i) ? ['Flutter', '']
+  : has(/chrome extension/i) ? ['Chrome Extension', ' ']
+  : has(/swift/i) && has(/kotlin/i) ? ['Android & iOS', '']
+  : has(/swift/i) ? ['iOS', ''] : has(/kotlin/i) ? ['Android', '']
+  : has(/^(html|css|javascript|react)$/i) ? ['Web', '']
+  : has(/langchain|gpt|llm|gemini/i) ? ['AI', '']
+  : [stack[0] ?? '', ''];
+// kindNoun ' ' means the kind already names the thing ("Chrome Extension"), so skip "App/Project".
+const noun = kindNoun === ' ' ? '' : platforms.length || /app/i.test(headline) ? 'App' : 'Project';
+const tidy = (s: string) => s.replace(/\s+/g, ' ').trim();
+// Drop "Case Study" rather than cut mid-phrase when the name is long (44 = 60 − " · Lokesh Jangid").
+const seoTitle = [`${name}: ${kind} ${noun} Case Study`, `${name}: ${kind} ${noun}`, name].map(tidy).find((t) => t.length <= 44) ?? name;
+const seoDesc = [`${name}, ${/^[AEIOU]/.test(kind) ? 'an' : 'a'} ${tidy(`${kind} ${noun.toLowerCase()}`)} by Flutter developer ${site.name}.`, summary, metrics[0] ?? ''].filter(Boolean).join(' ');
+
 const facts = [
   role && { k: 'Role', v: role },
   stack.length > 0 && { k: 'Stack', v: stack.join(', ') },
@@ -91,8 +107,9 @@ const facts = [
   study?.data.year && { k: 'Year', v: study.data.year },
 ].filter(Boolean) as { k: string; v: string }[];
 ---
-<Base title={project?.subtitle || headline ? `${name} — ${project?.subtitle || headline}` : name} current="/work" ogSlug={`work-${slug}`} crumbs={{ [slug]: name }}
-  description={[`${name}: ${summary}`, stack.length ? `Built with ${stack.slice(0, 4).join(', ')}.` : '', metrics.join(' · ')].filter(Boolean).join(' ')} jsonLd={jsonLd} ogType={platforms.length ? 'website' : 'article'}>
+<Base title={seoTitle} current="/work" ogSlug={`work-${slug}`} crumbs={{ [slug]: name }}
+  keywords={[`${name} app`, tidy(`${kind} ${noun.toLowerCase()}`), ...stack.slice(0, 5), 'Flutter developer portfolio']}
+  description={seoDesc} jsonLd={jsonLd} ogType={platforms.length ? 'website' : 'article'}>
   <article class="wrap" style={`--app:${brand(slug, name).accent}`}>
     <header class:list={['page-head', 'hero', { 'with-visual': shots.length > 0 }]}>
       <div class="app-glow" aria-hidden="true"></div>
@@ -167,7 +184,7 @@ const facts = [
       <section class="section" aria-labelledby="shots-h">
         <SectionHead id="shots-h" size="sub" label="Gallery" title="Screens" />
         <div class:list={['gallery', { portrait }]} tabindex="0" role="region" aria-label={`${name} screenshots, scrollable`} data-cursor="Drag">
-          {shots.map((s, i) => <Shot src={s} alt={`${name} screenshot ${i + 1}`} width={portrait ? 520 : 1200} />)}
+          {shots.map((s, i) => <Shot src={s} alt={tidy(`${name} ${kind} ${noun.toLowerCase()} screenshot ${i + 1}`)} width={portrait ? 520 : 1200} />)}
         </div>
       </section>
     )}

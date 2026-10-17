@@ -14,6 +14,8 @@ export const GET: APIRoute = async () => {
   const body = [
     `# ${site.name}`,
     '',
+    `${site.name} — ${site.role} (Flutter, Android & iOS), India. Available for hire: ${u('/contact')}`,
+    '',
     `> ${site.description}`,
     '',
     `${site.name} is a ${site.role} based in ${site.location}.`,

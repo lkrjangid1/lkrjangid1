@@ -10,6 +10,7 @@ const search = `https://www.google.com/search?q=${encodeURIComponent(site.handle
       <div class="credit">
         <p>Designed and built by <a href="/about">{site.name}</a></p>
         <a class="status" href="/contact" data-cursor="Hire"><span class="dot pulse"></span> {site.availability}</a>
+        <a class="hire-link" href="/contact">Hire a Flutter developer →</a>
       </div>
       <nav class="links" aria-label="Elsewhere">
         <a href={site.links.github} rel="me noopener">GitHub</a>
@@ -42,6 +43,8 @@ const search = `https://www.google.com/search?q=${encodeURIComponent(site.handle
   .credit p a:hover { color: var(--accent); }
   .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: var(--r-pill); background: var(--glass); border: 1px solid var(--line); font-size: 14px; color: var(--text-2); transition: border-color var(--t-fast); }
   .status:hover { border-color: var(--mint); color: var(--text); }
+  .hire-link { font-size: 14px; color: var(--text-2); }
+  .hire-link:hover { color: var(--accent); }
   .links { display: flex; flex-wrap: wrap; gap: 8px 28px; padding-top: 6px; color: var(--text-2); }
   .links a:hover { color: var(--text); }
 

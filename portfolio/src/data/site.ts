@@ -7,24 +7,26 @@ export const site = {
   initials: 'LJ',
   handle: 'lkrjangid',
   url: 'https://lkrjangid-portfolio.web.app',
-  role: 'Senior Mobile Engineer',
+  role: 'Senior Flutter Developer',
+  /** Actual job title at Univest (schema.org OrganizationRole); `role` is the search-facing headline. */
+  jobTitle: 'Senior Software Engineer',
   stack: 'Flutter · Android (Kotlin) · iOS (SwiftUI)',
-  location: 'Gurgaon, India',
+  location: 'Gurgaon (Gurugram), India',
   timezone: 'Asia/Kolkata',
   email: 'lkrjangid1@gmail.com',
   status: 'Open to senior mobile roles',
   statusSub: 'Full-time · Consulting · Code review',
   intro:
-    'Senior Mobile Engineer at Univest. I build Flutter, Android and iOS apps for 9M+ users, and the tooling underneath them.',
+    'Senior Flutter developer at Univest. I build Flutter, Android and iOS apps for 9M+ users, and the tooling underneath them.',
   description:
-    'Lokesh Jangid is a Senior Mobile Engineer at Univest building Flutter, Android and iOS apps for 9M+ users, plus native bindings, code push and 24 pub.dev packages.',
+    'Lokesh Jangid is a Senior Flutter Developer in India building Flutter, Android and iOS apps for 9M+ users at Univest. Open to full-time or consulting.',
   currently: [
     { label: 'Senior Software Engineer', at: '@ Univest' },
     { label: 'Building', at: 'native-api-bindgen' },
     { label: 'Shipping', at: 'PushPatch' },
   ],
   bio: [
-    'Senior Mobile Engineer with 4+ years shipping high-scale consumer apps across Flutter, native Android (Kotlin) and native iOS (Swift/SwiftUI).',
+    'Senior Flutter developer and mobile app engineer with 4+ years shipping high-scale consumer apps across Flutter, native Android (Kotlin) and native iOS (Swift/SwiftUI).',
     'At Univest I build brokerage order flows, mutual funds, payments and the Scalper trading terminal for 9M+ users. The rest of the time I build the layer underneath: native-api-bindgen, a self-hosted code push that became PushPatch, and packages on pub.dev.',
   ],
   availability: 'Open to senior mobile and platform roles · replies within 2 days',
@@ -39,6 +41,16 @@ export const site = {
     holopin: 'https://holopin.io/@lkrjangid',
   },
 } as const;
+
+/** What I can be hired for. Shown on About (short) and Contact (with detail). */
+export const services = [
+  { title: 'Flutter app development', short: 'Cross-platform apps from first commit to the stores.', detail: 'New Flutter apps or features for Android, iOS and web: architecture (BLoC, Riverpod, clean architecture), real-time data, payments and release to Google Play and the App Store.' },
+  { title: 'Native Android (Kotlin)', short: 'Kotlin, Jetpack Compose and platform code.', detail: 'Native Android screens and SDK integrations in Kotlin and Jetpack Compose, plus the platform side of Flutter plugins: activity aliases, install referrers, widgets.' },
+  { title: 'Native iOS (SwiftUI)', short: 'SwiftUI and UIKit when the app needs native.', detail: 'Native iOS features in SwiftUI and UIKit, and embedding Flutter screens inside existing Android and iOS apps (add-to-app).' },
+  { title: 'Performance and stability', short: 'Faster cold starts, fewer crashes, smaller apps.', detail: 'Profiling cold start, jank, memory leaks and app size. At Univest: cold start 5.5s → 2.0s and crash-free users 70% → 95%.' },
+  { title: 'OTA code push', short: 'Ship Flutter hotfixes in minutes, not review cycles.', detail: 'Self-hosted Flutter code push based on Shorebird internals: patch pipeline, rollout and rollback. Built at Univest (₹14L+ a year saved) and as PushPatch.' },
+  { title: 'Flutter plugins and native bindings', short: 'Plugins, Pigeon, JNI and FFI bindings.', detail: 'Custom Flutter plugins with Pigeon or platform channels, and direct native calls via JNI, the Objective-C runtime and FFI, as in native-api-bindgen and 24 pub.dev packages.' },
+] as const;
 
 export const nav = [
   { href: '/work', label: 'Work' },

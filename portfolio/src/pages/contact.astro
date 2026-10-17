@@ -2,17 +2,71 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import SectionHead from '../components/SectionHead.astro';
-import { site } from '../data/site';
+import { services, site } from '../data/site';
+import { ids } from '../data/seo';
+
+const serviceLd = {
+  '@type': 'Service',
+  '@id': `${site.url}/contact#service`,
+  name: 'Flutter app development and consulting',
+  serviceType: 'Flutter app development',
+  description: 'Flutter, native Android and iOS development, app performance work, OTA code push and Flutter plugin development, by Senior Flutter developer Lokesh Jangid.',
+  provider: { '@id': ids.person },
+  areaServed: 'Worldwide',
+  availableChannel: { '@type': 'ServiceChannel', serviceUrl: `${site.url}/contact` },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Services',
+    itemListElement: services.map((s) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: s.title, description: s.detail } })),
+  },
+};
+
+const engagements = [
+  { title: 'Full-time', body: 'Senior Flutter or mobile platform roles, remote or in Delhi NCR.' },
+  { title: 'Contract / freelance', body: 'A feature, an app or a migration, scoped up front with clear milestones.' },
+  { title: 'Code review and audit', body: 'A written review of architecture, performance and release setup, with a prioritised fix list.' },
+];
+const steps = ['Short call about the app and the goal', 'Written scope, estimate and milestones', 'Build in small reviewed releases', 'Handover with docs and a walkthrough'];
+const faq = [
+  { q: 'Do you work remotely?', a: `Yes. I'm based in ${site.location} and work remotely with teams anywhere; for full-time roles I can also work from Delhi NCR.` },
+  { q: 'Which time zone do you work in?', a: 'India Standard Time (UTC+5:30). That overlaps the European working day and US mornings or evenings for calls.' },
+  { q: 'Flutter or native?', a: 'Flutter for most apps that need Android and iOS from one codebase. Native Kotlin or SwiftUI where the platform matters: widgets, background work, deep OS integration. I do both, and the bridge between them.' },
+  { q: 'How do we start, and what does it cost?', a: 'Send a short brief through the form below. I reply within 2 days with questions, then a written scope and estimate before any work starts.' },
+];
 ---
-<Base title="Contact · Hire a Flutter & mobile engineer" current="/contact" ogSlug="contact" pageType="ContactPage" description="Hire Lokesh Jangid for senior Flutter, Android or iOS roles, or consulting on code push, app startup time, crash rate and native plugins. Replies within 2 days.">
+<Base title="Hire a Senior Flutter Developer" current="/contact" ogSlug="contact" pageType="ContactPage" jsonLd={serviceLd}
+  keywords={['hire Flutter developer', 'freelance Flutter developer', 'Flutter consultant', 'Flutter app development services', 'hire Android developer', 'hire iOS developer', 'remote Flutter developer India']}
+  description="Hire Lokesh Jangid, a Senior Flutter developer: Flutter, Android and iOS apps, code push, performance and plugins. Full-time, freelance or audit. Replies in 2 days.">
   <div class="wrap">
     <header class="page-head">
       <div class="page-glow" aria-hidden="true"></div>
-      <SectionHead as="h1" label="Contact" title="Have an app to build" accent="or fix?" lead={`${site.availability}.`} split={false} />
+      <SectionHead as="h1" label="Hire a Flutter developer" title="Have an app to build" accent="or fix?" lead={`Senior Flutter developer for Android and iOS apps. ${site.availability}.`} split={false} />
     </header>
 
+    <section class="hire" aria-labelledby="svc-h">
+      <h2 id="svc-h" class="label">What I can build for you</h2>
+      <ul class="svc">
+        {services.map((s) => <li class="ui-card"><h3 class="h4">{s.title}</h3><p class="muted">{s.detail}</p></li>)}
+      </ul>
+    </section>
+
+    <section class="hire two" aria-label="How we can work together">
+      <div>
+        <h2 class="label">Ways to work together</h2>
+        <ul class="eng">
+          {engagements.map((e) => <li><b>{e.title}</b><span class="muted">{e.body}</span></li>)}
+        </ul>
+      </div>
+      <div>
+        <h2 class="label">How a project runs</h2>
+        <ol class="steps">{steps.map((s) => <li>{s}</li>)}</ol>
+      </div>
+    </section>
+
+    <h2 class="label form-h" id="form-h">Send a message</h2>
+
     <div class="contact-grid">
-    <form id="contact" class="ui-card lg form" data-email={site.email} action="/api/contact" method="post" novalidate>
+    <form id="contact" class="ui-card lg form" aria-labelledby="form-h" data-email={site.email} action="/api/contact" method="post" novalidate>
       <div class="field">
         <label for="name">Name</label>
         <input id="name" name="name" autocomplete="name" required maxlength="100" aria-describedby="name-err" />
@@ -65,6 +119,13 @@ import { site } from '../data/site';
       </div>
     </aside>
     </div>
+
+    <section class="hire" aria-labelledby="faq-h">
+      <h2 id="faq-h" class="label">Questions clients ask</h2>
+      <div class="faq">
+        {faq.map((f) => <details class="ui-card"><summary>{f.q}</summary><p class="muted">{f.a}</p></details>)}
+      </div>
+    </section>
   </div>
 </Base>
 
@@ -150,6 +211,19 @@ import { site } from '../data/site';
 </script>
 
 <style>
+  .hire { margin-bottom: clamp(40px, 6vw, 72px); }
+  .hire .label, .form-h { margin: 0 0 16px; }
+  .contact-grid + .hire { margin-top: clamp(48px, 6vw, 80px); }
+  .svc { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: var(--gap-grid); }
+  .svc h3 { margin: 0 0 8px; }
+  .svc p { margin: 0; font-size: 15px; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: clamp(24px, 5vw, 64px); }
+  .eng { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+  .eng li { display: grid; gap: 2px; }
+  .steps { margin: 0; padding-left: 22px; display: grid; gap: 10px; color: var(--text-2); }
+  .faq { display: grid; gap: 12px; }
+  .faq summary { cursor: pointer; font-weight: 500; }
+  .faq p { margin: 10px 0 0; }
   .contact-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--gap-grid); align-items: start; }
   .form { display: grid; gap: 6px; }
   .side { display: grid; gap: var(--gap-grid); }

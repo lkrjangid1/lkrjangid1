@@ -13,7 +13,7 @@ const pages: Record<string, Page> = {
   'open-source': { title: 'Open source', description: 'pub.dev packages and the native-api-bindgen toolchain.' },
   writing: { title: 'Writing', description: 'Flutter internals, Shorebird code push, native interop and performance.' },
   about: { title: 'About', description: site.bio[0] },
-  contact: { title: 'Have an app to build or fix?', description: site.availability },
+  contact: { title: 'Hire a Senior Flutter Developer', description: `Flutter, Android and iOS apps, code push and performance. ${site.availability}.` },
 };
 for (const p of projects) pages[`work-${p.slug}`] = { title: p.name, description: p.subtitle || p.points[0] || '', accent: brand(p.slug, p.name).accent };
 for (const c of caseStudies) pages[`work-${c.id}`] = { title: c.data.title, description: c.data.headline, accent: brand(c.id, c.data.title).accent };
