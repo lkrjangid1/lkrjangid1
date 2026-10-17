@@ -127,18 +127,29 @@ if (!reduced) {
         root.classList.toggle('c-link', !labelled && !!link && !text);
         if (labelled) label.textContent = labelled.dataset.cursor ?? '';
       };
-      addEventListener('pointermove', (e) => {
-        x = e.clientX; y = e.clientY;
+      let down = false;
+      const moveTo = (cx: number, cy: number) => {
+        x = cx; y = cy;
         dot.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      };
+      addEventListener('pointermove', (e) => {
+        moveTo(e.clientX, e.clientY);
         setState(e.target as Element);
         root.classList.remove('c-hide');
       }, { passive: true });
-      addEventListener('pointerdown', () => root.classList.add('c-down'));
-      addEventListener('pointerup', () => root.classList.remove('c-down'));
+      // A long press can turn into a native drag (links, images), which stops pointermove; follow drag events instead.
+      addEventListener('dragover', (e) => moveTo(e.clientX, e.clientY), { passive: true });
+      const release = () => { down = false; root.classList.remove('c-down'); };
+      addEventListener('pointerdown', () => { down = true; root.classList.add('c-down'); });
+      addEventListener('pointerup', release);
+      addEventListener('pointercancel', release);
+      addEventListener('dragend', release);
       document.addEventListener('pointerleave', () => root.classList.add('c-hide'));
       document.addEventListener('pointerenter', () => root.classList.remove('c-hide'));
       const loop = () => {
-        rx += (x - rx) * 0.2; ry += (y - ry) * 0.2;
+        // Eased while hovering; locked to the pointer while pressed (selecting text, dragging) so ring and dot stay concentric.
+        const k = down ? 1 : 0.2;
+        rx += (x - rx) * k; ry += (y - ry) * k;
         ring.style.transform = tag.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
         requestAnimationFrame(loop);
       };

@@ -71,6 +71,14 @@
 }
 .dock-item:hover::after, .dock-item:focus-visible::after { opacity: 1; translate: -50% 0; }
 .dock-sep { width: 1px; height: 36px; background: var(--line-2); margin: 0 4px; flex: none; }
+/* App folder: a 2×2 grid of mini icons in a frosted tile, same size and elevation as the other dock icons. */
+.folder {
+  width: 54px; height: 54px; border-radius: 14px; padding: 7px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; place-items: center;
+  background: color-mix(in srgb, var(--surface-3) 80%, transparent); box-shadow: var(--icon-shadow), var(--icon-ring);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.folder .app-icon { --size: 18px !important; border-radius: 5px; font-size: 7px; box-shadow: none; }
+.folder .app-icon::after { box-shadow: none; }
 
 .proof { position: relative; z-index: 3; display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap-grid); margin-top: 64px; padding: 32px 0 40px; border-top: 1px solid var(--line); }
 .stat { display: block; }

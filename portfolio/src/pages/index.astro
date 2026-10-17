@@ -47,8 +47,12 @@ const series = writing.filter((p) => p.series).sort((a, b) => a.title.localeComp
 const recent = writing.filter((p) => !p.series).slice(0, 5);
 const month = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric' });
 
+const dockApps = lineup.filter((t) => t.metric).slice(0, 3);
 const dock = [...reelItems.map((r) => ({ slug: r.slug, name: r.name, href: `#p-${r.slug}` })), null,
-  ...lineup.filter((t) => t.metric).slice(0, 4).map((t) => ({ slug: t.slug, name: t.name, href: t.href }))];
+  ...dockApps.map((t) => ({ slug: t.slug, name: t.name, href: t.href }))];
+// The last dock slot is a folder previewing four more apps; it opens /work.
+const folderApps = lineup.filter((t) => !dockApps.includes(t)).slice(0, 4);
+const moreCount = lineup.length - dockApps.length;
 
 const marqueeItems = [
   ...reelItems.map((r) => ({ slug: r.slug, name: r.name, href: r.href })),
@@ -125,6 +129,11 @@ const jsonLd = {
         {dock.map((d) => d ? (
           <a href={d.href} class="dock-item" data-tip={d.name} aria-label={d.name}><AppIcon slug={d.slug} name={d.name} size={54} /></a>
         ) : <span class="dock-sep" aria-hidden="true"></span>)}
+        <a href="/work" class="dock-item" data-tip={`${moreCount} more · all work`} aria-label={`All work: ${moreCount} more projects`} data-cursor="All work">
+          <span class="folder" aria-hidden="true">
+            {folderApps.map((t) => <AppIcon slug={t.slug} name={t.name} size={20} />)}
+          </span>
+        </a>
       </nav>
     </div>
 
