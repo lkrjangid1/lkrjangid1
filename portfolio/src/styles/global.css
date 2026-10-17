@@ -83,7 +83,7 @@ main { flex: 1; }
 .prose a { color: var(--text); border-bottom: 1px solid var(--line-2); }
 .prose a:hover { border-color: var(--accent); }
 
-.section { padding-top: clamp(96px, 12vw, 160px); }
+.section { padding-top: clamp(72px, 12vw, 160px); }
 
 .page-head { padding-top: clamp(140px, 16vw, 200px); padding-bottom: var(--gap-head); position: relative; }
 .page-head .lead { margin-top: 24px; max-width: 640px; }

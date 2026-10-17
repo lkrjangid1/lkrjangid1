@@ -80,7 +80,7 @@
 .folder .app-icon { --size: 18px !important; border-radius: 5px; font-size: 7px; box-shadow: none; }
 .folder .app-icon::after { box-shadow: none; }
 
-.proof { position: relative; z-index: 3; display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap-grid); margin-top: 64px; padding: 32px 0 40px; border-top: 1px solid var(--line); }
+.proof { position: relative; z-index: 3; display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--gap-grid); margin-top: 64px; padding-block: 32px 40px; border-top: 1px solid var(--line); }
 .stat { display: block; }
 .stat b { display: block; font: 600 clamp(36px, 4.4vw, 64px)/1 var(--font-display); letter-spacing: -.04em; font-variant-numeric: tabular-nums; transition: color var(--t-fast); }
 .stat .label { display: block; margin-top: 10px; }
@@ -97,7 +97,12 @@
   .portrait { height: 104%; }
   .name { white-space: normal; line-height: .86; font-size: 23vw; }
   .hero-ctas { grid-template-columns: 1fr; }
-  .proof { grid-template-columns: repeat(2, 1fr); }
+  .proof { grid-template-columns: repeat(2, 1fr); margin-top: 48px; row-gap: 24px; }
+  .dock-wrap { margin-top: 40px; }
+  .dock { flex-wrap: wrap; justify-content: center; overflow: visible; max-width: 100%; margin-inline: var(--gutter); gap: 12px; padding: 12px; }
+  .dock-sep { display: none; }
+  .dock-item:hover, .dock-item:focus-visible { transform: none; }
+  .dock-item::after { display: none; }
   .currently-list li { font-size: 18px; }
 }
 
@@ -164,12 +169,24 @@
 .bench .bar i.hi { background: var(--app); box-shadow: 0 0 16px var(--app); }
 
 @media (max-width: 900px) {
-  .product, .product.flip { grid-template-columns: 1fr; min-height: 0; padding-block: 64px; }
+  .product, .product.flip { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-block: 64px; }
   .product.flip .product-copy { order: 0; }
   .product-visual { min-height: 0; }
 }
 @media (max-width: 560px) {
   .product::before { inset: 2% 6px; border-radius: var(--r-card); }
+  .product { padding-block: 48px; gap: 36px; }
+  .product-name { font-size: clamp(40px, 12vw, 56px); }
+  .product-head { margin-bottom: 20px; }
+  /* Keep the reel skimmable: two points here, the rest live on the case study. */
+  .product-points li:nth-child(n + 3) { display: none; }
+  /* Two phones share the screen width instead of spilling off the right edge. */
+  .two-phones { --phone-w: min(260px, 43vw); }
+  .two-phones .phone { border-radius: 26px; padding: 7px; }
+  .two-phones .phone .screen { border-radius: 20px; }
+  .two-phones .phone::before { width: 34%; height: 14px; top: 13px; }
+  .tilt-l { translate: 10px 6px; }
+  .tilt-r { translate: -10px -12px; }
   .bench-row { grid-template-columns: 100px 1fr 64px; }
 }
 
@@ -212,7 +229,7 @@
 .pkgs .muted { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .repo-row { grid-template-columns: repeat(6, 1fr); margin-top: var(--gap-grid); }
 .repo { display: flex; flex-direction: column; gap: 4px; padding: 18px 20px; }
-.repo b { font-weight: 500; font-size: 15px; }
+.repo b { font-weight: 500; font-size: 15px; overflow-wrap: anywhere; }
 .repo span { font-size: 13px; color: var(--text-3); }
 .st { margin-top: auto; padding-top: 12px; font: normal 500 11px/1 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); }
 .st.show { color: var(--accent); } .st.prog { color: var(--app-pushpatch); }
@@ -239,6 +256,15 @@
 
 /* ---------- Recommendations ---------- */
 .quotes { columns: 3 320px; column-gap: var(--gap-grid); }
+/* Phones: a swipeable row instead of six full-height cards stacked down the page. */
+@media (max-width: 700px) {
+  .quotes {
+    columns: auto; display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-inline: calc(var(--gutter) * -1); padding: 4px var(--gutter) 8px; scroll-padding-inline: var(--gutter);
+  }
+  .quotes::-webkit-scrollbar { display: none; }
+  .quotes .quote.ui-card { flex: 0 0 86%; margin: 0; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: space-between; }
+}
 
 /* ---------- Contact ---------- */
 .contact { position: relative; }

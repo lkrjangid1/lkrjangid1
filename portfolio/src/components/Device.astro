@@ -43,7 +43,8 @@ const screens = shots.map((src, i) => ({ src, alt: shots.length > 1 ? `${alt}, s
 )}
 
 <style>
-  .phone.md { width: 260px; }
+  /* --phone-w lets a parent shrink the frame (two phones side by side on a narrow screen). */
+  .phone.md { width: var(--phone-w, 260px); }
   .phone.big { width: 290px; }
   .phone.mini { width: 120px; border-radius: 22px; padding: 6px; }
   .phone.mini::before { width: 30px; height: 9px; top: 11px; border-radius: 6px; }
