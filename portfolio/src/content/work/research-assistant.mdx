@@ -1,0 +1,43 @@
+---
+title: AI Research Assistant
+headline: Search arXiv, then chat with up to three papers
+summary: A Flutter app and FastAPI RAG backend that summarise arXiv papers by expertise level and answer questions with page-level citations.
+role: Final-year MCA project
+year: '2026'
+stack: [Flutter, Gemini API, FastAPI, Python, FAISS, PyMuPDF, Hive, Bloc/Cubit]
+order: 19
+problem: Researchers can find papers but can't question them, and general chatbots answer about papers with citations that are often made up.
+approach: A three-tier system in which the Flutter app searches arXiv directly, a FastAPI backend indexes PDFs into FAISS, and Gemini answers only from the retrieved chunks with page citations.
+result: A working end-to-end app, submitted as my MCA capstone at Uttaranchal University, with the full source on GitHub.
+links:
+  - { label: Project report, url: 'https://docs.google.com/document/d/1UDb1kOt7fiQ6a1BwyH8rD-mstawqOblFahn_9oZzRt4/edit?tab=t.0' }
+  - { label: GitHub, url: 'https://github.com/lkrjangid1/research_assistant' }
+---
+
+## What it does
+
+You search arXiv from the app, open a paper's details and get a summary pitched at beginner, intermediate or expert level. Then you select up to three papers and chat with them. Each answer cites the paper title and page it came from, so you can check it against the source.
+
+## Features
+
+- **arXiv search.** Keyword search with pagination, sent from the app straight to the arXiv API.
+- **Adaptive summaries.** The same paper can be summarised at three expertise levels without being indexed again.
+- **Multi-paper chat.** Up to three papers per session. The limit is enforced in the app and checked again by the backend's request models.
+- **Page-level citations.** Answers cite sources in the form `[Paper Title, Page N]`.
+- **Slash commands.** `/summary`, `/compare`, `/gaps`, `/review`, `/code`, `/visualize`, `/search` and `/explain`, each one a prompt template run through the same RAG pipeline.
+- **PDF upload.** You can index your own PDF as well as arXiv papers.
+- **On-device history.** Chat sessions are stored in Hive on the phone and can be resumed.
+
+## How it's built
+
+**Flutter client.** Clean architecture with presentation, domain, data and core layers. Five Cubits handle search, paper selection, paper details, chat and settings. GetIt provides dependency injection. There are two Dio clients: one for backend JSON, the other for arXiv XML with a rate-limit interceptor and exponential backoff on `503`.
+
+**FastAPI backend.** `POST /api/papers/process` starts a `BackgroundTasks` job that downloads the PDF with `httpx` and extracts page text with PyMuPDF. It splits the text into paragraph-aware, overlapping chunks that keep their page numbers, embeds them with Gemini and stores the vectors in a FAISS index. The index loads at startup and is saved at shutdown. The app polls a status endpoint until indexing is done.
+
+**Query path.** The backend embeds the question, retrieves the top chunks filtered to the selected paper IDs and builds a prompt that tells Gemini to use only that context and cite inline. It returns the answer together with the extracted citations.
+
+## What I'd point out
+
+- **No answer without retrieval.** If no chunk scores high enough, the RAG service returns a fixed "couldn't find relevant information" reply and never calls the model without context.
+- **The backend never sees the conversation.** It gets only the current question, the selected paper IDs and a session ID. All chat history stays on the device.
+- **The report and the code use different model setups.** The report describes Vertex AI with Gemini 1.5 Pro. The committed backend calls the Gemini REST API with an API key, and the README notes this.

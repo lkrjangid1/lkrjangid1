@@ -1,0 +1,43 @@
+---
+title: Libgen
+headline: Book search and an ebook reader in one app
+summary: A Flutter app that searches many book sources at once, then reads EPUB and PDF offline, with streaks, widgets and Google Drive backup.
+role: Personal project · Solo-built
+year: '2021–2026'
+stack: [Flutter, Kotlin, JavaScript, flutter_bloc, SQLite, Firebase, RevenueCat, LevelPlay]
+order: 10
+problem: Readers looking for a book, paper or textbook have to check many catalogues one by one, then juggle a separate reader app to open what they find.
+approach: One search across many sources, parsed by a JavaScript engine in a headless WebView, feeding a local library and an embedded EPUB/PDF reader. An iPhone version ships as Quillshelf.
+result: 600K+ downloads and 150K+ monthly active users; 4.0★ on Google Play.
+links:
+  - { label: Play Store, url: 'https://play.google.com/store/apps/details?id=com.yaaratech.libgen' }
+  - { label: Website, url: 'https://libgen-d4497.web.app/' }
+---
+
+## What it does
+
+Libgen searches book records, research papers, textbooks, audiobooks and magazines across multiple public sources, including Project Gutenberg and Open Library, from one search box. Books open in a built-in reader that works offline, and the library, progress and streaks back up to the user's own Google Drive. No account is needed.
+
+## Features
+
+- **One search, many sources.** The Android app queries 12 sources and groups results by source, with filters for format, language and year.
+- **ISBN scan.** Scan a barcode to find a book by its ISBN.
+- **Built-in reader.** EPUB and PDF with light, sepia, dark and OLED themes, highlights, notes and a listen mode that reads pages aloud.
+- **Library.** Covers, collections, reading progress and import of your own EPUB and PDF files.
+- **Reading habit.** Daily goals, streaks with freezes, and reminders scheduled around when you usually read.
+- **Search alerts.** Save a query and get a notification when new results show up.
+- **Home-screen widgets.** Continue reading, quick search, quick actions and a streak widget.
+- **Drive backup.** Back up the library and progress to Google Drive and restore on a new phone.
+
+## How it's built
+
+State lives in `flutter_bloc` blocs and cubits, with `get_it` for dependency injection, Dio for networking and three SQLite databases (library, bookmarks, streaks). Search runs through a parser engine: a headless `flutter_inappwebview` page holds one JavaScript parser class per source, the JS asks Dart to make each HTTP request, and returns normalized JSON that Dart maps to models. The parser can be hot-swapped from a remote copy, with a bundled fallback.
+
+The reader is the open-source Readest web app, bundled as assets and hosted in a WebView. Android home-screen widgets are native Kotlin `AppWidgetProvider`s fed through `home_widget`. Monetization uses RevenueCat for the Libgen Pro subscription and LevelPlay and Unity Ads for ads.
+
+## What I'd point out
+
+- **Versioned parser hot-fixes.** Each parser copy declares a version. The newer of the remote and bundled copies wins, so a stale remote file never shadows a fix shipped in the app.
+- **Anti-bot handling.** A pure-Dart classifier sorts pages into real, automatic challenge (solved in a hidden WebView) or human check, which the user passes once in a visible page.
+- **Mirror failover.** A mirror registry retries a request on the next configured host when one domain stops resolving.
+- **Measured ad rules.** Opt-in rewarded ads and capped interstitials at natural breaks, rolled out to a percentage of installs by stable hash buckets, with no ads for Pro users.

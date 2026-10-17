@@ -59,6 +59,7 @@ export interface Project {
 /** Long titles that would make unwieldy URLs. */
 const slugAliases: Record<string, string> = {
   'ai-based-research-paper-search-summarization-and-chat-application': 'research-assistant',
+  'ai-research-assistant': 'research-assistant',
 };
 
 export function slugify(s: string): string {

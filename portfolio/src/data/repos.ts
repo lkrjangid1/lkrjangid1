@@ -10,6 +10,8 @@ export interface Repo {
   status: RepoStatus;
   live?: string;
   caseStudy?: boolean;
+  /** Filter chip on /work; defaults by status (learning builds, otherwise open source). */
+  category?: string;
 }
 
 export const statusLabels: Record<RepoStatus, string> = {
@@ -34,6 +36,7 @@ export const repos: Repo[] = [
     status: 'flagship',
     live: 'https://lkrjangid1.github.io/native-api-bindgen-docs/',
     caseStudy: true,
+    category: 'tooling',
   },
   {
     slug: 'flutter-account-manager',
@@ -44,6 +47,7 @@ export const repos: Repo[] = [
     year: 2026,
     status: 'production',
     live: 'https://pub.dev/packages/flutter_account_manager',
+    category: 'tooling',
   },
   {
     slug: 'organic-chemistry-map',
@@ -51,6 +55,7 @@ export const repos: Repo[] = [
     repo: gh('Organic-Chemistry-Map'),
     desc: 'Zoomable map of organic reactions for JEE Advanced: compounds as nodes, reactions as edges, structures drawn from SMILES.',
     tech: ['React', 'TypeScript', 'React Flow', 'SMILES Drawer'],
+    category: 'web',
     year: 2025,
     status: 'showcase',
   },
@@ -60,6 +65,7 @@ export const repos: Repo[] = [
     repo: gh('fcm_admin'),
     desc: 'Self-hosted push campaign panel: composer, scheduling, targeting, analytics and roles on top of Firebase Cloud Messaging. Backend first; frontend in progress.',
     tech: ['NestJS', 'BullMQ', 'Next.js', 'Firebase'],
+    category: 'web',
     year: 2026,
     status: 'in-progress',
   },

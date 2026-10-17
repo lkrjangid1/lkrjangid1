@@ -3,7 +3,8 @@ title: PushPatch
 headline: Code push for Flutter teams
 summary: Ship Dart-only patches to released Flutter apps without waiting on store review, with staged rollouts and one-click rollback.
 role: Product · Flutter code-push platform
-stack: [Flutter, Dart, OTA updates, MongoDB]
+year: '2026'
+stack: [Flutter, Dart, OTA updates, MongoDB, Node.js, Express, Redis, React]
 order: 4
 problem: Teams that can't use or afford hosted code push still need store-free hotfixes, with control over who gets a patch and when.
 approach: Binary-diff patches applied on device, staged rollouts from 1%, live adoption and device-health monitoring, available as a desktop app, CLI and web dashboard, and self-hostable.
@@ -13,3 +14,29 @@ links:
 ---
 
 PushPatch grew out of the [self-hosted code push](/work/self-hosted-code-push) pipeline built at Univest.
+
+## What it does
+
+PushPatch separates two kinds of update. A **release** is a new base build that goes through the app stores. A **patch** is an over-the-air update to the Dart code of a release that is already installed, applied on the next launch. Native code, plugins, assets and Flutter version changes still need a release. Pure Dart fixes ship as a patch, numbered per release.
+
+## Features
+
+- **Staged rollout.** Promote a patch to a channel at a percentage, from 1% up to everyone.
+- **Channels and device groups.** Target a channel such as `beta` or `stable`, or a device group built from rules on device metadata or a manual list of client IDs.
+- **One-click rollback.** A rolled-back patch is excluded from resolution, and the check response lists rolled-back patch numbers for the client.
+- **A/B variants.** Patches in a variant group are split by weight, and each device always gets the same variant.
+- **Device blocklist.** A blocked device is never offered a patch.
+- **Three front ends.** A desktop app for macOS, Windows and Linux, a CLI, and a web dashboard.
+- **Self-hosting.** White-label mode runs the API, storage and dashboard on your own servers against your own MongoDB.
+
+## How it's built
+
+The backend is Node.js and Express on MongoDB through Mongoose, with 24 route modules and 20 models, from releases and rollouts to devices, crashes and audit logs. Artifacts are stored on local disk or in Google Cloud Storage. PM2 runs the API in cluster mode across all cores. The admin panel is React with Vite, Tailwind and Recharts. GitHub Actions runs the Jest suite, then builds the panel and deploys.
+
+The CLI ships as prebuilt binaries for macOS (Apple Silicon and Intel), Linux (x86_64 and arm64) and Windows (x86_64). The install script verifies each archive's SHA-256, and the CLI is also on Homebrew, Chocolatey and Winget.
+
+## What I'd point out
+
+- **Platform-aware resolution.** One release is shared by both stores, so patch numbers interleave across Android and iOS. The resolver keeps only patches with an artifact for the device's platform and architecture before picking the newest. Without that, an iOS device could be handed an Android-only patch and get nothing.
+- **Deterministic rollout buckets.** A device's bucket is a hash of its client ID and the patch ID, mod 100, so the same device stays in or out as the percentage grows.
+- **A cache that knows its limits.** The unauthenticated `/patches/check` path caches results in Redis for 10 minutes, keyed by country so geo-targeted rollouts stay separate. It skips the cache while a per-device rollout is active, and falls through to MongoDB if Redis is unavailable.

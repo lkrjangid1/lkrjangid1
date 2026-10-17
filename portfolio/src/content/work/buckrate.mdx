@@ -1,0 +1,32 @@
+---
+title: Buckrate
+headline: Weighing livestock without a scale
+summary: A Flutter Web livestock marketplace at Timemarks, with a computer-vision weight estimator that prices an animal from a photo instead of a scale.
+role: Timemarks · Flutter Web marketplace
+stack: [Flutter, Web, Python, Computer Vision]
+order: 18
+problem: Livestock is sold by weight, but most sellers don't have a weighing scale, so pricing an animal fairly is guesswork.
+approach: A computer-vision weight estimator built on image segmentation with custom-trained models, inside a Flutter Web marketplace where sellers price and list animals.
+result: 75–80% estimation accuracy without weighing scales.
+links:
+  - { label: Website, url: 'https://buckrate.com/' }
+---
+
+## What it does
+
+Buckrate was a livestock marketplace I built as a Flutter Web app at Timemarks. Its centre is the **Buckrate Calculator**, a Hindi-language screen whose subtitle reads, in translation, "calculate your animal's price and sell online". The seller describes the animal, the app estimates its live weight, and the price follows from the current rate per kilogram.
+
+## Features
+
+- **Three ways to get the weight.** The seller picks whether they have a measuring tape, a camera, or already know the weight.
+- **Camera estimation.** A computer-vision estimator built on image segmentation with custom-trained models estimates weight from a photo.
+- **Tape measurement.** A chest-girth field comes with an illustrated guide showing where to wrap the tape.
+- **Animal details.** Type, gender, age in months and a five-level body-condition choice, from very thin to very fat.
+- **Rate shown up front.** The current price per kilogram sits in the header next to the calculator.
+- **Hindi-first UI.** Labels are in Hindi, with English terms such as Gender, Age and Chest Girth in brackets.
+
+## How it's built
+
+The front end is Flutter compiled for the web. The weight estimator was written in Python and built on image segmentation with custom-trained models.
+
+Today buckrate.com presents a wider goat and sheep supply-chain platform, and the Flutter Web app described here is no longer what the site serves. The details above come from the app's own calculator screen.

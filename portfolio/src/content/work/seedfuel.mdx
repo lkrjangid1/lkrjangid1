@@ -1,0 +1,38 @@
+---
+title: SeedFuel
+headline: A laddu brand site with no build step
+summary: Marketing and ordering site for a no-added-sugar dry-fruit and seed laddu brand. Plain HTML, CSS and JS on GitHub Pages.
+role: Personal project · Brand & ordering site
+year: '2026'
+stack: [HTML, CSS, JavaScript, GitHub Pages, Google Forms]
+order: 16
+problem: A small food brand needed a site that tells its story and takes orders, without a backend, a CMS or a developer on call for every price change.
+approach: Two static pages, with every contact detail, price and form link pulled from one config file, and orders collected through an embedded Google Form pre-filled with the chosen pack size.
+result: Live on GitHub Pages, with contact details, prices and the order form all changed from a single file.
+links:
+  - { label: Live site, url: 'http://lkrjangid1.github.io/seedfuel' }
+  - { label: GitHub, url: 'https://github.com/lkrjangid1/seedfuel' }
+---
+
+## What it does
+
+SeedFuel makes laddus from dry fruits, seeds, dates and homemade ghee, with no added sugar. The home page covers the brand story, ingredients, who it's for, the product, pack sizes, how ordering works, a FAQ and contact. Picking a pack (500 g, 1 kg, 2 kg or 3 kg) opens the order page with that size already selected in the form.
+
+## Features
+
+- **Pack picker.** Size cards link to `order.html?size=1kg`, and the order page highlights the matching card.
+- **Pre-filled order form.** The embedded Google Form gets `entry.<id>=<size>` appended, so the pack-size question arrives answered. Picking a different card reloads the form with the new value.
+- **WhatsApp ordering.** Every "Order on WhatsApp" button builds a `wa.me` link with a pre-written message that includes the selected size.
+- **Config-driven content.** Contact details, prices and form URLs come from `assets/js/config.js`, injected through `data-config` and `data-price` attributes.
+- **Visible placeholders.** Any value still unset shows a dashed outline and a tooltip naming the config key to fill.
+- **Scroll reveal and sticky order bar.** `IntersectionObserver` drives the reveal animations and a mobile "Order now" bar that appears once the hero scrolls away.
+
+## How it's built
+
+There is no framework and no build step: `index.html`, `order.html` and `404.html`, one stylesheet with the design tokens, and two scripts. `main.js` is a single IIFE in four parts: navigation, scroll reveal, config injection, and the order page logic. Images are served as optimised `.webp`, and the repo includes `sitemap.xml`, `robots.txt` and an Open Graph image. Two docs explain how to build the Google Form and how to edit content and deploy to GitHub Pages.
+
+## What I'd point out
+
+- **Editing without code.** A non-developer changes prices, the phone number or the form by editing one commented file, and the placeholder outline shows what's still missing.
+- **Graceful fallbacks.** If no embed URL is set, the order page reveals a fallback block instead of an empty frame, and a share link opens the form in a new tab. Without `IntersectionObserver`, content renders without the animation.
+- **Accessible mobile menu.** The menu button keeps `aria-expanded` and its label in sync and closes on Escape.

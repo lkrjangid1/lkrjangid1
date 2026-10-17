@@ -1,0 +1,40 @@
+---
+title: OI Visualizer
+headline: Open interest and strategy payoff charts in Flutter
+summary: A Flutter package for options traders that charts open interest per strike and plots strategy P&L with breakevens, max profit and max loss.
+role: Personal project · Flutter
+year: '2025'
+stack: [Flutter, Dart, Data Visualization, Options Trading, CustomPainter, json_serializable]
+order: 14
+problem: Options traders read support, resistance and sentiment from open interest across strikes, but there was no ready-made Flutter widget set for OI charts and strategy payoff graphs.
+approach: A Flutter package that ports an open-source React and D3 OI visualizer to `CustomPainter` widgets, with an OI view, a strategy builder and an interactive P&L chart.
+result: Shipped as a reusable package with an example app, covering OI bars, data tables and strategy payoff charts.
+links:
+  - { label: GitHub, url: 'https://github.com/lkrjangid1/OI-Visualizer' }
+repo: https://github.com/lkrjangid1/OI-Visualizer
+---
+
+## What it does
+
+OI Visualizer helps options traders see where open interest sits across strike prices for an index or stock, and how it is changing against price. A strategy builder plots the payoff of a multi-leg position, such as a bull call spread, at a target date and at expiry, marking breakevens, max profit and max loss. It is a Flutter port of [nse-oi-visualizer](https://github.com/anshuthopsee/nse-oi-visualizer), an open-source React app by Anshu Thopsee, packaged as reusable widgets.
+
+## Features
+
+- **OI chart.** Call and put open interest per strike, switchable between change in OI and total OI, with the underlying price marked.
+- **Expiry filter.** Pick one or more expiries to view combined open interest.
+- **Data table.** Strike-wise call and put data in a sortable table.
+- **Strategy builder.** Add and edit option legs, then calculate the payoff for the position.
+- **P&L chart.** Separate lines for P&L at target and at expiry, with green and red fills for profit and loss regions.
+- **Breakevens and extremes.** Breakeven points found automatically, plus labelled max profit and max loss levels.
+- **OI behind the payoff.** Call and put OI bars can be drawn in the background of the P&L chart, so strikes with heavy positioning line up with the payoff curve.
+- **Crosshair and tooltips.** Hover or drag to read interpolated P&L values at any underlying price.
+
+## How it's built
+
+The package (`oi_visualizer`) is pure Flutter: charts are drawn with `CustomPainter` rather than a chart library, and the models are generated with `json_serializable`. Widgets take callbacks for loading data and calculating P&L, so the app decides where data comes from; the example app calls the original project's Node backend for open interest and builder data. A `ChartUtils` class holds the shared math: axis scaling and tick generation, K/L/Cr number formatting, breakeven detection and value interpolation.
+
+## What I'd point out
+
+- **Breakevens by interpolation.** Breakeven prices are found by detecting zero crossings in the payoff series and interpolating between the two points around each one.
+- **Platform-aware gestures.** The advanced P&L chart uses pan gestures on web and scale gestures on mobile for the crosshair, from one widget.
+- **Theme-able.** An `OITheme` provides light and dark colors for calls, puts, profit and loss, so the widgets can sit inside another app's design.

@@ -11,8 +11,12 @@ import { site } from '../../data/site';
 
 const { projects } = await getWork();
 
-const repoCategory = (status: string) => (status === 'learning' ? 'learning' : status === 'flagship' ? 'tooling' : 'open-source');
-const categories = [...new Set([...projects.map((p) => p.category), ...sortedRepos.map((r) => repoCategory(r.status))])];
+const repoCategory = (r: (typeof sortedRepos)[number]) => r.category ?? (r.status === 'learning' ? 'learning' : 'open-source');
+const allCategories = [...projects.map((p) => p.category), ...sortedRepos.map(repoCategory)];
+// Chip order follows categoryLabels; each chip shows how many items it holds.
+const categories = Object.keys(categoryLabels)
+  .filter((c) => allCategories.includes(c))
+  .map((c) => ({ c, n: allCategories.filter((x) => x === c).length }));
 const total = projects.length + sortedRepos.length;
 const listLd = {
   '@type': 'ItemList',
@@ -41,11 +45,12 @@ const listLd = {
       <label class="search">
         <span class="sr-only">Search projects</span>
         <Icon name="search" />
-        <input type="search" id="q" placeholder="Search projects, stacks, metrics" autocomplete="off" />
+        <input type="search" id="q" placeholder="Search projects, stacks, metrics" autocomplete="off" enterkeyhint="search" />
       </label>
+      <button type="button" class="reset" data-clear hidden>Clear</button>
       <div class="chips" role="group" aria-label="Filter by category">
-        <button type="button" class="fchip" data-c="" aria-pressed="true">All</button>
-        {categories.map((c) => <button type="button" class="fchip" data-c={c} aria-pressed="false">{categoryLabels[c] ?? c}</button>)}
+        <button type="button" class="fchip" data-c="" aria-pressed="true">All <span class="n">{total}</span></button>
+        {categories.map(({ c, n }) => <button type="button" class="fchip" data-c={c} aria-pressed="false">{categoryLabels[c] ?? c} <span class="n">{n}</span></button>)}
       </div>
     </div>
 
@@ -57,6 +62,7 @@ const listLd = {
             slug={p.slug} href={`/work/${p.slug}`} title={p.name} subtitle={p.subtitle} meta={p.role}
             metric={p.metrics} tags={p.tech} category={p.category} featured={p.featured}
             shot={p.screenshots[0] ? shotSrc(p.screenshots[0]) : undefined}
+            keywords={[...p.points, ...p.links.map((l) => l.label), categoryLabels[p.category]].join(' ')}
           />
         ))}
       </div>
@@ -69,13 +75,17 @@ const listLd = {
           <ProjectCard
             slug={r.slug} href={r.caseStudy ? `/work/${r.slug}` : r.repo} external={!r.caseStudy}
             title={r.name} subtitle={r.desc} meta={`${r.year}`} tags={r.tech}
-            status={statusLabels[r.status]} category={repoCategory(r.status)} featured={r.status === 'flagship'}
+            status={statusLabels[r.status]} category={repoCategory(r)} featured={r.status === 'flagship'}
+            keywords={[categoryLabels[repoCategory(r)], r.live ? 'live' : '', 'github open source'].join(' ')}
           />
         ))}
       </div>
     </section>
 
-    <p class="empty muted" id="empty" hidden>No projects match. Try another filter.</p>
+    <div class="empty" id="empty" hidden>
+      <p class="muted">No projects match that search.</p>
+      <button type="button" class="btn btn-sm" data-clear>Clear filters</button>
+    </div>
   </div>
 </Base>
 
@@ -88,6 +98,7 @@ const listLd = {
   const count = document.getElementById('count')!;
   const empty = document.getElementById('empty')!;
   const total = cards.length;
+  const clear = root.querySelector<HTMLButtonElement>('.reset')!;
 
   const params = new URLSearchParams(location.search);
   let c = params.get('c') ?? '';
@@ -95,18 +106,22 @@ const listLd = {
   if (!chips.some((b) => b.dataset.c === c)) c = '';
   input.value = q;
 
+  const words = (s: string) => s.toLowerCase().split(/[^\p{L}\p{N}+#]+/u).filter(Boolean);
+  const index = new Map(cards.map((card) => [card, words(card.dataset.search ?? '')]));
+
   function apply() {
-    const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+    const terms = words(q);
     let shown = 0;
     for (const card of cards) {
-      const hay = card.dataset.search ?? '';
-      const ok = (!c || card.dataset.category === c) && terms.every((t) => hay.includes(t));
+      const hay = index.get(card)!;
+      const ok = (!c || card.dataset.category === c) && terms.every((t) => hay.some((w) => w.startsWith(t)));
       card.hidden = !ok;
       if (ok) shown++;
     }
     for (const g of groups) g.hidden = !g.querySelector('.pcard:not([hidden])');
     for (const b of chips) b.setAttribute('aria-pressed', String(b.dataset.c === c));
     empty.hidden = shown > 0;
+    clear.hidden = !c && !q;
     count.textContent = shown === total ? `${total} projects` : `${shown} of ${total} projects`;
     const url = new URL(location.href);
     if (c) url.searchParams.set('c', c); else url.searchParams.delete('c');
@@ -116,6 +131,7 @@ const listLd = {
 
   chips.forEach((b) => b.addEventListener('click', () => { c = b.dataset.c ?? ''; apply(); }));
   input.addEventListener('input', () => { q = input.value.trim(); apply(); });
+  document.querySelectorAll('[data-clear]').forEach((b) => b.addEventListener('click', () => { c = ''; q = ''; input.value = ''; apply(); input.focus(); }));
   apply();
 </script>
 
@@ -128,6 +144,19 @@ const listLd = {
   .fchip { font-size: 13px; padding: 8px 14px; border-radius: var(--r-pill); border: 1px solid var(--line-2); background: transparent; color: var(--text-2); transition: background var(--t-fast), color var(--t-fast); }
   .fchip:hover { background: var(--surface-2); color: var(--text); }
   .fchip[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  .fchip .n { margin-left: 4px; font: 500 11px/1 var(--font-mono); opacity: .6; }
+  .reset { font-size: 13px; padding: 8px 12px; border: 0; background: none; color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; }
+  .reset:hover { color: var(--text); }
+  .reset[hidden] { display: none; }
+  .empty { display: grid; justify-items: center; gap: 16px; }
+  /* Phones: one swipeable row of chips keeps the sticky bar short. */
+  @media (max-width: 640px) {
+    .controls { top: 64px; padding: 8px; gap: 8px; }
+    .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; width: 100%; margin-inline: -8px; padding-inline: 8px; scroll-padding-inline: 8px; }
+    .chips::-webkit-scrollbar { display: none; }
+    .fchip { flex: none; }
+    .search input { font-size: 16px; }
+  }
   .group + .group { margin-top: clamp(72px, 9vw, 120px); }
   .empty { padding: 48px 0; text-align: center; }
 </style>

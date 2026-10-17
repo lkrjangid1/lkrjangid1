@@ -1,0 +1,36 @@
+---
+title: Remote Jobs
+headline: Fresh remote job posts from X, in one feed
+summary: An Android app that collects remote job posts shared on X (Twitter) into a searchable in-app feed, with role filters and bookmarks.
+role: Personal project
+stack: [Flutter, Android, Firebase, Web Scraping]
+order: 13
+problem: Many remote roles are announced first as posts on X by job boards and hiring accounts, scattered across hashtags and hard to follow for someone searching by role.
+approach: An automated pipeline pulls remote-job posts from X and publishes them to in-app feeds, which users can search by role, filter by job type and bookmark.
+result: 12,000+ users on the Play Store.
+---
+
+{/* The Play Store listing returned 404 when checked in October 2026; the app appears to be unpublished. */}
+
+## What it does
+
+Remote Jobs helps people find remote work anywhere in the world. Instead of following dozens of job-board accounts and hashtags on X, users open one feed of recent remote-job posts, each shown with the posting account, the post text, its link preview and the date it was posted. The app is no longer listed on Google Play.
+
+## Features
+
+- **Job feed.** Remote-job posts from job boards and hiring accounts on X, shown as cards with the original text, links and post date.
+- **Search by role.** A search box with role suggestions such as software developer, full stack, frontend, backend, iOS, Android, Node.js and React.
+- **Job-type chips.** Quick filters for freelance, part-time, full-time and internship roles.
+- **Bookmarks.** Save a job with one tap and find it later in a separate bookmarks screen.
+- **Share and open.** Share a post, or open its apply link in the browser.
+- **Paged browsing.** Previous and next page controls for moving through older posts.
+- **Dark mode.** A dark theme toggle in the side menu, next to About, Share and Feedback.
+
+## How it's built
+
+The app is written in Flutter for Android, with Firebase behind it. The data side is an automated pipeline that retrieves remote-job posts from X (Twitter) and publishes them to the feeds the app reads, so new openings appear without anyone curating them by hand. Users see a post's original wording and links rather than a rewritten summary.
+
+## What I'd point out
+
+- **Source where the jobs are posted.** Pulling straight from X means the feed fills itself from the accounts that announce openings, with no manual curation step.
+- **Small, focused scope.** One feed, role search, type filters and bookmarks, which was enough to reach more than 12,000 users.

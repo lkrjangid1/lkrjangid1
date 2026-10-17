@@ -1,0 +1,42 @@
+---
+title: MBM E-Learning
+headline: Study material for MBM students, by semester and branch
+summary: A Flutter app that gives MBM University students their branch and semester's notes, papers and books, plus campus clubs, events and news.
+role: Personal project
+year: '2021–2026'
+stack: [Flutter, Android, Firebase, Cloud Firestore, Google Apps Script, Google Sheets, flutter_bloc, SQLite]
+order: 12
+problem: MBM students spent their first semesters hunting for the syllabus, reference books, notes and previous papers, with no single place that had them for their branch and year.
+approach: A student-run Flutter app where material is filtered by semester and branch, anyone can upload, and admins approve before it goes live. Content is backed by Google Sheets and Apps Script, with Firebase for sign-in and push.
+result: 15K+ downloads on Google Play.
+links:
+  - { label: Play Store, url: 'https://play.google.com/store/apps/details?id=com.mbm.elereaning.mbmecj' }
+  - { label: GitHub, url: 'https://github.com/selsmbm/mbm-elearning-flutter-Android' }
+repo: https://github.com/selsmbm/mbm-elearning-flutter-Android
+---
+
+## What it does
+
+MBM E-Learning is the study app for MBM Engineering College, Jodhpur, published by SELS (Society of e-learning Students). Students pick their semester and branch and get the matching syllabus, reference book PDFs, handwritten notes, video lectures and previous year papers. The app also covers campus life: clubs, events, a news feed, faculty and a campus map.
+
+## Features
+
+- **Personalized material.** Notes, books, papers and lectures filtered by semester and branch, with search.
+- **Student uploads.** Anyone signed in can submit material; it goes live after an admin approves it.
+- **Bookmarks.** Save material for later, alongside a list of your own uploads.
+- **Campus life.** Clubs and societies, events, a feed, MBM stories, the faculty directory and a campus map.
+- **GATE section and useful links.** Exam prep material and curated links.
+- **Admin tools.** Approve material, manage verified users and achievements, and send push notifications to students.
+- **Dark mode.** Light and dark themes from settings.
+- **Account control.** Google and email sign-in, with account deletion in settings.
+
+## How it's built
+
+The app uses Provider for most app-wide state, with `flutter_bloc` for the material list and uploads. The content backend is Google Workspace: published Google Sheets act as read tables that the app fetches and parses with the `html` package, and Google Apps Script web apps handle filtered queries and writes (add, update, delete, approve). Firebase covers authentication, Cloud Firestore for user profiles, Cloud Messaging for notifications, and Analytics. The project uses `flutter_flavorizr` for separate dev and prod builds.
+
+## What I'd point out
+
+- **Zero-cost backend.** Sheets plus Apps Script gave a student team an editable database and a REST-style API with no server to run or pay for.
+- **Parallel startup load.** Material, feed, explore, events, useful links and the admin list are fetched with one `Future.wait`, not one after another.
+- **Offline cache.** Fetched tables are written to a small SQLite key-value cache, so the app has content to show before the network responds.
+- **Rewrite, then upkeep.** The app started in 2021 as a native Android (Java) project, was rebuilt in Flutter in 2022, and is still maintained in 2026; the latest release added account deletion.

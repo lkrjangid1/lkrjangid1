@@ -121,7 +121,7 @@ export const categoryOverrides: Record<string, string> = {
   scalper: 'production',
   'self-hosted-code-push': 'production',
   'finsight-ai': 'production',
-  pushpatch: 'product',
+  pushpatch: 'tooling',
   libgen: 'apps',
   searchly: 'apps',
   'remote-jobs': 'apps',
@@ -138,11 +138,10 @@ export const categoryOverrides: Record<string, string> = {
 
 export const categoryLabels: Record<string, string> = {
   production: 'Production',
-  product: 'Product',
   apps: 'Apps',
   'ai-iot': 'AI & IoT',
   web: 'Web',
-  tooling: 'Tooling',
+  tooling: 'Dev tools',
   'open-source': 'Open source',
   learning: 'Learning builds',
   other: 'Other',

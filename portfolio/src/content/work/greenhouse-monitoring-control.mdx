@@ -1,0 +1,40 @@
+---
+title: Greenhouse Monitoring & Control
+headline: A greenhouse you can watch and run from your phone
+summary: An ESP8266 greenhouse prototype that streams temperature, humidity, soil moisture and light to Firebase, with auto and manual control from a Flutter app.
+role: Final-year B.Tech project
+year: '2023'
+stack: [Flutter, Firebase, IoT, Android, NodeMCU ESP8266, Arduino C++, DHT11, Firebase Cloud Messaging]
+order: 20
+problem: Many greenhouses are still run by hand, and temperature, humidity, soil moisture and light have to be checked in person.
+approach: A NodeMCU ESP8266 reads four sensors and switches a fan, a pump, a light and a servo-driven window through relays. It syncs readings and control flags with Firebase Realtime Database, which a Flutter app reads and writes.
+result: A working proof-of-concept prototype, built by a five-person team in MBM University's Electrical Engineering department, with a bill of materials of about ₹1,265.
+links:
+  - { label: Project report, url: 'https://docs.google.com/document/d/17N0snPxfcz9Z75Yx-na0LfVPv5ap2OOayehAhktldBg/edit?usp=sharing' }
+---
+
+## What it does
+
+A small greenhouse model watches four things: temperature, humidity, soil moisture and light. It reacts to them on its own or follows commands from a phone. Every reading goes to Firebase, so the Flutter app shows live values and keeps a history.
+
+## Features
+
+- **Four sensors.** A DHT11 reads temperature and humidity, an FC-28 probe reads soil moisture and an LDR module reads light.
+- **Automatic mode.** The firmware runs the pump when the soil is dry, the fan when it's too hot, and opens a servo-driven window when the air is too humid.
+- **Manual mode.** One flag in the database switches the board to follow on/off commands from the app for each device.
+- **Thresholds set from the app.** The temperature and humidity cut-offs are read from Firebase, not hard-coded.
+- **Push alerts.** The board sends Firebase Cloud Messaging notifications, for example "time to irrigate" or "turn on the fan".
+- **History and live view.** Each reading is written to a timestamped history path and to one real-time node.
+
+## How it's built
+
+**Hardware.** A NodeMCU ESP8266 drives a 5 V four-channel relay module, a DC pump, DC motors, a servo and an LED, powered from a 12 V adapter. In the demo, a bulb stands in for the shade that would cut sunlight in a real greenhouse.
+
+**Firmware.** Arduino C++ that uses the Firebase ESP Client library and gets epoch time from an NTP client. On every pass of the loop it pulls the control flags and thresholds from the Realtime Database, runs manual or automatic logic, writes the readings to `ghm_data/<epoch>` and `ghm_real_time_data`, and then waits five seconds.
+
+**App.** A Flutter app, built with Android Studio, that reads the real-time node, plots readings and writes the control flags back.
+
+## What I'd point out
+
+- **Firebase as the control bus.** The board and the app never talk to each other directly. Both read and write the same database node, which keeps the firmware simple and lets the phone work from anywhere.
+- **The sensors are coarse.** Soil moisture and light are read as digital high/low values, not analog levels. That is enough for on/off control, and the report presents the build as a small-scale proof of concept, not production hardware.

@@ -17,10 +17,12 @@ interface Props {
   shot?: ShotSrc;
   external?: boolean;
   featured?: boolean;
+  /** Extra text the /work search should match (bullet points, link labels) without showing it on the card. */
+  keywords?: string;
 }
 
-const { slug, href, title, subtitle, meta, metric, tags, category, status, shot, external = false, featured = false } = Astro.props;
-const search = [title, subtitle, meta, metric, status, ...tags].filter(Boolean).join(' ').toLowerCase();
+const { slug, href, title, subtitle, meta, metric, tags, category, status, shot, external = false, featured = false, keywords } = Astro.props;
+const search = [title, subtitle, meta, metric, status, ...tags, keywords].filter(Boolean).join(' ').toLowerCase();
 const portrait = shot && typeof shot !== 'string' && shot.height > shot.width * 1.2;
 ---
 <article
