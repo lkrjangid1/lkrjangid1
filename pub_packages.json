@@ -20,8 +20,8 @@
     "native_api_ir",
     "native_api_ui",
     "native_api_android",
-    "global_context_menu",
     "curl_request_parser",
+    "global_context_menu",
     "smooth_chucker",
     "flutter_account_manager"
   ]
