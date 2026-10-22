@@ -42,7 +42,9 @@ const isCurrent = (href: string) => current === href || current.startsWith(href 
 </header>
 
 <style>
-  .nav { position: fixed; inset: 0 0 auto; z-index: 50; padding: 18px 0; transition: padding var(--t-med) var(--ease-out), background var(--t-med); }
+  .nav { position: fixed; inset: 0 0 auto; z-index: 50; padding: 18px 0; transition: padding var(--t-med) var(--ease-out), background var(--t-med), translate .5s var(--ease-out); }
+  /* Out of the way while the home showcase owns the screen (site.ts sets .in-show). */
+  :global(.in-show) .nav { translate: 0 -110%; }
   .nav:global(.scrolled) {
     padding: 10px 0; background: var(--glass); border-bottom: 1px solid var(--line);
     backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);

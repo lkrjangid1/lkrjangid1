@@ -49,69 +49,135 @@ if (splash) {
   setTimeout(() => { splash.remove(); removeEventListener('keydown', skip); }, 2600);
 }
 
-/* ---------- Showcase: pinned stage, circle reveal from each app icon ---------- */
+/* ---------- Showcase: pinned stage, scroll-scrubbed circle reveal from each app icon ---------- */
+// Same model as pawan.app: every slide owns one viewport of scroll. It holds for the first 10%, then over the
+// next 40% the next slide's circle grows out of its icon (0 → 150%). Every value is a pure function of the
+// scroll position, eased toward it each frame so wheel steps glide instead of jumping.
 const show = document.querySelector<HTMLElement>('[data-show]');
 const pinnable = matchMedia('(min-width: 1000px) and (min-height: 620px) and (prefers-reduced-motion: no-preference)');
 if (show) {
-  const slides = [...show.querySelectorAll<HTMLElement>('.slide')];
+  const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+  const slides = [...show.querySelectorAll<HTMLElement>('.slide')].map((el) => ({
+    el,
+    copy: el.querySelector<HTMLElement>('.slide-copy'),
+    icon: el.querySelector<HTMLElement>('.slide-icon'),
+    texts: [...el.querySelectorAll<HTMLElement>('.s-in')],
+    visual: el.querySelector<HTMLElement>('.slide-visual'),
+    ox: 0, oy: 0,
+  }));
   const dots = [...show.querySelectorAll<HTMLElement>('.show-dot')];
+  const dotIcons = dots.map((d) => d.querySelector<HTMLElement>('.app-icon'));
   const count = show.querySelector('[data-show-n]');
   const bar = show.querySelector<HTMLElement>('.show-progress');
   const n = slides.length;
-  let active = 0;
+  const HOLD = 0.1, SPAN = 0.4;
   let pinned = false;
+  let cur = -1;   // eased scroll offset inside the stage, in px
+  let raf = 0;
+  let active = -1;
 
-  const setActive = (i: number) => {
-    if (i === active) return;
-    active = i;
-    slides.forEach((s, j) => {
-      s.classList.toggle('on', j <= i);
-      s.classList.toggle('under', j < i);
-    });
-    dots.forEach((d, j) => d.classList.toggle('on', j === i));
-    if (count) count.textContent = String(i + 1).padStart(2, '0');
-  };
-  // Each slide grows out of its own icon; every slide shares the layout, so measure per slide.
+  // Each slide grows from its own icon; offsets (not rects) so the icon's scale does not skew the centre.
   const origins = () => slides.forEach((s) => {
-    const icon = s.querySelector<HTMLElement>('.slide-icon');
-    if (!icon) return;
-    // Offsets, not getBoundingClientRect: hidden slides hold their copy shifted down for the entrance.
-    let x = icon.offsetWidth / 2, y = icon.offsetHeight / 2;
-    for (let el: HTMLElement | null = icon; el && el !== s; el = el.offsetParent as HTMLElement | null) {
+    if (!s.icon) return;
+    let x = s.icon.offsetWidth / 2, y = s.icon.offsetHeight / 2;
+    for (let el: HTMLElement | null = s.icon; el && el !== s.el; el = el.offsetParent as HTMLElement | null) {
       x += el.offsetLeft; y += el.offsetTop;
     }
-    s.style.setProperty('--ox', `${x}px`);
-    s.style.setProperty('--oy', `${y}px`);
+    s.ox = x; s.oy = y;
   });
-  // Scroll space is n viewports; each slide owns an equal share of the (n - 1) that actually scroll.
-  const segment = () => (show.offsetHeight - innerHeight) / n;
-  const update = () => {
-    if (!pinned) return;
+  const target = () => Math.min(n * innerHeight, Math.max(0, scrollY - show.offsetTop));
+  // Progress of slide k's entrance (slide 0 is always fully in).
+  const enter = (k: number, y: number) => (k === 0 ? 1 : k >= n ? 0 : clamp01((y / innerHeight - k - HOLD) / SPAN));
+
+  const render = (y: number) => {
+    const vh = innerHeight;
+    slides.forEach((s, k) => {
+      const t = enter(k, y);              // this slide coming in
+      const out = enter(k + 1, y);        // the next slide covering it
+      const u = clamp01((t - 0.4) / 0.6); // text and visual follow in the last 60% of the circle
+      const covered = enter(k + 1, y) === 1 || (k > 0 && t === 0);
+      s.el.style.visibility = covered ? 'hidden' : 'visible';
+      if (covered) return;
+      if (k > 0) s.el.style.clipPath = `circle(${(t * 150).toFixed(3)}% at ${s.ox}px ${s.oy}px)`;
+      if (s.icon) s.icon.style.transform = t < 1 ? `scale(${(0.55 + 0.45 * t).toFixed(4)})` : '';
+      s.texts.forEach((el) => {
+        el.style.opacity = u.toFixed(4);
+        el.style.transform = u < 1 ? `translateY(${(80 * (1 - u)).toFixed(2)}px)` : '';
+      });
+      if (s.copy) {
+        s.copy.style.opacity = (1 - 0.8 * out).toFixed(4);
+        s.copy.style.transform = out > 0 ? `translateY(${(-80 * out).toFixed(2)}px)` : '';
+      }
+      if (s.visual) {
+        // Slow drift while the slide holds, then up and back (scale .9) as the next circle covers it.
+        const holdStart = k === 0 ? 0 : (k + HOLD + SPAN) * vh;
+        const holdEnd = (k + 1 + HOLD) * vh;
+        const drift = -36 * clamp01((y - holdStart) / (holdEnd - holdStart));
+        const ty = 160 * (1 - t) + drift - 54 * out;
+        s.visual.style.opacity = (k === 0 ? 1 : u).toFixed(4);
+        s.visual.style.transform = `perspective(1400px) translateY(${ty.toFixed(2)}px) rotateX(${(16 * (1 - t)).toFixed(3)}deg) scale(${(1 - 0.1 * out).toFixed(4)})`;
+      }
+    });
+    // Rail: each icon's weight is how much of the screen its slide currently owns.
+    dotIcons.forEach((ic, k) => {
+      const w = enter(k, y) - enter(k + 1, y);
+      if (ic) { ic.style.opacity = (0.5 + 0.5 * w).toFixed(3); ic.style.transform = `scale(${(0.7 + 0.32 * w).toFixed(4)})`; }
+    });
+    let a = 0;
+    for (let k = 1; k < n; k++) if (enter(k, y) >= 0.5) a = k;
+    if (a !== active) {
+      active = a;
+      dots.forEach((d, j) => d.classList.toggle('on', j === a));
+      if (count) count.textContent = String(a + 1).padStart(2, '0');
+    }
+    bar?.style.setProperty('--p', (y / (n * vh)).toFixed(4));
+  };
+  // Like pawan.app, the nav slides away while the stage is on screen.
+  const navAway = () => {
     const y = scrollY - show.offsetTop;
-    const p = Math.min(1, Math.max(0, y / (show.offsetHeight - innerHeight)));
-    bar?.style.setProperty('--p', p.toFixed(4));
-    setActive(Math.min(n - 1, Math.max(0, Math.floor(y / segment()))));
+    root.classList.toggle('in-show', pinned && y > -2 && y < n * innerHeight - 2);
+  };
+
+  const tick = () => {
+    const goal = target();
+    cur = cur < 0 ? goal : cur + (goal - cur) * 0.14;
+    if (Math.abs(goal - cur) < 0.5) cur = goal;
+    render(cur);
+    raf = cur === goal ? 0 : requestAnimationFrame(tick);
+  };
+  const kick = () => { navAway(); if (pinned && !raf) raf = requestAnimationFrame(tick); };
+
+  // Drop only the properties render() writes; the markup carries --app, --i and --size inline.
+  const clear = () => {
+    for (const s of slides) {
+      s.el.style.clipPath = s.el.style.visibility = '';
+      for (const el of [s.copy, s.icon, s.visual, ...s.texts]) if (el) el.style.opacity = el.style.transform = '';
+    }
+    for (const ic of dotIcons) if (ic) ic.style.opacity = ic.style.transform = '';
   };
   const mode = () => {
     pinned = pinnable.matches;
     show.classList.toggle('pinned', pinned);
-    if (pinned) { origins(); update(); }
-    else slides.forEach((s) => s.classList.add('on'));
+    if (!pinned) { cancelAnimationFrame(raf); raf = 0; clear(); navAway(); return; }
+    origins();
+    cur = -1;
+    kick();
   };
+  // Where slide k is fully in: the end of its circle.
+  const slideTop = (k: number) => show.offsetTop + (k === 0 ? 0 : (k + HOLD + SPAN) * innerHeight) + 2;
   // Rail dots and the hero dock link to #p-slug; in pinned mode that means a scroll position, not an element.
   document.querySelectorAll<HTMLAnchorElement>('a[href^="#p-"]').forEach((a) => a.addEventListener('click', (e) => {
-    const i = slides.findIndex((s) => `#${s.id}` === a.getAttribute('href'));
-    if (!pinned || i < 0) return;
+    const k = slides.findIndex((s) => `#${s.el.id}` === a.getAttribute('href'));
+    if (!pinned || k < 0) return;
     e.preventDefault();
-    scrollTo({ top: show.offsetTop + i * segment() + 2, behavior: 'smooth' });
+    scrollTo({ top: slideTop(k), behavior: 'smooth' });
   }));
-  // Deep links (#p-libgen) land on that slide instead of the stage top.
-  const hashSlide = slides.findIndex((s) => `#${s.id}` === location.hash);
   mode();
-  if (pinned && hashSlide > 0) requestAnimationFrame(() => scrollTo({ top: show.offsetTop + hashSlide * segment() + 2 }));
+  const hashSlide = slides.findIndex((s) => `#${s.el.id}` === location.hash);
+  if (pinned && hashSlide > 0) requestAnimationFrame(() => scrollTo({ top: slideTop(hashSlide) }));
   pinnable.addEventListener('change', mode);
-  addEventListener('resize', () => pinned && origins(), { passive: true });
-  addEventListener('scroll', update, { passive: true });
+  addEventListener('resize', () => { if (pinned) { origins(); cur = -1; kick(); } }, { passive: true });
+  addEventListener('scroll', kick, { passive: true });
 }
 
 if (!reduced) {

@@ -137,6 +137,7 @@
 }
 .slide-inner { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); align-items: center; gap: clamp(32px, 5vw, 88px); padding-block: 96px 64px; }
 .slide-head { display: flex; align-items: center; gap: 18px; margin-bottom: 30px; }
+.slide-icon { filter: drop-shadow(0 16px 28px color-mix(in srgb, var(--app) 40%, transparent)); }
 .slide-head > div { display: grid; gap: 10px; justify-items: start; }
 .slide-n { letter-spacing: .2em; }
 .slide-name { font-size: clamp(52px, 7vw, 112px); line-height: .92; letter-spacing: -.05em; overflow-wrap: anywhere; }
@@ -180,35 +181,21 @@
 .show-progress { display: none; position: absolute; left: 0; right: 0; top: 0; height: 2px; z-index: 30; }
 .show-progress i { display: block; height: 100%; width: 100%; transform-origin: left; transform: scaleX(var(--p, 0)); background: var(--accent); }
 
-/* ---------- Pinned mode ---------- */
-.show.pinned { height: calc(var(--n) * 100vh); }
+/* ---------- Pinned mode ----------
+   site.ts scrubs every value below from the scroll position (one viewport of scroll per slide), so nothing
+   here transitions on a timer. These are only the resting states before the first frame. */
+.show.pinned { height: calc((var(--n) + 1) * 100vh); }
 .show.pinned .show-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .show.pinned .slide { position: absolute; inset: 0; min-height: 0; z-index: calc(var(--i) + 1); }
 .show.pinned .show-rail { display: flex; }
 .show.pinned .show-progress { display: block; }
-/* Hidden slides are a zero circle at their icon; `.on` grows it past the corners. Going back, it shrinks home. */
-.show.pinned .slide:not(:first-child) {
-  clip-path: circle(0 at var(--ox, 12%) var(--oy, 32%));
-  transition: clip-path 1s cubic-bezier(.62, 0, .24, 1), visibility 0s 1s;
-  visibility: hidden;
-}
-.show.pinned .slide.on { clip-path: circle(150vmax at var(--ox, 12%) var(--oy, 32%)); visibility: visible; transition-delay: 0s; }
-/* The arriving circle carries a wash of the app colour that settles into the slide background. */
-.show.pinned .slide::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; background: radial-gradient(circle at var(--ox, 12%) var(--oy, 32%), color-mix(in srgb, var(--app) 55%, var(--bg)), color-mix(in srgb, var(--app) 24%, var(--bg)) 70%); }
-.show.pinned .slide.on:not(:first-child)::after { animation: wash 1.5s cubic-bezier(.4, 0, .2, 1) forwards; }
-@keyframes wash { 0%, 35% { opacity: 1; } 100% { opacity: 0; } }
-/* Content of the incoming slide follows the circle in. */
-.show.pinned .slide .s-in, .show.pinned .slide .slide-visual { opacity: 0; transform: translateY(26px); transition: opacity .5s, transform .5s var(--ease-out); }
-.show.pinned .slide .slide-visual { transform: translateY(40px) scale(.97); }
-.show.pinned .slide.on .s-in, .show.pinned .slide.on .slide-visual {
-  opacity: 1; transform: none; transition: opacity .8s var(--ease-out), transform 1s var(--ease-out);
-  transition-delay: calc(.32s + var(--k, 0) * 70ms);
-}
-.show.pinned .slide .slide-head { --k: 0; } .show.pinned .slide .slide-name { --k: 1; } .show.pinned .slide .slide-tag { --k: 2; }
-.show.pinned .slide .slide-desc { --k: 3; } .show.pinned .slide .slide-chips { --k: 4; } .show.pinned .slide .slide-cta { --k: 5; }
-.show.pinned .slide .slide-visual { --k: 3; }
-/* Covered slides dim slightly so the circle reads as something arriving on top. */
-.show.pinned .slide.under .slide-inner { opacity: .35; transition: opacity .9s; }
+.show.pinned .slide:not(:first-child) { clip-path: circle(0 at var(--ox, 12%) var(--oy, 32%)); visibility: hidden; }
+.show.pinned .slide:not(:first-child) .slide-icon { transform: scale(.55); }
+.show.pinned .slide:not(:first-child) .s-in { opacity: 0; transform: translateY(80px); }
+.show.pinned .slide:not(:first-child) .slide-visual { opacity: 0; transform: perspective(1400px) translateY(160px) rotateX(16deg); }
+.show.pinned .slide-visual { transform-origin: 50% 40%; will-change: transform, opacity; }
+.show.pinned .slide-copy, .show.pinned .s-in { will-change: transform, opacity; }
+.show.pinned .show-dot .app-icon { transition: none; }
 
 @media (max-width: 900px) {
   .slide { min-height: 0; }

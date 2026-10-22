@@ -5,8 +5,8 @@ import { brand } from '../data/icons';
 import type { ReelItem } from '../data/home';
 
 /**
- * Full-screen product showcase. On wide screens with motion allowed, site.ts pins the stage and each
- * slide is revealed by a circle that grows out of its app icon as you scroll. Without that it is a
+ * Full-screen product showcase. On wide screens with motion allowed, site.ts pins the stage and scrubs
+ * every transition with the scroll position: the next slide is a circle growing out of its app icon. Without that it is a
  * plain stack of full-height sections, so content, links and headings never depend on JS.
  */
 interface Props { items: ReelItem[] }
@@ -35,9 +35,9 @@ const terminal = [
           <div class="slide-bg" aria-hidden="true"></div>
           <div class="wrap slide-inner">
             <div class="slide-copy">
-              <div class="slide-head s-in">
+              <div class="slide-head">
                 <AppIcon slug={r.slug} name={r.name} size={76} class="slide-icon" />
-                <div>
+                <div class="s-in">
                   <span class="label slide-n">{String(i + 1).padStart(2, '0')} / {total}</span>
                   <span class="pill">{r.platform}</span>
                 </div>
