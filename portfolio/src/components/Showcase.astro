@@ -57,7 +57,7 @@ const terminal = [
                   {r.shots.slice(0, 2).map((s, j) => <Device kind="phone" shots={[s]} alt={`${r.name} app screenshot ${j + 1}`} class={j === 0 ? 'tilt-l' : 'tilt-r'} eager={i === 0} />)}
                 </div>
               )}
-              {r.visual === 'phone' && <Device kind="phone" size="big" shots={r.shots.slice(0, 6)} alt={`${r.name} app screenshots`} />}
+              {r.visual === 'phone' && <Device kind="phone" size="big" shots={r.shots.slice(0, 6)} alt={`${r.name} app screenshots`} eager={i === 0} />}
               {r.visual === 'laptop' && <Device kind="laptop" shots={r.shots.slice(0, 3)} alt={`${r.name} screenshots`} />}
               {r.visual === 'browser' && <Device kind="browser" shots={r.shots.slice(0, 4)} alt={`${r.name} screenshots`} url={`${r.slug}.app`} />}
               {r.visual === 'terminal' && (

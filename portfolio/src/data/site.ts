@@ -117,12 +117,12 @@ export const framedShots = new Set(['searchly', 'remote-jobs', 'mbm-e-learning']
 
 /** The "Now shipping" reel on the home page, in order. Copy and links come from projects.json. */
 export const reel = [
+  { slug: 'libgen', platform: 'Android · iPhone (Quillshelf) · Flutter', tagline: 'Every book source, one beautiful reader.', visual: 'phone' },
   { slug: 'univest', platform: 'Android · iOS · Flutter, Kotlin, SwiftUI', tagline: 'Trading and investing for 9M+ people.', visual: 'phones' },
   { slug: 'scalper', platform: 'Inside Univest · Flutter custom rendering', tagline: 'A trading terminal, built from scratch in under a month.', visual: 'phone' },
   { slug: 'pushpatch', platform: 'Desktop · CLI · Web dashboard', tagline: 'Fix production Flutter apps in minutes, not review cycles.', visual: 'laptop' },
-  { slug: 'native-api-bindgen', platform: 'Open source · Dart, JNI, libclang, JSI', tagline: 'Use native APIs directly. No MethodChannel.', visual: 'terminal' },
-  { slug: 'libgen', platform: 'Android · iPhone (Quillshelf) · Flutter', tagline: 'Every book source, one beautiful reader.', visual: 'phone' },
   { slug: 'incognito-vault', platform: 'Chrome extension · macOS app', tagline: 'Keep the chats you meant to keep.', visual: 'browser' },
+  { slug: 'native-api-bindgen', platform: 'Open source · Dart, JNI, libclang, JSI', tagline: 'Use native APIs directly. No MethodChannel.', visual: 'terminal' },
 ] as const;
 
 export type ReelVisual = (typeof reel)[number]['visual'];

@@ -140,8 +140,10 @@
 .slide-icon { filter: drop-shadow(0 16px 28px color-mix(in srgb, var(--app) 40%, transparent)); }
 .slide-head > div { display: grid; gap: 10px; justify-items: start; }
 .slide-n { letter-spacing: .2em; }
-.slide-name { font-size: clamp(52px, 7vw, 112px); line-height: .92; letter-spacing: -.05em; overflow-wrap: anywhere; }
-#p-native-api-bindgen .slide-name { font-size: clamp(38px, 4.6vw, 72px); letter-spacing: -.035em; }
+/* Sized to the copy column (container units) so a one-word name like PushPatch never breaks mid-word. */
+.slide-copy { container-type: inline-size; }
+.slide-name { font-size: clamp(40px, 17cqi, 112px); line-height: .92; letter-spacing: -.05em; overflow-wrap: normal; word-break: keep-all; hyphens: none; }
+#p-native-api-bindgen .slide-name { font-size: clamp(32px, 11cqi, 72px); letter-spacing: -.035em; }
 .slide-tag { font-size: clamp(24px, 2.6vw, 38px); line-height: 1.15; margin: 14px 0 22px; color: color-mix(in srgb, var(--app) 62%, var(--text)); }
 .slide-desc { max-width: 540px; color: var(--text-2); font-size: clamp(16px, 1.25vw, 18px); line-height: 1.6; margin: 0; }
 .slide-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 0; padding: 0; max-width: 560px; }
@@ -152,8 +154,11 @@
 .slide-link:hover { color: var(--text); }
 
 .slide-visual { position: relative; display: grid; place-items: center; min-width: 0; }
-.slide-visual .phone { width: min(260px, 27vh); }
-.slide-visual .phone.big { width: min(300px, 31vh); }
+.slide-visual { container-type: inline-size; }
+/* Device.astro sizes .phone.md from --phone-w (its scoped rules beat plain selectors here). Two phones share
+   the column, so each takes at most ~45% of it and the pair never runs under the rail or off a phone screen. */
+.slide-visual { --phone-w: min(260px, 27vh, 44cqi); }
+.show .slide-visual .phone.big { width: min(290px, 30vh, 70cqi); }
 .slide-visual .laptop, .slide-visual .browser { max-width: min(760px, 100%); }
 .slide-visual .terminal { max-width: 640px; }
 .two-phones { display: flex; justify-content: center; }
@@ -188,6 +193,8 @@
 .show.pinned .show-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
 .show.pinned .slide { position: absolute; inset: 0; min-height: 0; z-index: calc(var(--i) + 1); }
 .show.pinned .show-rail { display: flex; }
+/* Keep visuals clear of the rail on narrower desktops. */
+.show.pinned .slide-inner { padding-right: max(var(--gutter), 92px); }
 .show.pinned .show-progress { display: block; }
 .show.pinned .slide:not(:first-child) { clip-path: circle(0 at var(--ox, 12%) var(--oy, 32%)); visibility: hidden; }
 .show.pinned .slide:not(:first-child) .slide-icon { transform: scale(.55); }
@@ -200,15 +207,12 @@
 @media (max-width: 900px) {
   .slide { min-height: 0; }
   .slide-inner { grid-template-columns: minmax(0, 1fr); padding-block: 88px 72px; gap: 44px; }
-  .slide-visual .phone { width: min(240px, 42vw); }
-  .slide-visual .phone.big { width: min(260px, 60vw); }
 }
 @media (max-width: 560px) {
   .slide-inner { padding-block: 72px 56px; }
   .slide-head { margin-bottom: 22px; }
   .slide-head .app-icon { --size: 60px !important; }
-  .slide-name { font-size: clamp(42px, 13vw, 60px); }
-  .two-phones .phone { width: min(200px, 42vw); border-radius: 26px; padding: 7px; }
+  .two-phones .phone { border-radius: 26px; padding: 7px; }
   .two-phones .phone .screen { border-radius: 20px; }
   .two-phones .phone::before { width: 34%; height: 14px; top: 13px; }
   .tilt-l { translate: 10px 6px; }
