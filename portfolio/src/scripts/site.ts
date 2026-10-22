@@ -100,8 +100,14 @@ if (show) {
       const covered = enter(k + 1, y) === 1 || (k > 0 && t === 0);
       s.el.style.visibility = covered ? 'hidden' : 'visible';
       if (covered) return;
-      if (k > 0) s.el.style.clipPath = `circle(${(t * 150).toFixed(3)}% at ${s.ox}px ${s.oy}px)`;
-      if (s.icon) s.icon.style.transform = t < 1 ? `scale(${(0.55 + 0.45 * t).toFixed(4)})` : 'none';
+      // The new icon (and its circle) is born on the centre of the current icon, which is lifting 80px * t with
+      // its copy, then glides to its own place as the circle grows. Copy blocks differ in height, so the two
+      // icons rarely share a position.
+      const prev = slides[k - 1];
+      const dx = prev ? (prev.ox - s.ox) * (1 - t) : 0;
+      const dy = prev ? (prev.oy - 80 * t - s.oy) * (1 - t) : 0;
+      if (k > 0) s.el.style.clipPath = `circle(${(t * 150).toFixed(3)}% at ${(s.ox + dx).toFixed(2)}px ${(s.oy + dy).toFixed(2)}px)`;
+      if (s.icon) s.icon.style.transform = t < 1 ? `translate(${dx.toFixed(2)}px, ${dy.toFixed(2)}px) scale(${(0.55 + 0.45 * t).toFixed(4)})` : 'none';
       s.texts.forEach((el) => {
         el.style.opacity = u.toFixed(4);
         el.style.transform = u < 1 ? `translateY(${(80 * (1 - u)).toFixed(2)}px)` : 'none';
