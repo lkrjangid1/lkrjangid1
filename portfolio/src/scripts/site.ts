@@ -89,6 +89,8 @@ if (show) {
   // Progress of slide k's entrance (slide 0 is always fully in).
   const enter = (k: number, y: number) => (k === 0 ? 1 : k >= n ? 0 : clamp01((y / innerHeight - k - HOLD) / SPAN));
 
+  // Always write explicit values ('none', never ''): clearing would fall back to the CSS resting state
+  // (icon at .55, text 80px down) that hidden slides start from.
   const render = (y: number) => {
     const vh = innerHeight;
     slides.forEach((s, k) => {
@@ -99,14 +101,14 @@ if (show) {
       s.el.style.visibility = covered ? 'hidden' : 'visible';
       if (covered) return;
       if (k > 0) s.el.style.clipPath = `circle(${(t * 150).toFixed(3)}% at ${s.ox}px ${s.oy}px)`;
-      if (s.icon) s.icon.style.transform = t < 1 ? `scale(${(0.55 + 0.45 * t).toFixed(4)})` : '';
+      if (s.icon) s.icon.style.transform = t < 1 ? `scale(${(0.55 + 0.45 * t).toFixed(4)})` : 'none';
       s.texts.forEach((el) => {
         el.style.opacity = u.toFixed(4);
-        el.style.transform = u < 1 ? `translateY(${(80 * (1 - u)).toFixed(2)}px)` : '';
+        el.style.transform = u < 1 ? `translateY(${(80 * (1 - u)).toFixed(2)}px)` : 'none';
       });
       if (s.copy) {
         s.copy.style.opacity = (1 - 0.8 * out).toFixed(4);
-        s.copy.style.transform = out > 0 ? `translateY(${(-80 * out).toFixed(2)}px)` : '';
+        s.copy.style.transform = out > 0 ? `translateY(${(-80 * out).toFixed(2)}px)` : 'none';
       }
       if (s.visual) {
         // Slow drift while the slide holds, then up and back (scale .9) as the next circle covers it.
