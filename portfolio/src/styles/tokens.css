@@ -227,7 +227,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .browser .bar { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
 .browser .bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--surface-3); }
 .browser .bar i:nth-child(1) { background: #ff5f57; } .browser .bar i:nth-child(2) { background: #febc2e; } .browser .bar i:nth-child(3) { background: #28c840; }
-.browser .url { margin-left: 12px; flex: 1; max-width: 320px; height: 22px; border-radius: 6px; background: var(--surface-3); font: 12px/22px var(--font-mono); color: var(--text-3); padding: 0 10px; overflow: hidden; }
+.browser .url { margin-left: 12px; flex: 1; max-width: 320px; height: 22px; border-radius: 6px; background: var(--surface-3); font: 12px/22px var(--font-mono); color: var(--text-2); padding: 0 10px; overflow: hidden; }
 .browser .screen { position: relative; aspect-ratio: 16 / 10; background: #111; }
 
 .terminal { border-radius: 14px; background: #0a0c10; color: #d8dee9; box-shadow: 0 0 0 1px rgba(255,255,255,.1), var(--shadow); overflow: hidden; width: 100%; max-width: 640px; }
@@ -236,7 +236,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .terminal pre { margin: 0; padding: 20px 22px 26px; min-height: 248px; font: 13.5px/1.75 var(--font-mono); white-space: pre-wrap; }
 .terminal .p { color: var(--app-bindgen); }
 .terminal .ok { color: #7cf2d0; }
-.terminal .dim { color: #6b7180; }
+.terminal .dim { color: #858b99; }
 .caret { display: inline-block; width: 8px; height: 1.1em; vertical-align: -3px; background: currentColor; animation: blink 1s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 

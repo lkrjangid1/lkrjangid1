@@ -3,6 +3,8 @@ import Base from '../layouts/Base.astro';
 import AppIcon from '../components/AppIcon.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Contributions from '../components/Contributions.astro';
+import GithubActivity from '../components/GithubActivity.astro';
+import { getGithubStats } from '../data/github';
 import { getAllPackages } from '../data/work';
 import { isBindgenFamily } from '../data/packages';
 import { sortedRepos, statusLabels } from '../data/repos';
@@ -10,6 +12,7 @@ import { site } from '../data/site';
 import { ids } from '../data/seo';
 
 const packages = await getAllPackages();
+const github = await getGithubStats();
 const family = packages.filter((p) => isBindgenFamily(p.name));
 const standalone = packages.filter((p) => !isBindgenFamily(p.name));
 const cli = packages.find((p) => p.name === 'native_api_bindgen');
@@ -83,6 +86,16 @@ const listLd = {
         ))}
       </ul>
     </section>
+
+    {github && (
+      <section id="github" class="section" aria-labelledby="gh-h">
+        <SectionHead id="gh-h" size="sub" label="GitHub · activity" title="Building" accent="in public."
+          lead="Pulled from GitHub at every build: a year of contributions, followers and public repositories.">
+          <a class="btn" href={github.url} rel="noopener" data-cursor="GitHub">@{github.user} ↗</a>
+        </SectionHead>
+        <GithubActivity stats={github} />
+      </section>
+    )}
 
     <section class="section" aria-labelledby="contrib-h">
       <SectionHead id="contrib-h" size="sub" label="Open-source contributions · Hacktoberfest · Holopin" title="Contributor," accent="two Octobers running." lead="Hacktoberfest contributor in 2020 and 2021, with swag to prove it, and badges collected on Holopin.">

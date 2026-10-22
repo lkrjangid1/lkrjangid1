@@ -35,23 +35,83 @@ document.querySelectorAll<HTMLElement>('[data-clock]').forEach((el) => {
   setInterval(tick, 30_000);
 });
 
-/* ---------- Reel rail ---------- */
-const rail = document.querySelector('.rail');
-const reel = document.querySelector('.reel');
-if (rail && reel) {
-  const icons = [...rail.querySelectorAll('.rail-icon')];
-  const n = rail.querySelector('[data-rail-n]');
-  const total = icons.length;
-  new IntersectionObserver(([e]) => rail.classList.toggle('show', e.isIntersecting), { rootMargin: '-40% 0px -40% 0px' }).observe(reel);
-  const io = new IntersectionObserver((entries) => {
-    for (const e of entries) {
-      if (!e.isIntersecting) continue;
-      const i = Number((e.target as HTMLElement).dataset.index);
-      icons.forEach((ic, j) => ic.classList.toggle('on', j === i));
-      if (n) n.textContent = `${String(i + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+/* ---------- Splash: once per session, any click or key skips it ---------- */
+const splash = document.querySelector<HTMLElement>('[data-splash]');
+if (splash) {
+  try { sessionStorage.setItem('lj-splash', '1'); } catch {}
+  const skip = () => {
+    splash.classList.add('skip');
+    setTimeout(() => splash.remove(), 300);
+    removeEventListener('keydown', skip);
+  };
+  splash.addEventListener('click', skip);
+  addEventListener('keydown', skip);
+  setTimeout(() => { splash.remove(); removeEventListener('keydown', skip); }, 2600);
+}
+
+/* ---------- Showcase: pinned stage, circle reveal from each app icon ---------- */
+const show = document.querySelector<HTMLElement>('[data-show]');
+const pinnable = matchMedia('(min-width: 1000px) and (min-height: 620px) and (prefers-reduced-motion: no-preference)');
+if (show) {
+  const slides = [...show.querySelectorAll<HTMLElement>('.slide')];
+  const dots = [...show.querySelectorAll<HTMLElement>('.show-dot')];
+  const count = show.querySelector('[data-show-n]');
+  const bar = show.querySelector<HTMLElement>('.show-progress');
+  const n = slides.length;
+  let active = 0;
+  let pinned = false;
+
+  const setActive = (i: number) => {
+    if (i === active) return;
+    active = i;
+    slides.forEach((s, j) => {
+      s.classList.toggle('on', j <= i);
+      s.classList.toggle('under', j < i);
+    });
+    dots.forEach((d, j) => d.classList.toggle('on', j === i));
+    if (count) count.textContent = String(i + 1).padStart(2, '0');
+  };
+  // Each slide grows out of its own icon; every slide shares the layout, so measure per slide.
+  const origins = () => slides.forEach((s) => {
+    const icon = s.querySelector<HTMLElement>('.slide-icon');
+    if (!icon) return;
+    // Offsets, not getBoundingClientRect: hidden slides hold their copy shifted down for the entrance.
+    let x = icon.offsetWidth / 2, y = icon.offsetHeight / 2;
+    for (let el: HTMLElement | null = icon; el && el !== s; el = el.offsetParent as HTMLElement | null) {
+      x += el.offsetLeft; y += el.offsetTop;
     }
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  reel.querySelectorAll('.product').forEach((p) => io.observe(p));
+    s.style.setProperty('--ox', `${x}px`);
+    s.style.setProperty('--oy', `${y}px`);
+  });
+  // Scroll space is n viewports; each slide owns an equal share of the (n - 1) that actually scroll.
+  const segment = () => (show.offsetHeight - innerHeight) / n;
+  const update = () => {
+    if (!pinned) return;
+    const y = scrollY - show.offsetTop;
+    const p = Math.min(1, Math.max(0, y / (show.offsetHeight - innerHeight)));
+    bar?.style.setProperty('--p', p.toFixed(4));
+    setActive(Math.min(n - 1, Math.max(0, Math.floor(y / segment()))));
+  };
+  const mode = () => {
+    pinned = pinnable.matches;
+    show.classList.toggle('pinned', pinned);
+    if (pinned) { origins(); update(); }
+    else slides.forEach((s) => s.classList.add('on'));
+  };
+  // Rail dots and the hero dock link to #p-slug; in pinned mode that means a scroll position, not an element.
+  document.querySelectorAll<HTMLAnchorElement>('a[href^="#p-"]').forEach((a) => a.addEventListener('click', (e) => {
+    const i = slides.findIndex((s) => `#${s.id}` === a.getAttribute('href'));
+    if (!pinned || i < 0) return;
+    e.preventDefault();
+    scrollTo({ top: show.offsetTop + i * segment() + 2, behavior: 'smooth' });
+  }));
+  // Deep links (#p-libgen) land on that slide instead of the stage top.
+  const hashSlide = slides.findIndex((s) => `#${s.id}` === location.hash);
+  mode();
+  if (pinned && hashSlide > 0) requestAnimationFrame(() => scrollTo({ top: show.offsetTop + hashSlide * segment() + 2 }));
+  pinnable.addEventListener('change', mode);
+  addEventListener('resize', () => pinned && origins(), { passive: true });
+  addEventListener('scroll', update, { passive: true });
 }
 
 if (!reduced) {

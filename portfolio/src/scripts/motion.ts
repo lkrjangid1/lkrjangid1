@@ -44,10 +44,6 @@ export function startMotion() {
     gsap.from(pre.querySelectorAll('.tl'), { opacity: 0, duration: 0.01, stagger: 0.32, scrollTrigger: { trigger: pre, start: 'top 80%', once: true } });
   });
 
-  document.querySelectorAll('.product-visual').forEach((v) => {
-    gsap.fromTo(v, { y: 50 }, { y: -50, ease: 'none', scrollTrigger: { trigger: v, start: 'top bottom', end: 'bottom top', scrub: true } });
-  });
-
   if (document.querySelector('.hero-glow')) {
     gsap.to('.hero-glow', { opacity: 0.35, scale: 1.15, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
   }

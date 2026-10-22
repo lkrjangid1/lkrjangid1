@@ -1,0 +1,88 @@
+---
+import AppIcon from './AppIcon.astro';
+import Device from './Device.astro';
+import { brand } from '../data/icons';
+import type { ReelItem } from '../data/home';
+
+/**
+ * Full-screen product showcase. On wide screens with motion allowed, site.ts pins the stage and each
+ * slide is revealed by a circle that grows out of its app icon as you scroll. Without that it is a
+ * plain stack of full-height sections, so content, links and headings never depend on JS.
+ */
+interface Props { items: ReelItem[] }
+const { items } = Astro.props;
+const total = String(items.length).padStart(2, '0');
+const host = (url: string) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return ''; } };
+
+const terminal = [
+  '<span class="p">$</span> dart pub global activate native_api_bindgen',
+  '<span class="p">$</span> native-api-bindgen doctor',
+  '<span class="ok">✓</span> Android SDK · JDK · Xcode · libclang',
+  '<span class="p">$</span> native-api-bindgen generate flutter',
+  '<span class="dim">  parsing android.jar → IR …</span>',
+  '<span class="ok">✓ 51,429 of 52,938 methods generated (97.1%)</span>',
+  '<span class="dim">  1,509 skipped, each with a reason code</span>',
+  '<span class="p">$</span> <span class="caret"></span>',
+];
+---
+<section id="work" class="show" style={`--n:${items.length}`} aria-labelledby="work-h" data-show>
+  <h2 id="work-h" class="sr-only">Featured Flutter apps and tools</h2>
+  <div class="show-stage">
+    {items.map((r, i) => {
+      const site = r.links.find((l) => /website|docs|live|web/i.test(l.label)) ?? r.links[0];
+      return (
+        <article id={`p-${r.slug}`} class:list={['slide', { on: i === 0 }]} style={`--app:${brand(r.slug, r.name).accent};--i:${i}`} data-index={i} aria-labelledby={`p-${r.slug}-h`}>
+          <div class="slide-bg" aria-hidden="true"></div>
+          <div class="wrap slide-inner">
+            <div class="slide-copy">
+              <div class="slide-head s-in">
+                <AppIcon slug={r.slug} name={r.name} size={76} class="slide-icon" />
+                <div>
+                  <span class="label slide-n">{String(i + 1).padStart(2, '0')} / {total}</span>
+                  <span class="pill">{r.platform}</span>
+                </div>
+              </div>
+              <h3 id={`p-${r.slug}-h`} class="display slide-name s-in">{r.name}</h3>
+              <p class="serif slide-tag s-in">{r.tagline}</p>
+              <p class="slide-desc s-in">{r.points[0]}</p>
+              {r.metrics.length > 0 && <ul class="slide-chips s-in">{r.metrics.slice(0, 4).map((m) => <li>{m}</li>)}</ul>}
+              <div class="slide-cta s-in">
+                <a class="btn btn-primary" href={r.href} data-cursor="Read">Case study ↗</a>
+                {site && <a class="mono slide-link" href={site.url} rel="noopener" data-cursor="Visit">{host(site.url) || site.label}</a>}
+              </div>
+            </div>
+            <div class="slide-visual" data-cursor={r.visual === 'terminal' ? undefined : 'Look'}>
+              {r.visual === 'phones' && (
+                <div class="two-phones">
+                  {r.shots.slice(0, 2).map((s, j) => <Device kind="phone" shots={[s]} alt={`${r.name} app screenshot ${j + 1}`} class={j === 0 ? 'tilt-l' : 'tilt-r'} eager={i === 0} />)}
+                </div>
+              )}
+              {r.visual === 'phone' && <Device kind="phone" size="big" shots={r.shots.slice(0, 6)} alt={`${r.name} app screenshots`} />}
+              {r.visual === 'laptop' && <Device kind="laptop" shots={r.shots.slice(0, 3)} alt={`${r.name} screenshots`} />}
+              {r.visual === 'browser' && <Device kind="browser" shots={r.shots.slice(0, 4)} alt={`${r.name} screenshots`} url={`${r.slug}.app`} />}
+              {r.visual === 'terminal' && (
+                <div class="terminal">
+                  <div class="bar"><i></i><i></i><i></i><span class="mono dim" style="margin-left:8px">~/app — zsh</span></div>
+                  <pre aria-label="native-api-bindgen terminal session" set:html={terminal.map((l) => `<span class="tl">${l}</span>`).join('\n')} />
+                </div>
+              )}
+            </div>
+          </div>
+        </article>
+      );
+    })}
+
+    <nav class="show-rail" aria-label="Featured products">
+      <span class="label" data-show-n>01</span>
+      <i aria-hidden="true"></i>
+      {items.map((r, i) => (
+        <a href={`#p-${r.slug}`} class:list={['show-dot', { on: i === 0 }]} data-go={i} aria-label={r.name} data-tip={r.name}>
+          <AppIcon slug={r.slug} name={r.name} size={34} />
+        </a>
+      ))}
+      <i aria-hidden="true"></i>
+      <span class="label">{total}</span>
+    </nav>
+    <div class="show-progress" aria-hidden="true"><i></i></div>
+  </div>
+</section>

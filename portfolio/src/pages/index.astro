@@ -1,28 +1,19 @@
 ---
-import { Image } from 'astro:assets';
-import Base from '../layouts/Base.astro';
-import AppIcon from '../components/AppIcon.astro';
-import Device from '../components/Device.astro';
-import Shot from '../components/Shot.astro';
-import Icon from '../components/Icon.astro';
-import SectionHead from '../components/SectionHead.astro';
-import Quote from '../components/Quote.astro';
-import ProductMarquee from '../components/ProductMarquee.astro';
-import SkillsRadar from '../components/SkillsRadar.astro';
-import Timeline from '../components/Timeline.astro';
-import GithubActivity from '../components/GithubActivity.astro';
-import Contributions from '../components/Contributions.astro';
-import { getGithubStats } from '../data/github';
-import portrait from '../assets/portrait.webp';
-import '../styles/home.css';
-import { experience, proof, radar, shortNames, site, wins, writing } from '../data/site';
-import { getWork, getAllPackages } from '../data/work';
-import { buildLineup, buildReel } from '../data/home';
-import { brand } from '../data/icons';
-import { isBindgenFamily } from '../data/packages';
-import { sortedRepos, statusLabels } from '../data/repos';
-import { getRecommendations } from '../data/recommendations';
-import { getArticleCount } from '../data/stats';
+import { Image } from "astro:assets";
+import Base from "../layouts/Base.astro";
+import AppIcon from "../components/AppIcon.astro";
+import SectionHead from "../components/SectionHead.astro";
+import ProductMarquee from "../components/ProductMarquee.astro";
+import Showcase from "../components/Showcase.astro";
+import Splash from "../components/Splash.astro";
+import portrait from "../assets/portrait.webp";
+import "../styles/home.css";
+import { proof, shortNames, site } from "../data/site";
+import { getWork, getAllPackages } from "../data/work";
+import { buildLineup, buildReel } from "../data/home";
+import { repos } from "../data/repos";
+import { getRecommendations } from "../data/recommendations";
+import { getArticleCount } from "../data/stats";
 
 const { projects } = await getWork();
 const reelItems = buildReel(projects);
@@ -30,23 +21,9 @@ const lineup = buildLineup(projects);
 const packages = await getAllPackages();
 const articleCount = await getArticleCount();
 const recommendations = await getRecommendations();
-const github = await getGithubStats();
-const skillCount = radar.reduce((n, g) => n + g.skills.length, 0);
 
 const counts: Record<string, number> = { packages: packages.length, articles: articleCount };
-const stats = proof.map((s) => ({ ...s, value: 'key' in s ? counts[s.key] ?? s.value : s.value }));
-
-const family = packages.filter((p) => isBindgenFamily(p.name));
-const topPackages = packages
-  .filter((p) => !isBindgenFamily(p.name))
-  .sort((a, b) => (b.points ?? 0) - (a.points ?? 0))
-  .slice(0, 6);
-const otherPackages = packages.length - family.length - topPackages.length;
-const repoStrip = sortedRepos.filter((r) => r.slug !== 'native-api-bindgen').slice(0, 5);
-
-const series = writing.filter((p) => p.series).sort((a, b) => a.title.localeCompare(b.title));
-const recent = writing.filter((p) => !p.series).slice(0, 5);
-const month = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric' });
+const stats = proof.map((s) => ({ ...s, value: "key" in s ? counts[s.key] ?? s.value : s.value }));
 
 const dockApps = lineup.filter((t) => t.metric).slice(0, 3);
 const dock = [...reelItems.map((r) => ({ slug: r.slug, name: r.name, href: `#p-${r.slug}` })), null,
@@ -60,22 +37,20 @@ const marqueeItems = [
   ...lineup.map((t) => ({ slug: t.slug, name: shortNames[t.slug] ?? t.name, href: t.href })),
 ];
 
-const terminal = [
-  '<span class="p">$</span> dart pub global activate native_api_bindgen',
-  '<span class="p">$</span> native-api-bindgen doctor',
-  '<span class="ok">✓</span> Android SDK · JDK · Xcode · libclang',
-  '<span class="p">$</span> native-api-bindgen generate flutter',
-  '<span class="dim">  parsing android.jar → IR …</span>',
-  '<span class="ok">✓ 51,429 of 52,938 methods generated (97.1%)</span>',
-  '<span class="dim">  1,509 skipped, each with a reason code</span>',
-  '<span class="p">$</span> <span class="caret"></span>',
+const years = Math.floor((Date.now() - Date.UTC(2021, 1, 1)) / 31_557_600_000);
+// Everything that used to be stacked on the home page now has its own page; these cards point there.
+const explore = [
+  { href: "/work", n: projects.length + repos.length, label: "Projects", title: "All work", text: "Every app, tool and experiment, filterable, with case studies.", app: "#3db9ff" },
+  { href: "/open-source", n: packages.length, label: "pub.dev packages", title: "Open source", text: "Packages, repositories, GitHub activity and Hacktoberfest.", app: "#7cf2d0" },
+  { href: "/writing", n: articleCount, label: "Articles", title: "Writing", text: "Flutter internals, Shorebird code push, native interop.", app: "#ff7a45" },
+  { href: "/about", n: `${years}+`, label: `Years shipping · ${recommendations.length} recommendations`, title: "About", text: "Experience, skills radar, achievements and kind words.", app: "#b48cff" },
 ];
-
-
 ---
 <Base current="/" rawTitle="Lokesh Jangid · Senior Flutter Developer in India" ogType="profile" pageType="ProfilePage"
   keywords={['Flutter developer', 'Senior Flutter developer', 'Flutter app developer India', 'mobile app developer', 'Android developer', 'iOS developer', 'software developer', 'hire Flutter developer', 'Lokesh Jangid']}
   description="Lokesh Jangid, Senior Flutter developer in India: Flutter, Android and iOS apps for 9M+ users at Univest, 24 pub.dev packages and OTA code push. Hire me.">
+  <Splash />
+
   <!-- ============ HERO ============ -->
   <section class="hero" aria-labelledby="hero-name">
     <div class="hero-glow" aria-hidden="true"></div>
@@ -135,204 +110,31 @@ const terminal = [
     </div>
   </section>
 
-  <div class="marquee" aria-label="Highlights">
-    {[0, 1].map((copy) => (
-      <div class="marquee-track" aria-hidden={copy === 1 ? 'true' : undefined}>
-        {wins.map(([a, b]) => <span><b>{a}</b> {b}</span>)}
-      </div>
-    ))}
-  </div>
-
-  <!-- ============ REEL ============ -->
-  <section id="work" class="wrap section" aria-labelledby="work-h">
-    <SectionHead id="work-h" label="Featured · Flutter apps in production" title="Now shipping." accent="From order books to OTA patches."
-      lead="Fintech at scale by day, developer tooling the rest of the time. Scroll to step inside each one." />
-  </section>
-
-  <div class="reel">
-    <aside class="rail" aria-label="Featured products">
-      <span class="label rail-count" data-rail-n>01 / {String(reelItems.length).padStart(2, '0')}</span>
-      {reelItems.map((r) => <a href={`#p-${r.slug}`} class="rail-link" aria-label={r.name}><AppIcon slug={r.slug} name={r.name} size={36} class="rail-icon" /></a>)}
-    </aside>
-
-    {reelItems.map((r, i) => (
-      <article id={`p-${r.slug}`} class:list={['product', 'wrap', { flip: i % 2 === 1 }]} style={`--app:${brand(r.slug, r.name).accent}`} data-index={i}>
-        <div class="product-copy" data-reveal>
-          <div class="product-head">
-            <AppIcon slug={r.slug} name={r.name} size={64} />
-            <div><span class="label">{String(i + 1).padStart(2, '0')} / {String(reelItems.length).padStart(2, '0')}</span><span class="pill">{r.platform}</span></div>
-          </div>
-          <h3 class="display product-name">{r.name}</h3>
-          <p class="serif product-tag">{r.tagline}</p>
-          <ul class="product-points">{r.points.map((pt) => <li>{pt}</li>)}</ul>
-          {r.metrics.length > 0 && <ul class="metrics">{r.metrics.map((m) => <li>{m}</li>)}</ul>}
-          {r.visual === 'terminal' && (
-            <div class="ui-item bench" role="img" aria-label="1 MB round trip: bindgen 1.80 ms, MethodChannel 9.02 ms">
-              <div class="bench-row"><span class="mono">bindgen</span><span class="bar"><i style="--w:20%" class="hi"></i></span><span class="mono">1.80 ms</span></div>
-              <div class="bench-row"><span class="mono">MethodChannel</span><span class="bar"><i style="--w:100%"></i></span><span class="mono">9.02 ms</span></div>
-              <p class="label">1 MB round trip · Oct 2026</p>
-            </div>
-          )}
-          <div class="actions">
-            <a class="btn btn-sm btn-primary" href={r.href} data-cursor="Read">Case study →</a>
-            {r.links.slice(0, 3).map((l) => <a class="btn btn-sm" href={l.url} rel="noopener" data-cursor="Visit">{l.label} ↗</a>)}
-          </div>
-        </div>
-        <div class="product-visual" data-reveal data-cursor={r.visual === 'terminal' ? undefined : 'Look'}>
-          {r.visual === 'phones' && (
-            <div class="two-phones">
-              {r.shots.slice(0, 2).map((s, j) => <Device kind="phone" shots={[s]} alt={`${r.name} screen ${j + 1}`} class={j === 0 ? 'tilt-l' : 'tilt-r'} />)}
-            </div>
-          )}
-          {r.visual === 'phone' && <Device kind="phone" size="big" shots={r.shots.slice(0, 6)} alt={`${r.name} screens`} />}
-          {r.visual === 'laptop' && <Device kind="laptop" shots={r.shots.slice(0, 3)} alt={`${r.name} screens`} />}
-          {r.visual === 'browser' && <Device kind="browser" shots={r.shots.slice(0, 4)} alt={`${r.name} screens`} url={`${r.slug}.app`} />}
-          {r.visual === 'terminal' && (
-            <div class="terminal">
-              <div class="bar"><i></i><i></i><i></i><span class="mono dim" style="margin-left:8px">~/app — zsh</span></div>
-              <pre aria-label="native-api-bindgen terminal session" set:html={terminal.map((l) => `<span class="tl">${l}</span>`).join('\n')} />
-            </div>
-          )}
-        </div>
-      </article>
-    ))}
-  </div>
+  <!-- ============ SHOWCASE ============ -->
+  <Showcase items={reelItems} />
 
   <div class="marquee-gap"><ProductMarquee items={marqueeItems} /></div>
 
-  <!-- ============ LINEUP ============ -->
-  <section id="lineup" class="wrap section" aria-labelledby="lineup-h">
-    <SectionHead id="lineup-h" label="The lineup" title="Everything else" accent="I've shipped."
-      lead="Indie apps with real users, a hackathon win, AI experiments and client work.">
-      <a class="btn" href="/work">Browse all work →</a>
-    </SectionHead>
-    <div class="bento">
-      {lineup.map((t) => (
-        <a href={t.href} class:list={['ui-card', 'glow', 'tile', { 't-wide': t.layout !== 'text' }]} style={`--app:${brand(t.slug, t.name).accent}`} data-reveal data-tilt data-cursor="Open">
-          <div class="tile-copy">
-            <AppIcon slug={t.slug} name={t.name} size={44} />
-            <h3 class="h3">{t.name}</h3>
-            <p class="muted">{t.summary}</p>
-            {t.metric && <p class="tile-metric">{t.metric}</p>}
-          </div>
-          {t.layout === 'phones' && (
-            <div class="tile-media phones">
-              {t.shots.slice(0, 2).map((s, j) => <Device kind="phone" size="mini" shots={[s]} alt={`${t.name} screen ${j + 1}`} />)}
-            </div>
-          )}
-          {t.layout === 'posters' && (
-            <div class="tile-media posters">
-              {t.shots.slice(0, 2).map((s, j) => <Shot src={s} alt={`${t.name} screen ${j + 1}`} width={300} class="poster" />)}
-            </div>
-          )}
-          {t.layout === 'image' && <div class="tile-media image"><Shot src={t.shots[0]} alt={`${t.name} screenshot`} width={720} /></div>}
+  <!-- ============ EXPLORE ============ -->
+  <section class="wrap section" aria-labelledby="ex-h">
+    <SectionHead id="ex-h" label="Everything else · Flutter, Android, iOS" title="There is more" accent="where that came from."
+      lead="The full catalogue, the open-source work, the writing and the story behind it each have their own page." />
+    <div class="explore">
+      {explore.map((e) => (
+        <a class="ui-card lg glow hoverable ex" href={e.href} style={`--app:${e.app}`} data-reveal data-tilt data-cursor="Open">
+          <b>{e.n}</b><span class="label">{e.label}</span>
+          <h3 class="h3">{e.title}</h3>
+          <p class="muted">{e.text}</p>
+          <span class="go">Open →</span>
         </a>
       ))}
     </div>
   </section>
 
-  <!-- ============ OPEN SOURCE ============ -->
-  <section id="open-source" class="wrap section" aria-labelledby="os-h">
-    <SectionHead id="os-h" label="Open source · pub.dev/publishers/lkrjangid.tech" title={`${packages.length} packages.`} accent="Used in other people's apps.">
-      <a class="btn" href="/open-source">All open source →</a>
-    </SectionHead>
-    <div class="ui-grid os-grid">
-      <a class="ui-card lg glow family" href="/work/native-api-bindgen" data-reveal data-cursor="Read">
-        <p class="label">The toolchain · {family.length} packages</p>
-        <h3 class="h3 mono-title">native_api_*</h3>
-        <p class="muted">CLI, IR, generators and runtimes behind native-api-bindgen.</p>
-        <div class="pills">{family.map((p) => <span class="chip">{p.name.replace('native_api_', '')}</span>)}</div>
-      </a>
-      <ul class="ui-card flush pkgs" data-reveal>
-        {topPackages.map((p) => (
-          <li><a href={p.url} rel="noopener" data-cursor="pub.dev"><span class="mono">{p.name}</span><span class="muted">{p.description}</span><span class="chip">{p.version || '↗'}</span></a></li>
-        ))}
-        {otherPackages > 0 && <li><a href="/open-source"><span class="mono">+ {otherPackages} more</span><span class="muted">See every package</span><span class="chip">All →</span></a></li>}
-      </ul>
-    </div>
-    <div class="ui-grid repo-row" data-reveal>
-      {repoStrip.map((r) => (
-        <a class="ui-card repo" href={r.repo} rel="noopener" data-cursor="GitHub"><b>{r.name}</b><span>{r.tech.slice(0, 2).join(' · ')}</span><em class:list={['st', { show: r.status === 'showcase' || r.status === 'production', prog: r.status === 'in-progress' }]}>{statusLabels[r.status]}</em></a>
-      ))}
-      <a class="ui-card repo" href="/open-source"><b>+ {sortedRepos.length - repoStrip.length - 1} more</b><span>Every repo, with its status</span><em class="st">All →</em></a>
-    </div>
-  </section>
-
-  <!-- ============ CONTRIBUTIONS ============ -->
-  <div class="wrap">
-    <section class="section" aria-labelledby="contrib-h">
-      <SectionHead id="contrib-h" label="Open-source contributions · Hacktoberfest · Holopin" title="Contributor," accent="two Octobers running." lead="Hacktoberfest contributor in 2020 and 2021, with swag to prove it, and badges collected on Holopin.">
-        <a class="btn" href={site.links.holopin} rel="noopener" data-cursor="Holopin">Holopin board ↗</a>
-      </SectionHead>
-      <Contributions />
-    </section>
-  </div>
-
-  <!-- ============ GITHUB ============ -->
-  {github && (
-    <section id="github" class="wrap section" aria-labelledby="gh-h">
-      <SectionHead id="gh-h" label="GitHub · activity" title="Building" accent="in public."
-        lead="Pulled from GitHub at every build: a year of contributions, followers and public repositories.">
-        <a class="btn" href={github.url} rel="noopener" data-cursor="GitHub">@{github.user} ↗</a>
-      </SectionHead>
-      <GithubActivity stats={github} />
-    </section>
-  )}
-
-  <!-- ============ WRITING ============ -->
-  <section id="writing" class="wrap section" aria-labelledby="writing-h">
-    <SectionHead id="writing-h" label="Writing · FlutDev" title={`${articleCount} articles.`} accent="One rabbit hole at a time.">
-      <a class="btn" href="/writing">All writing →</a>
-    </SectionHead>
-    <div class="ui-grid writing">
-      <div class="ui-card lg glow series" style="--app:#ff7a45" data-reveal>
-        <p class="label">Series · May 2026 · 4 parts</p>
-        <h3 class="h3">Shorebird internals</h3>
-        <p class="muted">How Flutter code push really works, from bidiff to a running .so.</p>
-        <ol class="stack">
-          {series.map((p, i) => (
-            <li><a class="ui-item" href={p.url} rel="noopener" data-cursor="Read"><span class="mono">{String(i + 1).padStart(2, '0')}</span><span>{p.title.replace(/^Part \d+:\s*/, '')}</span></a></li>
-          ))}
-        </ol>
-      </div>
-      <ul class="rows posts" data-reveal>
-        {recent.map((p) => <li><a href={p.url} rel="noopener" data-cursor="Read"><span>{p.title}</span><time class="label" datetime={p.date}>{month.format(new Date(p.date))}</time></a></li>)}
-      </ul>
-    </div>
-  </section>
-
-  <!-- ============ RECOMMENDATIONS ============ -->
-  {recommendations.length > 0 && (
-    <section id="kind-words" class="wrap section" aria-labelledby="kw-h">
-      <SectionHead id="kw-h" label="Recommendations · LinkedIn" title="People I've" accent="shipped with." />
-      <div class="quotes">{recommendations.map((r) => <Quote r={r} />)}</div>
-    </section>
-  )}
-
-  <!-- ============ SKILLS ============ -->
-  <section id="skills" class="wrap section" aria-labelledby="skills-h">
-    <SectionHead id="skills-h" label="Skills · Flutter, Kotlin, Swift" title="The stack behind" accent="the products."
-      lead={`${skillCount} tools in ${radar.length} groups. The closer to the core, the more I use it. Hover a group to light up its sector.`} />
-    <SkillsRadar />
-  </section>
-
-  <!-- ============ EXPERIENCE ============ -->
-  <section id="about" class="wrap section" aria-labelledby="about-h">
-    <SectionHead id="about-h" label="Experience" title="Where I've" accent="built."
-      lead="From an early engineer at an EdTech startup to trading, payments and platform tooling at a 9M+ user fintech.">
-      <div class="pills"><span class="chip">{experience.length} roles</span><span class="chip">Since Feb 2021</span></div>
-      <div class="btns">
-        <a class="btn" href="/about">More about me →</a>
-        <a class="btn" href={site.resume} download data-cursor="PDF">Résumé <Icon name="download" size={14} /></a>
-      </div>
-    </SectionHead>
-    <Timeline limit={4} />
-  </section>
-
   <!-- ============ CONTACT ============ -->
   <section id="contact" class="wrap section contact" aria-labelledby="contact-h">
     <div class="contact-glow" aria-hidden="true"></div>
-    <SectionHead id="contact-h" label="Contact" title="Have an app to build" accent="or fix?" />
+    <SectionHead id="contact-h" label="Contact · Hire a Flutter developer" title="Have an app to build" accent="or fix?" />
     <div class="ui-grid contact-cards">
       <a class="ui-card lg glow ccard" href="/contact" data-reveal data-tilt data-cursor="Write">
         <p class="label">Full-time</p><h3 class="h3">Hire me</h3>
