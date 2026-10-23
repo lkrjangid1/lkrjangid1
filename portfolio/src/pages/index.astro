@@ -1,12 +1,14 @@
 ---
+import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import AppIcon from "../components/AppIcon.astro";
 import SectionHead from "../components/SectionHead.astro";
 import ProductMarquee from "../components/ProductMarquee.astro";
 import Showcase from "../components/Showcase.astro";
 import Splash from "../components/Splash.astro";
+import portrait from "../assets/portrait.webp";
 import "../styles/home.css";
-import { shortNames, site } from "../data/site";
+import { proof, shortNames, site } from "../data/site";
 import { getWork, getAllPackages } from "../data/work";
 import { buildLineup, buildReel } from "../data/home";
 import { repos } from "../data/repos";
@@ -19,6 +21,9 @@ const lineup = buildLineup(projects);
 const packages = await getAllPackages();
 const articleCount = await getArticleCount();
 const recommendations = await getRecommendations();
+
+const counts: Record<string, number> = { packages: packages.length, articles: articleCount };
+const stats = proof.map((s) => ({ ...s, value: "key" in s ? counts[s.key] ?? s.value : s.value }));
 
 const dockApps = lineup.filter((t) => t.metric).slice(0, 3);
 const dock = [...reelItems.map((r) => ({ slug: r.slug, name: r.name, href: `#p-${r.slug}` })), null,
@@ -49,15 +54,36 @@ const explore = [
   <!-- ============ HERO ============ -->
   <section class="hero" aria-labelledby="hero-name">
     <div class="hero-glow" aria-hidden="true"></div>
-    <div class="wrap hero-main">
+    <div class="wrap hero-top">
+      <a class="status" href="/contact" data-reveal data-cursor="Hire">
+        <span class="dot pulse"></span>
+        <span><strong>{site.status}</strong><small>{site.statusSub}</small></span>
+        <span class="status-go" aria-hidden="true">→</span>
+      </a>
+      <p class="where" data-reveal>Based in {site.location}<br /><span class="muted">Local time <time data-clock={site.timezone}>—</time> IST</span></p>
+    </div>
+
+    <div class="hero-stage">
+      <Image class="portrait" src={portrait} alt={`${site.name}, Senior Flutter developer in India`} width={900} loading="eager" fetchpriority="high" format="webp" quality={84} />
       <h1 id="hero-name" class="display name"><span class="hero-role">{site.role} · Android &amp; iOS · India</span>{site.name}</h1>
+    </div>
+
+    <div class="wrap hero-bottom">
       <p class="lead hero-intro" data-reveal>
-        I build Flutter, Android and iOS apps for <strong>9M+ users</strong> at <strong>Univest</strong>,
-        <span class="serif accent">and the tooling underneath them.</span>
+        {site.role} at <strong>Univest</strong>. I build Flutter, Android and iOS apps for
+        <strong>9M+ users</strong>, <span class="serif accent">and the tooling underneath them.</span>
       </p>
-      <div class="hero-ctas" data-reveal>
-        <a class="btn btn-primary" href="#work">See what's shipping ↓</a>
-        <a class="btn" href="/contact">Work with me ↗</a>
+      <div class="hero-side" data-reveal>
+        <div class="ui-card currently" data-rotator aria-live="polite">
+          <div class="currently-head"><span class="label">Currently</span><span class="ticks" aria-hidden="true">{site.currently.map((_, i) => <i class={i === 0 ? 'on' : ''}></i>)}</span></div>
+          <ul class="currently-list">
+            {site.currently.map((c, i) => <li class={i === 0 ? 'on' : ''}>{c.label} <span class="muted">{c.at}</span></li>)}
+          </ul>
+        </div>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#work">See what's shipping ↓</a>
+          <a class="btn" href="/contact">Work with me ↗</a>
+        </div>
       </div>
     </div>
 
@@ -75,6 +101,13 @@ const explore = [
       </nav>
     </div>
 
+    <div class="wrap proof" aria-label="Impact in numbers">
+      {stats.map((s) => (
+        <a class="stat" href={s.href} rel="noopener" data-reveal data-cursor="Source">
+          <b data-count={s.value} data-suffix={s.suffix}>{s.value}{s.suffix}</b><span class="label">{s.label}</span>
+        </a>
+      ))}
+    </div>
   </section>
 
   <!-- ============ SHOWCASE ============ -->
