@@ -155,15 +155,75 @@
 
 .slide-visual { position: relative; display: grid; place-items: center; min-width: 0; }
 .slide-visual { container-type: inline-size; }
-/* Device.astro sizes .phone.md from --phone-w (its scoped rules beat plain selectors here). Two phones share
-   the column, so each takes at most ~45% of it and the pair never runs under the rail or off a phone screen. */
-.slide-visual { --phone-w: min(260px, 27vh, 44cqi); }
-.show .slide-visual .phone.big { width: min(290px, 30vh, 70cqi); }
-.slide-visual .laptop, .slide-visual .browser { max-width: min(760px, 100%); }
-.slide-visual .terminal { max-width: 640px; }
-.two-phones { display: flex; justify-content: center; }
-.tilt-l { rotate: -5deg; translate: 18px 10px; z-index: 1; }
-.tilt-r { rotate: 5deg; translate: -18px -20px; }
+/* Film poster: the whole 16:9 frame is the play target; ShowcaseArt floats cards over its corners. */
+.sv { position: relative; width: min(100%, 860px, calc((100svh - 300px) * 16 / 9)); min-width: min(100%, 420px); margin-block: 0 clamp(70px, 14cqi, 120px); }
+.sv-play {
+  position: relative; display: block; aspect-ratio: 16 / 9; border-radius: clamp(14px, 2.4cqi, 22px); overflow: hidden; isolation: isolate;
+  border: 1px solid color-mix(in srgb, var(--app) 26%, var(--line-2));
+  box-shadow: 0 60px 120px -40px color-mix(in srgb, var(--app) 45%, transparent), 0 30px 60px -30px rgb(0 0 0 / .6);
+  transition: box-shadow var(--t-med) var(--ease-out), border-color var(--t-med);
+}
+.sv-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .9s var(--ease-out), filter var(--t-med); }
+.sv-light { display: none; }
+:root[data-theme="light"] .sv-dark { display: none; }
+:root[data-theme="light"] .sv-light { display: block; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .sv-dark { display: none; }
+  :root:not([data-theme="dark"]) .sv-light { display: block; }
+}
+.sv-play::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgb(0 0 0 / .28), transparent 60%); opacity: .7; transition: opacity var(--t-med); }
+.sv-btn {
+  position: absolute; left: 50%; top: 50%; z-index: 2; translate: -50% -50%; display: grid; place-items: center;
+  width: clamp(64px, 13cqi, 96px); aspect-ratio: 1; border-radius: 50%; color: #fff;
+  background: color-mix(in srgb, var(--app) 30%, rgb(10 12 18 / .4)); border: 1px solid rgb(255 255 255 / .35);
+  backdrop-filter: blur(14px) saturate(1.4); -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  box-shadow: 0 20px 50px -12px rgb(0 0 0 / .6);
+  transition: scale .5s var(--ease-out), background var(--t-med);
+}
+.sv-btn svg { width: 36%; margin-left: 7%; fill: currentColor; }
+.sv-btn::before, .sv-btn::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; border: 1.5px solid rgb(255 255 255 / .5); animation: sv-ring 2.6s var(--ease-out) infinite; }
+.sv-btn::after { animation-delay: 1.3s; }
+@keyframes sv-ring { from { scale: 1; opacity: .9; } to { scale: 1.7; opacity: 0; } }
+.sv-dur {
+  position: absolute; left: 14px; bottom: 14px; z-index: 2; padding: 6px 11px; border-radius: var(--r-pill); font-size: 12px; color: #fff;
+  background: rgb(8 10 14 / .55); border: 1px solid rgb(255 255 255 / .16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.sv-play:hover .sv-thumb, .sv-play:focus-visible .sv-thumb { transform: scale(1.035); }
+.sv-play:hover .sv-btn, .sv-play:focus-visible .sv-btn { scale: 1.1; background: color-mix(in srgb, var(--app) 60%, rgb(10 12 18 / .3)); }
+.sv-play:hover::after { opacity: 1; }
+.sv-play:hover { border-color: color-mix(in srgb, var(--app) 50%, var(--line-2)); }
+.sv-play.is-open { visibility: hidden; }
+
+/* Film dialog: site.ts animates .film-frame out of the poster it was opened from (and back on close). */
+.film {
+  position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+  background: transparent; color: #fff; display: none; place-items: center; overflow: hidden; overscroll-behavior: contain;
+}
+.film[open] { display: grid; }
+.film::backdrop { background: rgb(4 5 8 / .86); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); opacity: 0; transition: opacity .45s var(--ease-out); }
+.film.on::backdrop { opacity: 1; }
+.film-box { width: min(1280px, 92vw, calc((100dvh - 150px) * 16 / 9)); display: grid; gap: 16px; }
+.film-frame {
+  aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; background: #000;
+  box-shadow: 0 80px 160px -40px color-mix(in srgb, var(--app, #3d7bff) 55%, transparent), 0 0 0 1px rgb(255 255 255 / .1);
+  transform-origin: 0 0; will-change: transform;
+}
+.film-frame { position: relative; }
+.film-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: opacity .5s ease; }
+.film-frame.playing .film-poster { opacity: 0; }
+.film-frame video { display: block; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.film-bar { display: flex; align-items: center; gap: 18px; opacity: 0; translate: 0 10px; transition: opacity .3s ease, translate .45s var(--ease-out); }
+.film.on .film-bar { opacity: 1; translate: 0 0; transition-delay: .3s; }
+.film-title { font: 600 18px/1 var(--font-display); letter-spacing: -.02em; }
+.film-link { font: 500 14px/1 var(--font-body); color: rgb(255 255 255 / .7); margin-right: auto; }
+.film-link:hover { color: #fff; }
+.film-close {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; color: #fff;
+  background: rgb(255 255 255 / .1); border: 1px solid rgb(255 255 255 / .2); transition: background var(--t-fast), rotate .4s var(--ease-out);
+}
+.film-close:hover { background: rgb(255 255 255 / .2); rotate: 90deg; }
+.film-close svg { width: 18px; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+:root.film-lock { overflow: hidden; }
 
 /* Rail: counter, one icon per slide, counter. Fixed to the stage's right edge. */
 .show-rail {
@@ -212,11 +272,8 @@
   .slide-inner { padding-block: 72px 56px; }
   .slide-head { margin-bottom: 22px; }
   .slide-head .app-icon { --size: 60px !important; }
-  .two-phones .phone { border-radius: 26px; padding: 7px; }
-  .two-phones .phone .screen { border-radius: 20px; }
-  .two-phones .phone::before { width: 34%; height: 14px; top: 13px; }
-  .tilt-l { translate: 10px 6px; }
-  .tilt-r { translate: -10px -12px; }
+  .sv { min-width: 0; margin-block: 24px 56px; }
+  .sv-dur { left: auto; right: 10px; bottom: 10px; }
 }
 
 /* ---------- Explore: where everything else lives now ---------- */

@@ -1,0 +1,189 @@
+---
+/**
+ * Floating cards that sit over a showcase film poster, like the overlay widgets on pawan.app's product shots.
+ * One small piece of each product, drawn in HTML and SVG so it stays sharp, themeable and tiny.
+ */
+interface Props { slug: string; chip?: string }
+const { slug, chip } = Astro.props;
+
+// Scalper: a deterministic run of candles that drifts up, so the chart never changes between builds.
+const candles = Array.from({ length: 18 }, (_, i) => {
+  const base = 40 - i * 1.4 + Math.sin(i * 1.7) * 6;
+  const body = 4 + ((i * 7) % 9);
+  const up = (i * 5) % 3 !== 0;
+  return { x: 6 + i * 11, y: base - (up ? body : 0), h: body, wick: [base - body - 4 - (i % 3) * 2, base + 3 + (i % 2) * 3], up };
+});
+const dots = Array.from({ length: 36 }, (_, i) => ({ x: 8 + (i % 12) * 16, y: 8 + Math.floor(i / 12) * 16, d: ((i * 7) % 36) * 0.09 }));
+---
+<div class="art" aria-hidden="true">
+  {chip && <span class="chip"><i></i>{chip}</span>}
+
+  {slug === 'libgen' && (
+    <div class="fc">
+      <span class="k">Now reading</span>
+      <b class="t">Moby-Dick</b>
+      <p class="q"><mark>Call me Ishmael.</mark> Some years ago, never mind how long precisely…</p>
+      <div class="sw"><i style="--c:#f5c542"></i><i style="--c:#5fd38d"></i><i style="--c:#5fa8ff"></i><i style="--c:#ff7eb6"></i></div>
+      <div class="bar"><i></i></div>
+      <span class="s"><span>Chapter 1 · Loomings</span><span>EPUB</span></span>
+    </div>
+  )}
+
+  {slug === 'univest' && (
+    <div class="fc">
+      <span class="k">Order status</span>
+      <b class="t">HDFC · Buy 3</b>
+      <ol class="steps">
+        {['Order placed', 'Sent to exchange', 'Executed'].map((s, i) => (
+          <li style={`--d:${i * 0.7}s`}>
+            <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" /><path d="M6 10.4l2.7 2.6L14 7.6" /></svg>
+            <span>{s}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )}
+
+  {slug === 'scalper' && (
+    <div class="fc">
+      <span class="s"><span class="k">Nifty 50 · 1m</span><span class="up">▲ 0.62%</span></span>
+      <b class="t num">24,141.30</b>
+      <svg class="candles" viewBox="0 0 200 64" preserveAspectRatio="none">
+        {candles.map((c, i) => (
+          <g class={c.up ? 'cu' : 'cd'} style={`--d:${i * 0.06}s`}>
+            <line x1={c.x + 3} x2={c.x + 3} y1={c.wick[0]} y2={c.wick[1]} />
+            <rect x={c.x} y={c.y} width="6" height={c.h} rx="1" />
+          </g>
+        ))}
+      </svg>
+      <span class="s"><span class="buy">Buy</span><span class="sell">Sell</span></span>
+    </div>
+  )}
+
+  {slug === 'pushpatch' && (
+    <div class="fc">
+      <span class="s"><span class="k">Patch 47 · rollout</span><span class="live">Live</span></span>
+      <b class="t num">116,052 <small>devices</small></b>
+      <svg class="grid" viewBox="0 0 196 50">
+        {dots.map((d) => <circle cx={d.x} cy={d.y} r="4.2" style={`--d:${d.d}s`} />)}
+      </svg>
+      <span class="mono s"><span>$ pushpatch promote</span><span>no store review</span></span>
+    </div>
+  )}
+
+  {slug === 'incognito-vault' && (
+    <div class="fc">
+      <span class="k">Vault</span>
+      <ul class="chats">
+        {[['Flutter architecture layers', 'claude'], ['How do I fix a CORS error', 'chatgpt'], ['Generate a prompt doc', 'claude']].map(([t, m], i) => (
+          <li style={`--d:${i * 0.5}s`}><span>{t}</span><em>{m}</em><b>.md</b></li>
+        ))}
+      </ul>
+      <span class="toast">
+        <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" /><path d="M6 10.4l2.7 2.6L14 7.6" /></svg>
+        Saved before it vanished
+      </span>
+    </div>
+  )}
+
+  {slug === 'native-api-bindgen' && (
+    <div class="fc code">
+      <span class="s"><span class="k">Generated Dart</span><span class="up">51,429 methods</span></span>
+      <pre><span class="c">// android.hardware.camera2</span>
+<span class="kw">final</span> cam = <span class="ty">CameraManager</span>.of(ctx);
+<span class="kw">final</span> ids = <span class="kw">await</span> cam.cameraIdList();<i class="caret"></i></pre>
+    </div>
+  )}
+</div>
+
+<style>
+  /* Positioned over .sv (the poster frame) by the parent; everything floats a little, slower than you notice. */
+  .art { position: absolute; inset: 0; pointer-events: none; font-size: clamp(11px, 2.1cqi, 14px); }
+  .chip, .fc {
+    position: absolute; color: var(--text);
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    border: 1px solid color-mix(in srgb, var(--app) 30%, var(--line-2));
+    backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    box-shadow: 0 30px 60px -24px rgb(0 0 0 / .55), 0 0 0 1px rgb(255 255 255 / .03) inset;
+  }
+  .chip {
+    top: -18px; right: clamp(-8px, -2cqi, 0px); display: inline-flex; align-items: center; gap: .6em;
+    padding: .7em 1.1em; border-radius: var(--r-pill); font: 600 1em/1 var(--font-body); white-space: nowrap;
+    animation: float 7s ease-in-out -2s infinite;
+  }
+  .chip i { width: .55em; height: .55em; border-radius: 50%; background: var(--app); box-shadow: 0 0 0 .3em color-mix(in srgb, var(--app) 25%, transparent); }
+  .fc {
+    /* Hangs off the poster's lower-left corner, below the film's own headline. */
+    left: clamp(-64px, -8cqi, -10px); top: 72%; width: clamp(190px, 38cqi, 272px);
+    padding: 1.25em 1.3em; border-radius: 18px; display: grid; gap: .75em;
+    animation: float 8s ease-in-out infinite;
+  }
+  .k { font: 500 .78em/1 var(--font-mono); letter-spacing: .22em; text-transform: uppercase; color: var(--text-3); }
+  .t { font: 600 1.5em/1.05 var(--font-display); letter-spacing: -.03em; }
+  .t small { font: 500 .5em var(--font-body); color: var(--text-3); letter-spacing: 0; }
+  .num { font-variant-numeric: tabular-nums; }
+  .s { display: flex; justify-content: space-between; align-items: center; gap: 1em; font-size: .86em; color: var(--text-3); }
+  .up { color: var(--up, #3ccf8e); font: 600 .9em/1 var(--font-mono); }
+
+  /* Libgen */
+  .q { margin: 0; font: 400 .95em/1.5 var(--font-serif); color: var(--text-2); }
+  .q mark { background: color-mix(in srgb, #5fa8ff 35%, transparent); color: var(--text); border-radius: 3px; padding: 0 .15em; }
+  .sw { display: flex; gap: .5em; }
+  .sw i { width: 1.25em; height: 1.25em; border-radius: 50%; background: var(--c); }
+  .sw i:first-child { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--c); }
+  .bar { height: 4px; border-radius: 4px; background: var(--line-2); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 42%; background: var(--app); border-radius: inherit; transform-origin: left; animation: grow 2.4s var(--ease-out) both; }
+
+  /* Univest */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: .7em; }
+  .steps li { display: flex; align-items: center; gap: .7em; font-size: .95em; animation: step 4.2s var(--d) ease infinite both; }
+  .steps svg, .toast svg { width: 1.35em; height: 1.35em; flex: none; }
+  .steps circle, .toast circle { fill: color-mix(in srgb, #2fbf71 18%, transparent); stroke: #2fbf71; stroke-width: 1.5; }
+  .steps path, .toast path { fill: none; stroke: #2fbf71; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Scalper */
+  .candles { width: 100%; height: 4.4em; overflow: visible; }
+  .candles line { stroke-width: 1; }
+  .candles g { transform-box: fill-box; transform-origin: 50% 100%; animation: rise .5s var(--d) var(--ease-out) both; }
+  .cu line { stroke: #2fbf71; } .cu rect { fill: #2fbf71; }
+  .cd line { stroke: #ef5350; } .cd rect { fill: #ef5350; }
+  .candles g:last-child { animation: rise .5s var(--d) var(--ease-out) both, blink 1.2s 1.6s steps(2) infinite; }
+  .buy, .sell { flex: 1; text-align: center; padding: .55em 0; border-radius: 8px; font: 700 .9em/1 var(--font-body); color: #fff; }
+  .buy { background: #1f9d5c; } .sell { background: #d83a3a; }
+
+  /* PushPatch */
+  .live { display: inline-flex; align-items: center; gap: .4em; color: var(--app); font: 600 .9em/1 var(--font-mono); }
+  .live::before { content: ''; width: .5em; height: .5em; border-radius: 50%; background: currentColor; animation: blink 1.4s ease-in-out infinite; }
+  .grid { width: 100%; height: auto; }
+  .grid circle { fill: var(--line-2); animation: lit 3.6s var(--d) ease-in-out infinite; }
+
+  /* Incognito Vault */
+  .chats { list-style: none; margin: 0; padding: 0; display: grid; gap: .45em; }
+  .chats li { display: grid; grid-template-columns: 1fr auto auto; gap: .6em; align-items: center; padding: .55em .7em; border-radius: 10px; background: color-mix(in srgb, var(--app) 7%, transparent); font-size: .88em; animation: slidein .6s var(--d) var(--ease-out) both; }
+  .chats span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chats em { font: normal 500 .8em/1 var(--font-mono); color: var(--app); }
+  .chats b { font: 500 .8em/1 var(--font-mono); color: var(--text-3); }
+  .toast { display: flex; align-items: center; gap: .55em; font-size: .9em; font-weight: 600; color: #2fbf71; }
+
+  /* native-api-bindgen */
+  .fc.code { width: clamp(220px, 46cqi, 320px); }
+  pre { margin: 0; font: 400 .86em/1.7 var(--font-mono); white-space: pre; overflow: hidden; color: var(--text-2); }
+  pre .c { color: var(--text-3); } pre .kw { color: #c792ea; } pre .ty { color: var(--app); }
+  .caret { display: inline-block; width: .5em; height: 1.1em; margin-left: 2px; vertical-align: -.2em; background: var(--app); animation: blink 1s steps(2) infinite; }
+
+  @keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
+  @keyframes grow { from { transform: scaleX(0); } }
+  @keyframes rise { from { transform: scaleY(0); opacity: 0; } }
+  @keyframes blink { 50% { opacity: .25; } }
+  @keyframes lit { 0%, 100% { fill: var(--line-2); } 30%, 60% { fill: var(--app); } }
+  @keyframes slidein { from { opacity: 0; transform: translateX(-12px); } }
+  @keyframes step { 0% { opacity: .25; } 12%, 88% { opacity: 1; } 100% { opacity: .25; } }
+
+  @media (max-width: 560px) {
+    .fc { left: -6px; top: 70%; width: min(64%, 240px); padding: 1em; }
+    .chip { top: -14px; right: -4px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .art *, .chip, .fc { animation: none !important; }
+  }
+</style>

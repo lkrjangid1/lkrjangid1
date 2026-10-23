@@ -1,6 +1,8 @@
 ---
 import AppIcon from './AppIcon.astro';
-import Device from './Device.astro';
+import { Image } from 'astro:assets';
+import ShowcaseArt from './ShowcaseArt.astro';
+import { clock, showcaseMedia } from '../data/showcase';
 import { brand } from '../data/icons';
 import type { ReelItem } from '../data/home';
 
@@ -8,27 +10,19 @@ import type { ReelItem } from '../data/home';
  * Full-screen product showcase. On wide screens with motion allowed, site.ts pins the stage and scrubs
  * every transition with the scroll position: the next slide is a circle growing out of its app icon. Without that it is a
  * plain stack of full-height sections, so content, links and headings never depend on JS.
+ * Each visual is a film poster; site.ts opens the film in a dialog that grows out of the poster (without JS the
+ * poster is a plain link to the mp4).
  */
 interface Props { items: ReelItem[] }
 const { items } = Astro.props;
 const total = String(items.length).padStart(2, '0');
 const host = (url: string) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return ''; } };
-
-const terminal = [
-  '<span class="p">$</span> dart pub global activate native_api_bindgen',
-  '<span class="p">$</span> native-api-bindgen doctor',
-  '<span class="ok">✓</span> Android SDK · JDK · Xcode · libclang',
-  '<span class="p">$</span> native-api-bindgen generate flutter',
-  '<span class="dim">  parsing android.jar → IR …</span>',
-  '<span class="ok">✓ 51,429 of 52,938 methods generated (97.1%)</span>',
-  '<span class="dim">  1,509 skipped, each with a reason code</span>',
-  '<span class="p">$</span> <span class="caret"></span>',
-];
 ---
 <section id="work" class="show" style={`--n:${items.length}`} aria-labelledby="work-h" data-show>
   <h2 id="work-h" class="sr-only">Featured Flutter apps and tools</h2>
   <div class="show-stage">
     {items.map((r, i) => {
+      const m = showcaseMedia[r.slug];
       const site = r.links.find((l) => /website|docs|live|web/i.test(l.label)) ?? r.links[0];
       return (
         <article id={`p-${r.slug}`} class:list={['slide', { on: i === 0 }]} style={`--app:${brand(r.slug, r.name).accent};--i:${i}`} data-index={i} aria-labelledby={`p-${r.slug}-h`}>
@@ -51,19 +45,16 @@ const terminal = [
                 {site && <a class="mono slide-link" href={site.url} rel="noopener" data-cursor="Visit">{host(site.url) || site.label}</a>}
               </div>
             </div>
-            <div class="slide-visual" data-cursor={r.visual === 'terminal' ? undefined : 'Look'}>
-              {r.visual === 'phones' && (
-                <div class="two-phones">
-                  {r.shots.slice(0, 2).map((s, j) => <Device kind="phone" shots={[s]} alt={`${r.name} app screenshot ${j + 1}`} class={j === 0 ? 'tilt-l' : 'tilt-r'} eager={i === 0} />)}
-                </div>
-              )}
-              {r.visual === 'phone' && <Device kind="phone" size="big" shots={r.shots.slice(0, 6)} alt={`${r.name} app screenshots`} eager={i === 0} />}
-              {r.visual === 'laptop' && <Device kind="laptop" shots={r.shots.slice(0, 3)} alt={`${r.name} screenshots`} />}
-              {r.visual === 'browser' && <Device kind="browser" shots={r.shots.slice(0, 4)} alt={`${r.name} screenshots`} url={`${r.slug}.app`} />}
-              {r.visual === 'terminal' && (
-                <div class="terminal">
-                  <div class="bar"><i></i><i></i><i></i><span class="mono dim" style="margin-left:8px">~/app — zsh</span></div>
-                  <pre aria-label="native-api-bindgen terminal session" set:html={terminal.map((l) => `<span class="tl">${l}</span>`).join('\n')} />
+            <div class="slide-visual">
+              {m && (
+                <div class="sv">
+                  <a class="sv-play" href={m.video} data-film={m.video} data-film-title={r.name} data-film-href={r.href} data-cursor="Play" aria-label={`Play the ${r.name} film (${clock(m.duration)})`}>
+                    <Image class:list={['sv-thumb', { 'sv-dark': m.thumbLight }]} src={m.thumb} alt="" widths={[640, 960, 1280, 1920]} sizes="(max-width: 900px) 92vw, 52vw" format="webp" quality={82} loading={i === 0 ? 'eager' : 'lazy'} />
+                    {m.thumbLight && <Image class="sv-thumb sv-light" src={m.thumbLight} alt="" widths={[640, 960, 1280, 1920]} sizes="(max-width: 900px) 92vw, 52vw" format="webp" quality={82} loading="lazy" />}
+                    <span class="sv-btn" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.6v12.8a1 1 0 0 0 1.5.86l10.4-6.4a1 1 0 0 0 0-1.72L9.5 4.74A1 1 0 0 0 8 5.6z" /></svg></span>
+                    <span class="sv-dur mono" aria-hidden="true">▶ Watch · {clock(m.duration)}</span>
+                  </a>
+                  <ShowcaseArt slug={r.slug} chip={r.metrics[0]} />
                 </div>
               )}
             </div>
@@ -85,4 +76,19 @@ const terminal = [
     </nav>
     <div class="show-progress" aria-hidden="true"><i></i></div>
   </div>
+  <dialog class="film" aria-label="Product film" data-film-dialog>
+    <div class="film-box">
+      <div class="film-frame">
+        <video playsinline controls preload="none"></video>
+        <img class="film-poster" alt="" />
+      </div>
+      <div class="film-bar">
+        <b class="film-title"></b>
+        <a class="film-link" href="/work">Case study ↗</a>
+        <button class="film-close" type="button" aria-label="Close video" data-film-close>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+        </button>
+      </div>
+    </div>
+  </dialog>
 </section>

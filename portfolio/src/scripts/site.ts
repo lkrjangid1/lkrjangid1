@@ -188,6 +188,80 @@ if (show) {
   addEventListener('scroll', kick, { passive: true });
 }
 
+/* ---------- Showcase films: a dialog whose frame grows out of the poster that opened it ---------- */
+const film = document.querySelector<HTMLDialogElement>('[data-film-dialog]');
+if (film) {
+  const frame = film.querySelector<HTMLElement>('.film-frame')!;
+  const video = film.querySelector('video')!;
+  const title = film.querySelector('.film-title')!;
+  const link = film.querySelector<HTMLAnchorElement>('.film-link')!;
+  const poster = film.querySelector<HTMLImageElement>('.film-poster')!;
+  const still = matchMedia('(prefers-reduced-motion: reduce)');
+  let from: HTMLAnchorElement | null = null;
+  let closing = false;
+
+  // The transform that lays the (untransformed) frame exactly over the poster; the frame scales from its top-left.
+  const overPoster = (p: HTMLElement) => {
+    const a = p.getBoundingClientRect(), b = frame.getBoundingClientRect();
+    return `translate(${a.left - b.left}px, ${a.top - b.top}px) scale(${a.width / b.width}, ${a.height / b.height})`;
+  };
+  const stop = () => frame.getAnimations().forEach((x) => x.cancel());
+
+  const open = (a: HTMLAnchorElement) => {
+    from = a;
+    const slide = a.closest<HTMLElement>('.slide');
+    if (slide) film.style.setProperty('--app', getComputedStyle(slide).getPropertyValue('--app'));
+    title.textContent = a.dataset.filmTitle ?? '';
+    link.href = a.dataset.filmHref ?? '/work';
+    // The poster on screen (dark or light variant) rides along on top of the video while the frame grows, and
+    // fades once playback starts: the films open on black, so this keeps the hand-off seamless.
+    const img = [...a.querySelectorAll<HTMLImageElement>('.sv-thumb')].find((i) => i.offsetWidth > 0);
+    poster.src = img?.currentSrc ?? '';
+    frame.classList.remove('playing');
+    video.src = a.dataset.film!;
+    video.load();
+    root.classList.add('film-lock');
+    film.showModal();
+    a.classList.add('is-open');
+    stop();
+    const play = () => { if (film.open && !closing) video.play().catch(() => {}); };
+    if (still.matches) play();
+    else frame.animate([{ transform: overPoster(a) }, { transform: 'none' }], { duration: 700, easing: 'cubic-bezier(.22, 1, .36, 1)' }).finished.then(play, play);
+    requestAnimationFrame(() => film.classList.add('on'));
+  };
+
+  const close = () => {
+    if (!film.open || closing) return;
+    closing = true;
+    video.pause();
+    frame.classList.remove('playing'); // land back on the poster image, not a video frame
+    film.classList.remove('on');
+    root.classList.remove('film-lock');
+    const done = () => {
+      film.close();
+      stop();
+      from?.classList.remove('is-open');
+      video.removeAttribute('src');
+      video.load();
+      closing = false;
+    };
+    if (still.matches || !from) return done();
+    stop();
+    frame.animate([{ transform: 'none' }, { transform: overPoster(from) }], { duration: 520, easing: 'cubic-bezier(.65, 0, .25, 1)', fill: 'forwards' })
+      .finished.then(done, done);
+  };
+
+  document.querySelectorAll<HTMLAnchorElement>('[data-film]').forEach((a) => a.addEventListener('click', (e) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+    e.preventDefault();
+    open(a);
+  }));
+  video.addEventListener('playing', () => frame.classList.add('playing'));
+  film.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+  film.addEventListener('click', (e) => { if (e.target === film) close(); });
+  film.querySelector('[data-film-close]')?.addEventListener('click', close);
+}
+
 if (!reduced) {
   /* ---------- Rotator ("Currently") ---------- */
   document.querySelectorAll<HTMLElement>('[data-rotator]').forEach((box) => {
