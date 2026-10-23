@@ -1,0 +1,173 @@
+---
+/**
+ * Animated backdrop for a showcase slide, in the spirit of pawan.app's Still slide (one huge progress arc and a
+ * turning tick ring behind the product). Every slide shares that ring; on top of it each product gets a motif of
+ * its own: pages turning, a chart climbing, candles streaming, a rollout radar, chats rising and fading, and
+ * bindings flowing between two brackets. Pure SVG + CSS in the slide's --app colour, so it themes itself.
+ */
+interface Props { slug: string }
+const { slug } = Astro.props;
+
+const ticks = Array.from({ length: 60 }, (_, i) => i * 6);
+// Scalper: two identical runs of candles side by side so the stream can loop seamlessly at -50%.
+const run = Array.from({ length: 22 }, (_, i) => {
+  const mid = 520 - i * 9 + Math.sin(i * 1.3) * 60;
+  const body = 30 + ((i * 37) % 70);
+  return { x: i * 46, mid, body, up: (i * 5) % 3 !== 0 };
+});
+// PushPatch: devices on the radar; each lights when the sweep passes its angle.
+const devices = Array.from({ length: 26 }, (_, i) => {
+  const a = (i * 137.5) % 360;
+  const r = 140 + ((i * 53) % 280);
+  return { x: 500 + r * Math.cos((a - 90) * Math.PI / 180), y: 500 + r * Math.sin((a - 90) * Math.PI / 180), d: (a / 360) * 6 };
+});
+const chats = [
+  { x: 150, w: 260, d: 0 }, { x: 560, w: 220, d: 2.2 }, { x: 330, w: 300, d: 4.4 },
+  { x: 640, w: 180, d: 6.6 }, { x: 90, w: 200, d: 8.8 },
+];
+const lanes = [250, 340, 430, 520, 610, 700, 790];
+---
+<svg class="bg" viewBox="0 0 1000 1000" aria-hidden="true" focusable="false">
+  <g class="ring">
+    <circle class="arc" cx="500" cy="500" r="430" pathLength="100" />
+    <g class="ticks">{ticks.map((a) => <line x1="500" y1="22" x2="500" y2={a % 30 === 0 ? 52 : 40} transform={`rotate(${a} 500 500)`} />)}</g>
+    <g class="orbit"><circle cx="500" cy="70" r="14" /></g>
+  </g>
+
+  {slug === 'libgen' && (
+    <g class="m libgen">
+      <path class="spine" d="M500 300v420" />
+      {[0, 1, 2].map((i) => <path class="page still" d={`M500 ${300 + i * 6}C430 ${270 + i * 6} 330 ${270 + i * 6} ${250 - i * 8} ${300 + i * 10}V${700 + i * 8}C330 ${670 + i * 6} 430 ${670 + i * 6} 500 ${720}Z`} />)}
+      {[0, 1, 2].map((i) => <path class="page still" d={`M500 ${300 + i * 6}C570 ${270 + i * 6} 670 ${270 + i * 6} ${750 + i * 8} ${300 + i * 10}V${700 + i * 8}C670 ${670 + i * 6} 570 ${670 + i * 6} 500 ${720}Z`} />)}
+      {[0, 1, 2].map((i) => <path class="page flip" style={`--d:${i * 2.2}s`} d="M500 300C570 270 670 270 750 300V700C670 670 570 670 500 720Z" />)}
+      {[0, 1, 2, 3, 4, 5, 6].map((i) => <path class="line" d={`M${290} ${380 + i * 42}h${150 - (i % 3) * 30}M${560} ${380 + i * 42}h${150 - ((i + 1) % 3) * 30}`} />)}
+    </g>
+  )}
+
+  {slug === 'univest' && (
+    <g class="m univest">
+      {Array.from({ length: 7 }, (_, i) => <path class="grid" d={`M200 ${260 + i * 80}H800`} />)}
+      <path class="area" d="M200 700L280 650L360 670L440 560L520 590L600 450L680 470L800 300V740H200Z" />
+      <path class="line" pathLength="100" d="M200 700L280 650L360 670L440 560L520 590L600 450L680 470L800 300" />
+      <g class="check"><circle cx="800" cy="300" r="34" /><path pathLength="100" d="M784 300l11 11 22-22" /></g>
+    </g>
+  )}
+
+  {slug === 'scalper' && (
+    <g class="m scalper">
+      <path class="bolt" d="M560 160L330 540H490L440 840L690 430H520Z" />
+      <clipPath id="sc-clip"><circle cx="500" cy="500" r="400" /></clipPath>
+      <g clip-path="url(#sc-clip)"><g class="stream">
+        {[0, 1].map((r) => run.map((c) => (
+          <g class={c.up ? 'up' : 'dn'}>
+            <line x1={r * 1012 + c.x + 12} x2={r * 1012 + c.x + 12} y1={c.mid - c.body / 2 - 26} y2={c.mid + c.body / 2 + 22} />
+            <rect x={r * 1012 + c.x} y={c.mid - c.body / 2} width="24" height={c.body} rx="4" />
+          </g>
+        )))}
+      </g></g>
+    </g>
+  )}
+
+  {slug === 'pushpatch' && (
+    <g class="m pushpatch">
+      {[140, 240, 340, 420].map((r) => <circle class="rr" cx="500" cy="500" r={r} />)}
+      <path class="axis" d="M500 80V920M80 500H920" />
+      <g class="sweep"><path d="M500 500L500 80A420 420 0 0 1 797 203Z" /></g>
+      {devices.map((p) => <circle class="dev" cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r="7" style={`--d:${p.d.toFixed(2)}s`} />)}
+      <circle class="core" cx="500" cy="500" r="16" />
+    </g>
+  )}
+
+  {slug === 'incognito-vault' && (
+    <g class="m vault">
+      <path class="ghost" d="M500 250c-120 0-200 90-200 210v250l50-40 50 40 50-40 50 40 50-40 50 40 50-40 50 40V460c0-120-80-210-200-210z" />
+      <circle class="eye" cx="440" cy="450" r="18" /><circle class="eye" cx="560" cy="450" r="18" />
+      {chats.map((c) => (
+        <g class="chat" style={`--d:${c.d}s`}>
+          <rect x={c.x} y="800" width={c.w} height="64" rx="32" />
+          <path d={`M${c.x + 30} 862l-14 22 34-20`} />
+        </g>
+      ))}
+    </g>
+  )}
+
+  {slug === 'native-api-bindgen' && (
+    <g class="m bindgen">
+      <path class="br" d="M300 240L120 500L300 760" />
+      <path class="br" d="M700 240L880 500L700 760" />
+      {lanes.map((y, i) => <path class:list={['lane', { rev: i % 2 }]} d={`M230 ${y}C400 ${y - 40} 600 ${y + 40} 770 ${y}`} style={`--d:${i * -0.7}s`} />)}
+      {lanes.map((y) => <><circle class="node" cx="230" cy={y} r="9" /><circle class="node" cx="770" cy={y} r="9" /></>)}
+    </g>
+  )}
+</svg>
+
+<style>
+  .bg {
+    position: absolute; right: -14vw; top: 50%; height: max(120vh, 900px); aspect-ratio: 1; translate: 0 -50%;
+    color: var(--app); fill: none; stroke: currentColor; pointer-events: none; overflow: visible;
+  }
+  /* Shared ring: a thick open arc (like a progress ring), a turning tick ring and one orbiting bead. */
+  .arc { stroke-width: 54; stroke-linecap: round; stroke-dasharray: 72 28; stroke-dashoffset: 8; opacity: .1; }
+  .ticks { stroke-width: 3; opacity: .2; transform-origin: 500px 500px; animation: spin 120s linear infinite; }
+  .orbit { transform-origin: 500px 500px; animation: spin 24s linear infinite; }
+  .orbit circle { stroke-width: 3; opacity: .55; }
+  .m { opacity: .28; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* Libgen: a book whose right-hand pages keep turning. */
+  .libgen .page { fill: color-mix(in srgb, currentColor 5%, transparent); }
+  .libgen .flip { transform-origin: 500px 500px; animation: flip 6.6s var(--d) cubic-bezier(.6, 0, .3, 1) infinite; }
+  .libgen .line { stroke-dasharray: 6 10; opacity: .7; }
+  .libgen .spine { stroke-width: 5; }
+
+  /* Univest: a portfolio line that draws itself and lands on a tick. */
+  .univest .grid { stroke-dasharray: 2 14; opacity: .6; }
+  .univest .area { fill: currentColor; stroke: none; opacity: .14; }
+  .univest .line { stroke-width: 7; stroke-dasharray: 100; animation: draw 6s ease-in-out infinite; }
+  .univest .check circle { fill: color-mix(in srgb, currentColor 18%, transparent); stroke-width: 5; animation: pop 6s ease-in-out infinite; transform-origin: 800px 300px; }
+  .univest .check path { stroke-width: 7; stroke-dasharray: 100; animation: tick 6s ease-in-out infinite; }
+
+  /* Scalper: an endless tape of candles under a lightning bolt. */
+  .scalper .bolt { fill: color-mix(in srgb, currentColor 6%, transparent); stroke-width: 4; }
+  .scalper .stream { animation: tape 22s linear infinite; }
+  .scalper .up { color: #2fbf71; } .scalper .dn { color: #ef5350; }
+  .scalper rect { fill: currentColor; fill-opacity: .55; stroke: none; }
+  .scalper line { stroke-width: 3; }
+
+  /* PushPatch: a rollout radar; devices light up as the sweep reaches them. */
+  .pushpatch .rr { stroke-dasharray: 4 12; }
+  .pushpatch .axis { opacity: .4; }
+  .pushpatch .sweep { transform-origin: 500px 500px; animation: spin 6s linear infinite; }
+  .pushpatch .sweep path { fill: currentColor; fill-opacity: .2; stroke: none; }
+  .pushpatch .dev { fill: currentColor; stroke: none; opacity: .25; animation: ping 6s var(--d) linear infinite; }
+  .pushpatch .core { fill: currentColor; stroke: none; }
+
+  /* Incognito Vault: chats float up and vanish past a drifting ghost. */
+  .vault .ghost { fill: color-mix(in srgb, currentColor 5%, transparent); stroke-width: 4; animation: bob 7s ease-in-out infinite; }
+  .vault .eye { fill: currentColor; stroke: none; animation: bob 7s ease-in-out infinite; }
+  .vault .chat { animation: rise 11s var(--d) linear infinite; opacity: 0; }
+  .vault .chat rect, .vault .chat path { fill: color-mix(in srgb, currentColor 10%, transparent); stroke-width: 3; }
+
+  /* native-api-bindgen: calls flowing both ways between the native side and the generated side. */
+  .bindgen .br { stroke-width: 10; }
+  .bindgen .lane { stroke-dasharray: 8 22; opacity: .8; animation: flow 3s var(--d) linear infinite; }
+  .bindgen .lane.rev { animation-direction: reverse; }
+  .bindgen .node { fill: currentColor; stroke: none; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes flip { 0%, 15% { transform: scaleX(1); opacity: 1; } 50% { transform: scaleX(-1); opacity: .9; } 62%, 100% { transform: scaleX(-1); opacity: 0; } }
+  @keyframes draw { 0% { stroke-dashoffset: 100; } 55%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -100; } }
+  @keyframes tick { 0%, 50% { stroke-dashoffset: 100; } 62%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: 100; } }
+  @keyframes pop { 0%, 48% { transform: scale(0); } 58%, 88% { transform: scale(1); } 100% { transform: scale(0); } }
+  @keyframes tape { to { transform: translateX(-1012px); } }
+  @keyframes ping { 0% { opacity: 1; r: 11; } 30%, 100% { opacity: .2; r: 7; } }
+  @keyframes bob { 50% { transform: translateY(-18px); } }
+  @keyframes rise { 0% { opacity: 0; transform: translateY(0); } 12% { opacity: 1; } 70% { opacity: .6; } 100% { opacity: 0; transform: translateY(-640px); } }
+  @keyframes flow { to { stroke-dashoffset: -60; } }
+
+  @media (max-width: 900px) {
+    .bg { right: 50%; top: auto; bottom: -10%; translate: 50% 0; height: min(130vw, 760px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bg * { animation: none !important; }
+  }
+</style>

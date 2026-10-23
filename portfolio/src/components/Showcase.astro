@@ -2,6 +2,7 @@
 import AppIcon from './AppIcon.astro';
 import { Image } from 'astro:assets';
 import ShowcaseArt from './ShowcaseArt.astro';
+import ShowcaseBg from './ShowcaseBg.astro';
 import { clock, showcaseMedia } from '../data/showcase';
 import { brand } from '../data/icons';
 import type { ReelItem } from '../data/home';
@@ -26,7 +27,7 @@ const host = (url: string) => { try { return new URL(url).hostname.replace(/^www
       const site = r.links.find((l) => /website|docs|live|web/i.test(l.label)) ?? r.links[0];
       return (
         <article id={`p-${r.slug}`} class:list={['slide', { on: i === 0 }]} style={`--app:${brand(r.slug, r.name).accent};--i:${i}`} data-index={i} aria-labelledby={`p-${r.slug}-h`}>
-          <div class="slide-bg" aria-hidden="true"></div>
+          <div class="slide-bg" aria-hidden="true"><ShowcaseBg slug={r.slug} /></div>
           <div class="wrap slide-inner">
             <div class="slide-copy">
               <div class="slide-head">
