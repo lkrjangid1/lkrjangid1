@@ -180,7 +180,8 @@
   box-shadow: 0 20px 50px -12px rgb(0 0 0 / .6);
   transition: scale .5s var(--ease-out), background var(--t-med);
 }
-.sv-btn svg { width: 36%; margin-left: 7%; fill: currentColor; }
+/* The path already sits ~2px right of its box (optical centre for a triangle), so no extra offset here. */
+.sv-btn svg { display: block; width: 36%; fill: currentColor; }
 .sv-btn::before, .sv-btn::after { content: ''; position: absolute; inset: -1px; border-radius: inherit; border: 1.5px solid rgb(255 255 255 / .5); animation: sv-ring 2.6s var(--ease-out) infinite; }
 .sv-btn::after { animation-delay: 1.3s; }
 @keyframes sv-ring { from { scale: 1; opacity: .9; } to { scale: 1.7; opacity: 0; } }
