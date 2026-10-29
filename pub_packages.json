@@ -2,8 +2,8 @@
   "names": [
     "network_speed",
     "rar",
-    "pinned_shortcuts",
     "comic_reader",
+    "pinned_shortcuts",
     "cutout_text_effect",
     "duomorphsim",
     "drag_split_layout",
@@ -12,17 +12,17 @@
     "native_api_generator",
     "native_api_flutter_android",
     "native_api_core",
+    "native_api_react_native_ios",
     "native_api_flutter_ios",
+    "native_api_ir",
     "native_api_runtime",
     "native_api_bindgen",
-    "native_api_react_native_ios",
     "native_api_react_native_android",
-    "native_api_ir",
     "native_api_ui",
     "native_api_android",
     "smooth_chucker",
     "curl_request_parser",
-    "global_context_menu",
-    "flutter_account_manager"
+    "flutter_account_manager",
+    "global_context_menu"
   ]
 }
