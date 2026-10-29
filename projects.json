@@ -183,6 +183,106 @@
       ]
     },
     {
+      "title": "THE 3:13 FILES — Psychological-Horror Investigation Game",
+      "role": "Personal project · Game · Android",
+      "metrics": "8 episodes · 963 story nodes · 8 puzzles",
+      "tech": [
+        "Flutter",
+        "Riverpod",
+        "Fragment shaders",
+        "Text-to-speech"
+      ],
+      "links": [],
+      "points": [
+        "A horror mystery played entirely inside the recovered phone of a missing journalist: messages, calls, recordings, mail and an evidence board, all built as a Flutter widget tree with no game engine.",
+        "The whole season is data: 963 story nodes as a JSON graph, with a linter that proves there are no dead ends, dangling edges or unreachable branches.",
+        "A fear profile picked during onboarding decides how every scare plays out, and a retcon engine rewrites evidence the player has already collected.",
+        "The same story engine also exports the season as an illustrated EPUB novel."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/t313_1.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/t313_2.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/t313_3.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/t313_4.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/t313_5.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/t313_6.webp"
+      ]
+    },
+    {
+      "title": "Don't Wake the Reader — Stealth Platformer",
+      "role": "Personal project · Game · Android",
+      "metrics": "70 levels · 2 books · 500+ tests",
+      "tech": [
+        "Flutter",
+        "Flame",
+        "BLoC"
+      ],
+      "links": [],
+      "points": [
+        "A 2D stealth platformer set inside books: move while the Reader reads, freeze when they look up, and reach the bookmark before the page turns.",
+        "Built on Flame with tuned jump physics (coyote time, jump buffering, variable height) that runs the same at 60 and 120 Hz.",
+        "70 levels across two books, generated and checked by tests with a jump-aware solver and difficulty-curve rules.",
+        "Endless mode, Daily Challenge, unlockable characters, and graceful no-op fallbacks for ads, IAP, Play Games and cloud saves."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/dwtr_1.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/dwtr_2.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/dwtr_3.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/dwtr_4.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/dwtr_5.webp"
+      ]
+    },
+    {
+      "title": "Regina — Daily Crown Logic Puzzle",
+      "role": "Personal project · Game · Android",
+      "metrics": "567 levels · Live leaderboard · EN / HI / ES",
+      "tech": [
+        "Flutter",
+        "GetX",
+        "Firebase",
+        "Firestore"
+      ],
+      "links": [],
+      "points": [
+        "Place one crown in every row, column and colour region without two ever touching. A new 9×9 daily board is the same for every player.",
+        "567 bundled levels from a seeded generator, verified in CI, across four packs from 5×5 to 11×11.",
+        "Star ratings against par time, streaks, stats, and an all-time leaderboard on Firestore with security rules tested in CI.",
+        "Hints that explain the deduction instead of placing a crown, plus Auto-X marking and share cards."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/regina_1.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/regina_2.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/regina_3.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/regina_4.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/regina_5.webp"
+      ]
+    },
+    {
+      "title": "GridFill — Polyomino Grid Puzzle",
+      "role": "Personal project · Game · Android",
+      "metrics": "4 grid sizes · Daily challenge · Offline-first",
+      "tech": [
+        "Flutter",
+        "GetX",
+        "Hive",
+        "Firebase"
+      ],
+      "links": [],
+      "points": [
+        "Drag polyomino pieces onto the board and cover every cell exactly once, on grids from 4×4 to 7×7.",
+        "Deterministic, seeded puzzle engine, property-tested across 10,000 seeds to guarantee every board is solvable.",
+        "XP ranks, streaks, a Daily Challenge, hints, undo and a colorblind pattern mode, all playable fully offline."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/gridfill_1.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/gridfill_2.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/gridfill_3.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/gridfill_4.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/gridfill_5.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/gridfill_6.webp"
+      ]
+    },
+    {
       "title": "Remote Jobs",
       "role": "Personal project",
       "metrics": "12,000+ users on Play Store",

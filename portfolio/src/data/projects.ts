@@ -60,6 +60,7 @@ export interface Project {
 const slugAliases: Record<string, string> = {
   'ai-based-research-paper-search-summarization-and-chat-application': 'research-assistant',
   'ai-research-assistant': 'research-assistant',
+  'don-t-wake-the-reader': 'dont-wake-the-reader',
 };
 
 export function slugify(s: string): string {

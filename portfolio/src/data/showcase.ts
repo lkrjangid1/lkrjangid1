@@ -6,6 +6,7 @@ import scalper from '../assets/showcase/scalper.png';
 import pushpatch from '../assets/showcase/pushpatch.png';
 import vault from '../assets/showcase/incognito-vault.png';
 import bindgen from '../assets/showcase/native-api-bindgen.png';
+import t313 from '../assets/showcase/the-3-13-files.png';
 
 /** Promo film for a home showcase slide: a 16:9 poster plus the clip it opens (served from public/showcase). */
 export interface ShowcaseMedia {
@@ -19,6 +20,7 @@ export interface ShowcaseMedia {
 
 export const showcaseMedia: Record<string, ShowcaseMedia> = {
   libgen: { thumb: libgen, thumbLight: libgenLight, video: '/showcase/libgen.mp4', duration: 20 },
+  'the-3-13-files': { thumb: t313, video: '/showcase/the-3-13-files.mp4', duration: 21 },
   univest: { thumb: univest, video: '/showcase/univest.mp4', duration: 38 },
   scalper: { thumb: scalper, video: '/showcase/scalper.mp4', duration: 30 },
   pushpatch: { thumb: pushpatch, video: '/showcase/pushpatch.mp4', duration: 35 },

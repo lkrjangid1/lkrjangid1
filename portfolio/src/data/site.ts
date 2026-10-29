@@ -101,6 +101,10 @@ export const appMeta: Record<string, { accent: string; icon?: string; mono: stri
   'greenhouse-monitoring-control': { accent: '#57c46b', mono: 'G' },
   'research-assistant': { accent: '#5f8cff', mono: 'AI' },
   seedfuel: { accent: '#d79a3b', icon: 'seedfuel', mono: 'Sf' },
+  'the-3-13-files': { accent: '#e5303a', icon: 'the-3-13-files', mono: '313' },
+  'dont-wake-the-reader': { accent: '#d9a441', icon: 'dont-wake-the-reader', mono: 'DW' },
+  regina: { accent: '#7a68c4', icon: 'regina', mono: 'Rg' },
+  gridfill: { accent: '#4f5fd0', icon: 'gridfill', mono: 'GF' },
 };
 
 /** Shorter names for tiles and dock tooltips when the projects.json title is long. */
@@ -118,6 +122,7 @@ export const framedShots = new Set(['searchly', 'remote-jobs', 'mbm-e-learning']
 /** The "Now shipping" reel on the home page, in order. Copy and links come from projects.json. */
 export const reel = [
   { slug: 'libgen', platform: 'Android · iPhone (Quillshelf) · Flutter', tagline: 'Every book source, one beautiful reader.', visual: 'phone' },
+  { slug: 'the-3-13-files', platform: 'Android · Flutter · Horror game', tagline: 'Her phone. Her secrets. Your move.', visual: 'phone' },
   { slug: 'univest', platform: 'Android · iOS · Flutter, Kotlin, SwiftUI', tagline: 'Trading and investing for 9M+ people.', visual: 'phones' },
   { slug: 'scalper', platform: 'Inside Univest · Flutter custom rendering', tagline: 'A trading terminal, built from scratch in under a month.', visual: 'phone' },
   { slug: 'pushpatch', platform: 'Desktop · CLI · Web dashboard', tagline: 'Fix production Flutter apps in minutes, not review cycles.', visual: 'laptop' },
@@ -146,11 +151,16 @@ export const categoryOverrides: Record<string, string> = {
   weblm: 'ai-iot',
   buckrate: 'ai-iot',
   seedfuel: 'web',
+  'the-3-13-files': 'games',
+  'dont-wake-the-reader': 'games',
+  regina: 'games',
+  gridfill: 'games',
 };
 
 export const categoryLabels: Record<string, string> = {
   production: 'Production',
   apps: 'Apps',
+  games: 'Games',
   'ai-iot': 'AI & IoT',
   web: 'Web',
   tooling: 'Dev tools',
@@ -159,7 +169,7 @@ export const categoryLabels: Record<string, string> = {
   other: 'Other',
 };
 
-export const featured = ['univest', 'scalper', 'self-hosted-code-push', 'pushpatch'];
+export const featured = ['univest', 'scalper', 'self-hosted-code-push', 'pushpatch', 'the-3-13-files'];
 
 /** From the résumé (public/resume.pdf). */
 export const experience = [
