@@ -22,7 +22,7 @@
     "native_api_android",
     "smooth_chucker",
     "curl_request_parser",
-    "flutter_account_manager",
-    "global_context_menu"
+    "global_context_menu",
+    "flutter_account_manager"
   ]
 }
