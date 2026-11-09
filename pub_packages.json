@@ -8,6 +8,10 @@
     "duomorphsim",
     "drag_split_layout",
     "cloudflare_bypass",
+    "smooth_chucker",
+    "curl_request_parser",
+    "flutter_account_manager",
+    "global_context_menu",
     "native_api_generator",
     "native_api_ir",
     "native_api_react_native_ios",
@@ -19,10 +23,6 @@
     "native_api_ios",
     "native_api_flutter_android",
     "native_api_ui",
-    "curl_request_parser",
-    "native_api_android",
-    "smooth_chucker",
-    "flutter_account_manager",
-    "global_context_menu"
+    "native_api_android"
   ]
 }
