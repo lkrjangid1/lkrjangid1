@@ -22,7 +22,7 @@
     "native_api_flutter_ios",
     "native_api_ios",
     "native_api_flutter_android",
-    "native_api_ui",
-    "native_api_android"
+    "native_api_android",
+    "native_api_ui"
   ]
 }
