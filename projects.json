@@ -491,6 +491,44 @@
       ]
     },
     {
+      "title": "Ayuvo — Private AI Health App",
+      "role": "Yaara Tech · iPhone & Android",
+      "metrics": "Open source (MIT) · Launching on the App Store and Google Play",
+      "tech": [
+        "SwiftUI",
+        "Kotlin",
+        "Jetpack Compose",
+        "SQLite",
+        "HealthKit",
+        "Health Connect",
+        "On-device AI"
+      ],
+      "links": [
+        {
+          "label": "Website",
+          "url": "https://ayuvo-health.web.app/"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/astechtic/ayuvo"
+        }
+      ],
+      "points": [
+        "Nutrition by photo, barcode, voice or text, GPS and gym workouts, health records, medications and a local mirror of Apple Health or Health Connect, in one app.",
+        "An AI coach that runs on the user's own API key from one of 15 providers, or on Gemma, Qwen or MedGemma models that run on the phone.",
+        "No account, no Ayuvo server and no analytics, crash or ad SDKs: data stays on the phone unless the user sends it to a service they chose.",
+        "Native SwiftUI and Jetpack Compose apps sharing one health-data schema, so Export All Data moves a profile between iPhone and Android."
+      ],
+      "screenshots": [
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ayuvo_summary.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ayuvo_nutrition.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ayuvo_workouts.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ayuvo_coach.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ayuvo_heart_rate.webp",
+        "https://raw.githubusercontent.com/lkrjangid1/lkrjangid1/refs/heads/main/screen_shots/ayuvo_records.webp"
+      ]
+    },
+    {
       "title": "SeedFuel — Health Food Brand Website",
       "role": "Personal project · Brand & ordering site",
       "metrics": "",
