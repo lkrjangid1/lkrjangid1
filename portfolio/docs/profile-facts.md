@@ -45,7 +45,7 @@ Collected Oct 16, 2026 from the résumé (`public/resume.pdf`), Play Store listi
 - **Assets:** `src/assets/icons/searchly.webp`, `src/assets/shots/searchly/*`
 
 ### Libgen v3 and Quillshelf
-- **Site:** https://libgen-d4497.web.app/ — "Libgen for Android and Quillshelf for iPhone: search many book sources at once, import EPUB and PDF files, and read with themes, highlights and daily goals."
+- **Site:** https://libgen.yaaratech.in/ — "Libgen for Android and Quillshelf for iPhone: search many book sources at once, import EPUB and PDF files, and read with themes, highlights and daily goals."
 - **Play:** 500K+ installs · 4.0★ · updated Oct 15, 2026
 - **Assets:** 9 v3 screenshots in `src/assets/shots/libgen/`, plus the Quillshelf icon (64 px only)
 

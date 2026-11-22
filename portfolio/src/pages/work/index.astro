@@ -74,7 +74,7 @@ const listLd = {
       <div class="grid-cards">
         {sortedRepos.map((r) => (
           <ProjectCard
-            slug={r.slug} href={r.caseStudy ? `/work/${r.slug}` : r.repo} external={!r.caseStudy}
+            slug={r.slug} href={r.caseStudy ? `/work/${r.slug}` : (r.live ?? r.repo)} external={!r.caseStudy}
             title={r.name} subtitle={r.desc} meta={`${r.year}`} tags={r.tech}
             status={statusLabels[r.status]} category={repoCategory(r)} featured={r.status === 'flagship'}
             keywords={[categoryLabels[repoCategory(r)], r.live ? 'live' : '', 'github open source'].join(' ')}

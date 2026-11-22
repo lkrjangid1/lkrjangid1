@@ -34,7 +34,7 @@ export const repos: Repo[] = [
     tech: ['Dart', 'JNI', 'libclang', 'JSI', 'TypeScript'],
     year: 2026,
     status: 'flagship',
-    live: 'https://lkrjangid1.github.io/native-api-bindgen-docs/',
+    live: 'https://native-api-bindgen.yaaratech.in/',
     caseStudy: true,
     category: 'tooling',
   },
@@ -58,6 +58,7 @@ export const repos: Repo[] = [
     category: 'web',
     year: 2025,
     status: 'showcase',
+    live: 'https://organic-chemistry-map.yaaratech.in/',
   },
   {
     slug: 'fcm-admin',
